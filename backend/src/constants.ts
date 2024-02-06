@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import { join } from 'node:path';
 
 config({
-    path: join(__dirname, '..', '.env_tmp')
+    path: join(__dirname, '..', '.env')
 });
 
 const CLASS_RPS = Number(get_env_strict('CLASS_RPS'));
