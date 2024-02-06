@@ -4,10 +4,10 @@ import { config } from 'dotenv';
 import { join } from 'node:path';
 
 config({
-    path: join(__dirname, '..', '.env')
+    path: join(__dirname, '..', '.env_tmp')
 });
 
 const CLASS_RPS = Number(get_env_strict('CLASS_RPS'));
 const TG_TOKEN = get_env_strict('TG_TOKEN');
 
-export const request_queue = new RequestQueue(CLASS_RPS);
+export const REQUEST_QUEUE = new RequestQueue(CLASS_RPS);
