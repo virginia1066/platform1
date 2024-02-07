@@ -4,6 +4,7 @@ jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: Deploy_env
     steps:
       - uses: actions/checkout@main
       - name: Push to server
