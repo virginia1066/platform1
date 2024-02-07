@@ -5,10 +5,10 @@ import { get_env_strict } from './utils/get_env_prop';
 import { config } from 'dotenv';
 import { join } from 'node:path';
 import Knex from 'knex';
-
-config({
-    path: join(__dirname, '..', '.env')
-});
+//
+// config({
+//     path: join(__dirname, '..', '.env')
+// });
 
 const CLASS_RPS = Number(get_env_strict('CLASS_RPS'));
 const TG_TOKEN = get_env_strict('TG_TOKEN');
