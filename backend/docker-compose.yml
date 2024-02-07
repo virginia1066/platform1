@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  beowolf:
+    image: beowolf
+    build:
+      context: ./
+    restart: always
+    mem_limit: 512m
+    environment:
+      - TZ=UTC
+      - TG_TOKEN=${TG_TOKEN}
+      - CLASS_RPS=${CLASS_RPS}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PORT=${DB_PORT}
+      - SERVER_PORT=${SERVER_PORT}
+      - DB_MAX_CONNECTIONS=${DB_MAX_CONNECTIONS}
+      - DEBUG_MODE=${DEBUG_MODE}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+        compress: "true"
