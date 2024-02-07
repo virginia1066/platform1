@@ -1,10 +1,21 @@
 name: CI
-on: [push]
+on: [ push ]
+
 jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: Deploy_env
+    env:
+      CLASS_RPS: 7
+      SERVER_PORT: 3000
+      DEBUG_MODE: 1
+      TG_TOKEN: ${{ secrets.TG_TOKEN }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_MAX_CONNECTIONS: 50
     steps:
       - uses: actions/checkout@main
       - name: Push to server
@@ -19,13 +30,4 @@ jobs:
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
             cd ./backend
             docker-compose build
-            CLASS_RPS=7 \
-            TG_TOKEN=${{ secrets.TG_TOKEN }} \
-            SERVER_PORT=3000 \
-            DEBUG_MODE=1 \
-            DB_HOST=${{ secrets.DB_HOST }} \
-            DB_USER=${{ secrets.DB_USER }} \
-            DB_PASS=${{ secrets.DB_PASS }} \
-            DB_PORT=${{ secrets.DB_PORT }} \
-            DB_MAX_CONNECTIONS=50 \
             docker-compose up -d
