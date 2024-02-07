@@ -11,7 +11,7 @@ export const get_env_strict = <U = string>(name: string, processor?: (data: stri
         throw new Error(`Env property ${name} is empty! Please check env!`);
     }
 
-    console.info(`Property: ${name} get from env successful!`);
+    console.info(`Property: ${name} get from env successful! Value is "${value}"`);
 
     return processor
         ? processor(value)
