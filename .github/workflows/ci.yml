@@ -26,7 +26,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ${{ vars.PROJECT_PATH }}
-            pwd
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
             cd ./backend
             docker-compose build

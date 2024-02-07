@@ -15,11 +15,5 @@ COPY src ./src/
 
 RUN npm run build
 
-EXPOSE 3050
-
-# Определяем параметр сборки ARG
-ARG MEM_LIMIT=200
-
-
 # Устанавливаем команду, которая будет выполняться при запуске контейнера
-CMD sh -c 'node -max-old-space-size=$MEM_LIMIT ./dist/index.js --color'
+CMD [ "npm", "start" ]
