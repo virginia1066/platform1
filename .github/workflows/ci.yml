@@ -6,20 +6,20 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: Deploy_env
-    env:
-      CLASS_RPS: 7
-      SERVER_PORT: 3000
-      DEBUG_MODE: 1
-      TG_TOKEN: ${{ secrets.TG_TOKEN }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASS: ${{ secrets.DB_PASS }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DB_MAX_CONNECTIONS: 50
     steps:
       - uses: actions/checkout@main
       - name: Push to server
         uses: appleboy/ssh-action@master
+        env:
+          CLASS_RPS: 7
+          SERVER_PORT: 3000
+          DEBUG_MODE: 1
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_MAX_CONNECTIONS: 50
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
