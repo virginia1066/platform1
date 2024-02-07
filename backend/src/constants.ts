@@ -11,7 +11,6 @@ config({
 });
 
 const CLASS_RPS = Number(get_env_strict('CLASS_RPS'));
-
 const TG_TOKEN = get_env_strict('TG_TOKEN');
 export const SERVER_PORT = Number(get_env_strict('SERVER_PORT'));
 export const REQUEST_QUEUE = new RequestQueue(CLASS_RPS);
