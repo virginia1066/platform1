@@ -17,12 +17,14 @@ import { Middleware } from 'koa';
  */
 const middleware: Middleware = (ctx, next) => {
     const headers = JSON.stringify(ctx.headers, null, 4);
-    const from_ip = ctx.request.ip;
+    const body = ctx.request.body
+        ? JSON.stringify(ctx.request.body, null, 4)
+        : `Has no body in request!`;
     console.info([
         'Request to create user webhook',
         `Headers: `,
         headers,
-        from_ip
+        body
     ].join('\n'));
 
     ctx.body = { ok: true };
