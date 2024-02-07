@@ -1,7 +1,7 @@
 import { knex } from '../constants';
 
 export const create_users = () =>
-    knex.schema.hasTable('users')
+    knex.schema.hasTable('users_from_webhook')
         .then(exists => {
             if (exists) {
                 return void 0;
