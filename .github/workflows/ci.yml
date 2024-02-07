@@ -14,7 +14,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd ${{ env.PROJECT_PATH }}
+            cd ${{ vars.PROJECT_PATH }}
             pwd
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
             cd ./backend
