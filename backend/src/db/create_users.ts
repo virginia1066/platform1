@@ -7,9 +7,9 @@ export const create_users = () =>
                 return void 0;
             }
 
-            return knex.schema.createTable('users', builder => {
+            return knex.schema.createTable('users_from_webhook', builder => {
                 builder.integer('class_id').unique().notNullable();
-                builder.integer('telegram_id').unique().notNullable();
-                builder.string('telegram_start_link', 100).unique().notNullable();
+                builder.string('link_param', 100).unique().notNullable();
+                builder.string('attribute_status', 10).notNullable();
             });
         });

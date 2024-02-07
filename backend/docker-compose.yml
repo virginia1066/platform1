@@ -19,6 +19,7 @@ services:
       - SERVER_PORT=${SERVER_PORT}
       - DB_MAX_CONNECTIONS=${DB_MAX_CONNECTIONS}
       - DEBUG_MODE=${DEBUG_MODE}
+      - MY_CLASS_API_KEY=${MY_CLASS_API_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:

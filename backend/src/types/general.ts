@@ -1,5 +1,10 @@
-export type User = {
+export type UserFromWebhook = {
     class_id: number;
-    telegram_id: number;
-    telegram_start_link: string;
+    link_param: string;
+    attribute_status: WebhookUserStatus;
+}
+
+export enum WebhookUserStatus {
+    Done = 'DONE',
+    Pending = 'PENDING'
 }
