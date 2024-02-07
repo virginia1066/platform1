@@ -16,7 +16,17 @@ import { Middleware } from 'koa';
  *           type: object
  */
 const middleware: Middleware = (ctx, next) => {
+    const headers = JSON.stringify(ctx.headers, null, 4);
+    const from_ip = ctx.request.ip;
+    console.info([
+        'Request to create user webhook',
+        `Headers: `,
+        headers,
+        from_ip
+    ].join('\n'));
 
+    ctx.body = { ok: true };
+    return next();
 };
 
 export default middleware;

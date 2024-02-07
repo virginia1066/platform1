@@ -1,0 +1,31 @@
+name: CI
+
+on: [push]
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Push to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git master
+            cd ./backend
+            docker-compose build
+            CLASS_RPS=7 \
+            TG_TOKEN=${{ secrets.TG_TOKEN }} \
+            SERVER_PORT=3000 \
+            DEBUG_MODE=1 \
+            DB_HOST=${{ secrets.DB_HOST }} \
+            DB_USER=${{ secrets.DB_USER }} \
+            DB_PASS=${{ secrets.DB_PASS }} \
+            DB_PORT=${{ secrets.DB_PORT }} \
+            DB_MAX_CONNECTIONS=50 \
+            docker-compose up -d
