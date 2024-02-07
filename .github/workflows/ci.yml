@@ -1,7 +1,5 @@
 name: CI
-
 on: [push]
-
 jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -11,11 +9,11 @@ jobs:
       - name: Push to server
         uses: appleboy/ssh-action@master
         with:
-          host: 83.147.246.32
+          host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd ${{ vars.PROJECT_PATH }}
+            cd ${{ env.PROJECT_PATH }}
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
             cd ./backend
 #            docker-compose build
