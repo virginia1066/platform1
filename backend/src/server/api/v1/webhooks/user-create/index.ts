@@ -4,6 +4,7 @@ import { number, object, string } from 'yup';
 import { knex, MESSAGE_BUS } from '../../../../../constants';
 import { WebhookUserStatus } from '../../../../../types/general';
 import { make_id } from '../../../../../utils/make_id';
+import { randomUUID } from 'crypto';
 
 const body_schema = object().shape({
     event: string().required().oneOf(['user_new']),
@@ -35,7 +36,7 @@ const middleware: Middleware = (ctx, next) => {
         .insert([{
             class_id: userId,
             attribute_status: WebhookUserStatus.Pending,
-            link_param: make_id(`link-${userId}-${crypto.randomUUID()}`)
+            link_param: make_id(`link-${userId}-${randomUUID()}`)
         }])
         .returning('*')
         .then(([user]) => {
