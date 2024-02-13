@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export type UserFromWebhook = {
     class_id: number;
     link_param: string;
@@ -7,4 +9,9 @@ export type UserFromWebhook = {
 export enum WebhookUserStatus {
     Done = 'DONE',
     Pending = 'PENDING'
+}
+
+export type AccessToken<Date = Dayjs> = {
+    token: string;
+    expiredAt: Date;
 }

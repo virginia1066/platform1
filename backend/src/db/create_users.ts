@@ -1,4 +1,5 @@
 import { knex } from '../constants';
+import { info } from '../utils/log';
 
 export const create_users = () =>
     knex.schema.hasTable('users_from_webhook')
@@ -12,4 +13,5 @@ export const create_users = () =>
                 builder.string('link_param', 100).unique().notNullable();
                 builder.string('attribute_status', 10).notNullable();
             });
-        });
+        })
+        .then(() => info(`'users_from_webhook' table initialized!`));

@@ -6,6 +6,7 @@ import { SERVER_PORT } from '../constants';
 import Router from 'koa-router';
 import mount from 'koa-mount';
 import user_create_webhook_M from './api/v1/webhooks/user-create';
+import { info } from '../utils/log';
 
 export const create_server = () => {
     const app = new Koa();
@@ -27,5 +28,5 @@ export const create_server = () => {
         .use(mount('/api/v1', api_v1))
         .listen(SERVER_PORT);
 
-    console.info(`Launch server on port ${SERVER_PORT}`);
+    info(`Launch server on port ${SERVER_PORT}`);
 };

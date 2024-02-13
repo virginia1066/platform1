@@ -1,5 +1,6 @@
 import { Middleware } from 'koa';
 import { pick } from 'ramda';
+import { error, warn } from '../../../utils/log';
 
 export abstract class ServerError extends Error {
     public readonly code: number;
@@ -47,8 +48,8 @@ export class PermissionDenied extends ServerError {
 }
 
 const logger = {
-    warn: console.warn,
-    error: console.error
+    warn: warn,
+    error: error
 }
 
 export const applyErrorM: Middleware = (ctx, next) =>
