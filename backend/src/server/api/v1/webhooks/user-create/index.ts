@@ -5,12 +5,13 @@ import { knex, MESSAGE_BUS } from '../../../../../constants';
 import { WebhookUserStatus } from '../../../../../types/general';
 import { make_id } from '../../../../../utils/make_id';
 import { randomUUID } from 'crypto';
-import { info } from '../../../../../utils/log';
+import { info, warn } from '../../../../../utils/log';
 
 const body_schema = object().shape({
     event: string().required().oneOf(['user_new']),
     object: object().required().shape({
-        userId: number().required().integer()
+        userId: number().required().integer(),
+        name: string().required()
     })
 });
 
@@ -33,8 +34,17 @@ const body_schema = object().shape({
  *           type: object
  */
 const middleware: Middleware = (ctx, next) => {
-    const { object: { userId } } = yup_validate_sync(body_schema, ctx.request.body);
+    const { object: { userId, name } } = yup_validate_sync(body_schema, ctx.request.body);
     info(`Get user create event from my class! ${userId}`, ctx.request.body);
+
+    /**
+     * Код для отладки, пропускаем всех пользователей кроме тестового ученика
+     */
+    if (!/Тестовый Ученик \d/.test(name)) {
+        warn(`Not test student! Skip student!`);
+        ctx.body = { ok: true };
+        return next()
+    }
 
     return knex('users_from_webhook')
         .insert([{
