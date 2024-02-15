@@ -7,6 +7,7 @@ import Router from 'koa-router';
 import mount from 'koa-mount';
 import user_create_webhook_M from './api/v1/webhooks/user-create';
 import { info } from '../utils/log';
+import { replace_mk_id_M } from './api/v1/debug/tg/replace_mk_id_M';
 
 export const create_server = () => {
     const app = new Koa();
@@ -14,6 +15,7 @@ export const create_server = () => {
 
     router_v1
         .post('/webhooks/user-create', user_create_webhook_M)
+        .post('/debug/tg/replace-mk-id', replace_mk_id_M)
 
     const api_v1 = new Koa();
 
