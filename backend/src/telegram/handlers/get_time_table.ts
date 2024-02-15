@@ -4,7 +4,7 @@ import { get_dictionaries } from '../../utils/get_dictionaries';
 import { get_manager, get_user_lessons } from '../../utils/request_mk';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { getFixedT, t } from 'i18next';
-import { always, indexBy, pipe, prop, propEq } from 'ramda';
+import { always, indexBy, isNotNil, pipe, prop, propEq } from 'ramda';
 import dayjs from 'dayjs';
 import { error } from '../../utils/log';
 
@@ -88,12 +88,18 @@ export const get_time_table =
                                 month
                             } = get_base_info(lesson);
 
-                            return t('detailed', {
-                                date, week_day, month,
-                                icon, course_type, filial, time_interval, address,
-                                link: `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`,
-                                manager: managers_hash[lesson_class.managerIds[0]].name
-                            });
+                            const manager = managers_hash[lesson_class.managerIds[0]].name;
+
+                            return [
+                                t('detailed.date', { date, month, week_day }),
+                                t('detailed.type', { icon, course_type, filial }),
+                                t('detailed.time', { time_interval }),
+                                lesson.filialId === 30082 ? t('detailed.place', {
+                                    link: `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`,
+                                    address
+                                }) : null,
+                                t('detailed.manager', { manager })
+                            ].filter(isNotNil).join('\n');
                         });
 
                         return new MessageSpliter([

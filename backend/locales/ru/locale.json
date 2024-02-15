@@ -36,7 +36,13 @@
         "header_few": "{{count}} занятия в ближайшие 4 недели",
         "header_many": "{{count}} занятий в ближайшие 4 недели",
         "short": "<code>{{date}} {{month}} {{week_day}}</code>\n<b>{{time_interval}}</b> {{course_type}} {{filial}} занятие",
-        "detailed": "<b>{{date}} {{month}}</b> {{week_day}}\n{{icon}} {{course_type}} <b>{{filial}}</b> занятие\nВремя <b>{{time_interval}}</b>\nМесто <a href=\"{{link}}\">{{address}}</a>\nПреподаватель <b>{{manager}}</b>"
+        "detailed": {
+          "date": "<b>{{date}} {{month}}</b> {{week_day}}",
+          "type": "{{icon}} {{course_type}} <b>{{filial}}</b> занятие",
+          "time": "Время <b>{{time_interval}}</b>",
+          "place": "Место <a href=\"{{link}}\">{{address}}</a>",
+          "manager": "Преподаватель <b>{{manager}}</b>"
+        }
       },
       "subscription": {
         "empty": "У вас пока нет абонементов.\n\nКупить или продлить абонемент: {{admin}}",
