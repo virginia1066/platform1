@@ -1,7 +1,7 @@
 import { get_student, GetStudentResponse, update_student, update_user_attribute } from '../utils/request_mk';
 import { info } from '../utils/log';
 import { generate_email } from '../utils/generate_email';
-import { knex, MESSAGE_BUS, TG_LINK_ATTRIBUTE_ID } from '../constants';
+import { knex, MESSAGE_BUS, TG_BOT_NAME, TG_LINK_ATTRIBUTE_ID } from '../constants';
 import { UserFromWebhook, WebhookUserStatus } from '../types/general';
 import { head, map, pipe, prop, tap } from 'ramda';
 
@@ -36,7 +36,7 @@ export const make_auth_link_daemon = () => {
                             throw new Error(`Has no link data for user!`);
                         }
 
-                        const link = `https://t.me/BeowolfScoolBot?start=${link_data.link_param}`;
+                        const link = `https://t.me/${TG_BOT_NAME}?start=${link_data.link_param}`;
 
                         return update_user_attribute(class_user_id, TG_LINK_ATTRIBUTE_ID, link)
                             .then(() => knex('users_from_webhook')

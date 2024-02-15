@@ -29,7 +29,7 @@ const TG_TOKEN = get_env_strict('TG_TOKEN');
 export const TG = new TelegramBot(TG_TOKEN, {
     polling: true
 });
-
+export const TG_BOT_NAME = get_env_strict('TG_BOT_NAME');
 export const TG_LINK_ATTRIBUTE_ID = get_env_strict('TG_LINK_ATTRIBUTE_ID', Number);
 export const SERVER_PORT = get_env_strict('SERVER_PORT', Number);
 export const REQUEST_QUEUE = new RequestQueue(CLASS_RPS);
