@@ -12,6 +12,7 @@ RUN npm ci --verbose --no-audit
 # Копируем остальные файлы проекта в контейнер
 COPY tsconfig.json ./
 COPY src ./src/
+COPY locales ./locales/
 
 RUN npm run build
 
