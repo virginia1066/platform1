@@ -101,7 +101,8 @@ export const get_student_payments = cache((student_id: number) =>
         private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
             userId: student_id,
             limit: 500
-        }).then<PaymentsResponse>(parse_response),
+        })
+            .then<PaymentsResponse>(parse_response),
     make_time(5, 'minutes')
 );
 

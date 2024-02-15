@@ -11,13 +11,14 @@ import { error } from '../../utils/log';
 
 export const get_payments = (user: User) =>
     get_student_by_tg(user.id, true)
-        .then((student_id) => Promise
-            .all([
-                get_student_payments(student_id)
-                    .then(prop('payments')),
-                get_student({ student_id })
-                    .then(prop('balans'))
-            ]))
+        .then((student_id) =>
+            Promise
+                .all([
+                    get_student_payments(student_id)
+                        .then(prop('payments')),
+                    get_student({ student_id })
+                        .then(prop('balans'))
+                ]))
         .then(([payments, balance]) => {
             const t = getFixedT('ru', undefined, 'telegram.actions.payments');
 

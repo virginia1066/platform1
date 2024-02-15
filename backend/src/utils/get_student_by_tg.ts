@@ -14,6 +14,6 @@ export function get_student_by_tg(tg_user_id: number, strict?: boolean): Promise
                 throw new Error(`Has no user with id ${tg_user_id}!`);
             }
 
-            return data?.mk_id ?? void 0;
+            return data!.mk_id;
         });
 }

@@ -30,11 +30,15 @@ export const cache = <T extends (...args: Array<any>) => Promise<any>>(callback:
         if (!active_xhr_store[id] && (!ready_data_store[id] || ready_data_store[id]!.expire_at < Date.now())) {
             const request = callback(...args);
 
-            request.then((data: PromiseEntry<ReturnType<T>>) => {
-                const expired_at = Date.now() + time;
-                delete active_xhr_store[id];
-                ready_data_store[id] = Object.assign(Object.create(null), { expired_at, data });
-            });
+            request
+                .then((data: PromiseEntry<ReturnType<T>>) => {
+                    const expired_at = Date.now() + time;
+                    delete active_xhr_store[id];
+                    ready_data_store[id] = Object.assign(Object.create(null), { expired_at, data });
+                })
+                .catch(() => {
+                    delete active_xhr_store[id];
+                });
 
             return request;
         }
