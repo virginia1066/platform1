@@ -33,6 +33,9 @@ services:
       - DEBUG_MODE=${DEBUG_MODE}
       - MY_CLASS_API_KEY=${MY_CLASS_API_KEY}
       - TG_LINK_ATTRIBUTE_ID=${TG_LINK_ATTRIBUTE_ID}
+      - TG_MK_ADMIN_USER=${TG_MK_ADMIN_USER}
+      - MK_MASTER_PASSWORD=${MK_MASTER_PASSWORD}
+      - MK_SITE_ORIGIN=${MK_SITE_ORIGIN}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:

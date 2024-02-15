@@ -7,23 +7,55 @@ import { join } from 'node:path';
 import { EventEmitter } from 'typed-ts-events';
 import { MessageBussEvents } from './types/events';
 import { error, info, warn } from './utils/log';
+import TelegramBot from 'node-telegram-bot-api';
+import { init } from 'i18next';
+import locale from '../locales/ru/locale.json';
+import 'dayjs/locale/ru.js';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from 'dayjs';
+
+dayjs.locale('ru');
+dayjs.extend(customParseFormat);
 
 config({
     path: join(__dirname, '..', '.env')
 });
 
+const DEBUG = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
+
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
 const TG_TOKEN = get_env_strict('TG_TOKEN');
+
+export const TG = new TelegramBot(TG_TOKEN, {
+    polling: true
+});
 
 export const TG_LINK_ATTRIBUTE_ID = get_env_strict('TG_LINK_ATTRIBUTE_ID', Number);
 export const SERVER_PORT = get_env_strict('SERVER_PORT', Number);
 export const REQUEST_QUEUE = new RequestQueue(CLASS_RPS);
 export const MY_CLASS_API_KEY = get_env_strict('MY_CLASS_API_KEY');
+export const MK_MASTER_PASSWORD = get_env_strict('MK_MASTER_PASSWORD');
+export const MK_SITE_ORIGIN = get_env_strict('MK_SITE_ORIGIN');
+export const TG_MK_ADMIN_USER = get_env_strict('TG_MK_ADMIN_USER');
+export const MK_DATE_PATTERN = 'YYYY-MM-DD';
+export const MAX_TG_MESSAGE_LENGTH = 1_024;
 export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
+
+init({
+    lng: 'ru',
+    debug: DEBUG,
+    ns: ['translation'],
+    defaultNS: 'translation',
+    resources: {
+        ru: {
+            translation: locale
+        }
+    }
+});
 
 export const knex = Knex({
     client: 'pg',
-    debug: get_env_strict('DEBUG_MODE', pipe(Number, Boolean)),
+    debug: DEBUG,
     connection: {
         host: get_env_strict('DB_HOST'),
         user: get_env_strict('DB_USER'),

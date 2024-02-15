@@ -11,7 +11,18 @@ export enum WebhookUserStatus {
     Pending = 'PENDING'
 }
 
-export type AccessToken<Date = Dayjs> = {
+export type CompanyToken<Date = Dayjs> = {
     token: string;
     expiredAt: Date;
+}
+
+export type UserToken<Date = Dayjs> = {
+    token: string;
+    expiredAt: Date;
+    student_id: number;
+}
+
+export type TgUser = {
+    tg_id: number;
+    mk_id: number;
 }
