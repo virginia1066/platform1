@@ -13,12 +13,19 @@ import locale from '../locales/ru/locale.json';
 import 'dayjs/locale/ru.js';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
+import { BigNumber } from '@waves/bignumber';
 
 dayjs.locale('ru');
 dayjs.extend(customParseFormat);
 
 config({
     path: join(__dirname, '..', '.env')
+});
+
+BigNumber.config.set({
+    FORMAT: {
+        groupSeparator: ' '
+    }
 });
 
 const DEBUG = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));

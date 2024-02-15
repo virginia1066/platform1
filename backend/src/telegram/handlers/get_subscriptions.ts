@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { always, isNotNil, pipe } from 'ramda';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { error } from '../../utils/log';
+import { format_mk_date } from '../../utils/format_mk_date';
 
 export const get_subscriptions = (user: User) =>
     Promise
@@ -40,9 +41,6 @@ export const get_subscriptions = (user: User) =>
 
                 return t(`period.${ext}`, { count: Number(count) });
             };
-
-            const format_mk_date = (date: string): string =>
-                dayjs(date, 'YYYY-MM-DD').format('DD.MM.YYYY');
 
             const tpl_list = data.subscriptions.map(({
                                                          subscriptionId,

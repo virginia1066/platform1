@@ -91,6 +91,34 @@ export const get_classes = cache(() =>
         .then<Array<ClassesResponse>>(parse_response), make_time(4, 'hour')
 );
 
+export const get_student_payments = (student_id: number) =>
+    private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
+        userId: student_id,
+        limit: 500
+    }).then<PaymentsResponse>(parse_response);
+
+export enum PaymentOpType {
+    Income = 'income',
+    Debit = 'debit',
+    Refund = 'refund'
+}
+
+export type PaymentsResponse = {
+    payments: Array<{
+        id: number;
+        userId: number;
+        date: string;
+        summa: number;
+        userSubscriptionId: number | null;
+        optype: PaymentOpType;
+        filialId: number | null;
+        comment: string | null;
+        managerId: number | null;
+        paymentTypeId: number;
+        cashboxId: number | null;
+    }>
+}
+
 export const get_subscriptions_groups = cache(() =>
     private_req('https://api.moyklass.com/v1/company/subscriptionGroupings', {}, { includeSubscriptions: String(true) })
         .then<{

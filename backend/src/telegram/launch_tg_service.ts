@@ -21,6 +21,7 @@ import { get_subscription_type_hash } from '../utils/get_subscription_type_hash'
 import { get_time_table } from './handlers/get_time_table';
 import { get_subscriptions } from './handlers/get_subscriptions';
 import { get_start_message } from './handlers/get_start_message';
+import { get_payments } from './handlers/get_payments';
 
 export const launch_tg_service = () => {
     const buttons: Buttons = [
@@ -85,7 +86,7 @@ export const launch_tg_service = () => {
             {
                 id: 'payments',
                 type: ConfigType.Text,
-                text: () => 'payments',
+                text: get_payments,
                 buttons
             },
             {
