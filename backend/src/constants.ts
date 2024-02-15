@@ -28,6 +28,8 @@ BigNumber.config.set({
     }
 });
 
+export const ROOT_PATH = join(__dirname, '..');
+
 const DEBUG = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
 
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
@@ -46,6 +48,7 @@ export const MK_SITE_ORIGIN = get_env_strict('MK_SITE_ORIGIN');
 export const TG_MK_ADMIN_USER = get_env_strict('TG_MK_ADMIN_USER');
 export const MK_DATE_PATTERN = 'YYYY-MM-DD';
 export const MAX_TG_MESSAGE_LENGTH = 1_024;
+export const OFFLINE_FILIAL_ID = 30082;
 export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
 
 init({

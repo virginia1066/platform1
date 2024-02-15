@@ -16,25 +16,27 @@ const get_company_token_from_api = () =>
         }
     }).then<GetTokenResponse>(parse_response));
 
-const get_company_token = (): Promise<{ token: string }> =>
-    knex('company_access_tokens')
-        .select('*')
-        .where('expiredAt', '>=', dayjs().add(1, 'hour').toISOString())
-        .orderBy('expiredAt', 'desc')
-        .then((tokens) => {
-            const token = tokens.pop();
+const get_company_token = cache((): Promise<{ token: string }> =>
+        knex('company_access_tokens')
+            .select('*')
+            .where('expiredAt', '>=', dayjs().add(1, 'hour').toISOString())
+            .orderBy('expiredAt', 'desc')
+            .then((tokens) => {
+                const token = tokens.pop();
 
-            if (!token) {
-                return get_company_token_from_api()
-                    .then((token_info) => {
-                        return knex('company_access_tokens')
-                            .insert([{ token: token_info.accessToken, expiredAt: token_info.expiresAt }])
-                            .then(() => ({ token: token_info.accessToken }));
-                    });
-            }
+                if (!token) {
+                    return get_company_token_from_api()
+                        .then((token_info) => {
+                            return knex('company_access_tokens')
+                                .insert([{ token: token_info.accessToken, expiredAt: token_info.expiresAt }])
+                                .then(() => ({ token: token_info.accessToken }));
+                        });
+                }
 
-            return pick(['token'], token);
-        });
+                return pick(['token'], token);
+            }),
+    make_time(30, 'minutes')
+);
 
 const private_req = (url: string, init?: RequestInit, query?: Record<string, string | number | Array<string | number>>) =>
     get_company_token()
@@ -48,9 +50,10 @@ const private_req = (url: string, init?: RequestInit, query?: Record<string, str
             body: init?.body,
         })));
 
-export const get_student = ({ student_id }: GetStudentProps) =>
-    private_req(`https://api.moyklass.com/v1/company/users/${student_id}`)
-        .then<GetStudentResponse>(parse_response);
+export const get_student = cache(({ student_id }: GetStudentProps) =>
+        private_req(`https://api.moyklass.com/v1/company/users/${student_id}`)
+            .then<GetStudentResponse>(parse_response),
+    make_time(5, 'minutes'));
 
 export const update_student = (student_id: number, update_props: UpdateStudentProps) =>
     private_req(`https://api.moyklass.com/v1/company/users/${student_id}`, {
@@ -58,13 +61,14 @@ export const update_student = (student_id: number, update_props: UpdateStudentPr
         body: JSON.stringify(update_props),
     }).then<GetStudentResponse>(parse_response);
 
-export const get_user_lessons = (student_id: number) =>
+export const get_user_lessons = cache((student_id: number) =>
     private_req('https://api.moyklass.com/v1/company/lessons', {}, {
         userId: String(student_id),
         date: [dayjs().format(MK_DATE_PATTERN), dayjs().add(4, 'weeks').format(MK_DATE_PATTERN)],
         sort: 'date',
         limit: String(500)
-    }).then<GetLessonsRecordResponse>(parse_response);
+    }).then<GetLessonsRecordResponse>(parse_response), make_time(5, 'minutes')
+);
 
 export const get_manager = cache(
     (manager_id: number) =>
@@ -82,26 +86,52 @@ export const get_filials = cache(
 );
 
 export const get_courses = cache(() =>
-    private_req(`https://api.moyklass.com/v1/company/courses`)
-        .then<Array<CurseResponse>>(parse_response), make_time(4, 'hour')
+        private_req(`https://api.moyklass.com/v1/company/courses`)
+            .then<Array<CurseResponse>>(parse_response),
+    make_time(4, 'hour')
 );
 
 export const get_classes = cache(() =>
-    private_req(`https://api.moyklass.com/v1/company/classes`)
-        .then<Array<ClassesResponse>>(parse_response), make_time(4, 'hour')
+        private_req(`https://api.moyklass.com/v1/company/classes`)
+            .then<Array<ClassesResponse>>(parse_response),
+    make_time(4, 'hour')
 );
 
-export const get_student_payments = (student_id: number) =>
-    private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
-        userId: student_id,
-        limit: 500
-    }).then<PaymentsResponse>(parse_response);
+export const get_student_payments = cache((student_id: number) =>
+        private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
+            userId: student_id,
+            limit: 500
+        }).then<PaymentsResponse>(parse_response),
+    make_time(5, 'minutes')
+);
 
 export enum PaymentOpType {
     Income = 'income',
     Debit = 'debit',
     Refund = 'refund'
 }
+
+export const get_subscriptions_groups = cache(() =>
+    private_req('https://api.moyklass.com/v1/company/subscriptionGroupings', {}, { includeSubscriptions: String(true) })
+        .then<{
+            groupings: Array<{
+                id: number;
+                name: string,
+                subscriptions: Array<{ id: number }>
+            }>
+        }>(parse_response), make_time(4, 'hour'));
+
+export const get_student_subscriptions = cache((props: GetUserSubscriptionsProps) =>
+        private_req('https://api.moyklass.com/v1/company/userSubscriptions', {}, props)
+            .then<GetUserSubscriptionsResponse>(parse_response),
+    make_time(5, 'minutes')
+);
+
+export const update_user_attribute = (student_id: number, attr_id: number, value: string) =>
+    private_req(`https://api.moyklass.com/v1/company/users/${student_id}/attribute/${attr_id}`, {
+        method: 'POST',
+        body: JSON.stringify({ value })
+    }).then<{ value: string }>(parse_response);
 
 export type PaymentsResponse = {
     payments: Array<{
@@ -118,21 +148,6 @@ export type PaymentsResponse = {
         cashboxId: number | null;
     }>
 }
-
-export const get_subscriptions_groups = cache(() =>
-    private_req('https://api.moyklass.com/v1/company/subscriptionGroupings', {}, { includeSubscriptions: String(true) })
-        .then<{
-            groupings: Array<{
-                id: number;
-                name: string,
-                subscriptions: Array<{ id: number }>
-            }>
-        }>(parse_response), make_time(4, 'hour'));
-
-export const get_student_subscriptions = (props: GetUserSubscriptionsProps) =>
-    private_req('https://api.moyklass.com/v1/company/userSubscriptions', {}, props)
-        .then<GetUserSubscriptionsResponse>(parse_response);
-
 export type MkPeriodExt = 'day' | 'month' | 'year';
 export type MkPeriod = `${number} ${MkPeriodExt}`;
 
@@ -207,29 +222,6 @@ type GetFilialsResponse = {
     timezone: string;
     status: string;
 }
-
-export const update_user_attribute = (student_id: number, attr_id: number, value: string) =>
-    get_company_token()
-        .then(({ token }) =>
-            REQUEST_QUEUE.push(() => fetch(`https://api.moyklass.com/v1/company/users/${student_id}/attribute/${attr_id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Access-Token': token
-                },
-                body: JSON.stringify({ value })
-            }).then<{ value: string }>(parse_response)));
-
-export const get_all_attributes = () =>
-    get_company_token()
-        .then(({ token }) =>
-            REQUEST_QUEUE.push(() => fetch(`https://api.moyklass.com/v1/company/userAttributes`, {
-                    method: 'GET',
-                    headers: {
-                        'X-Access-Token': token
-                    }
-                }).then<Array<MyClass.Attribute>>(parse_response)
-            ));
 
 export type GetStudentProps = {
     student_id: number;

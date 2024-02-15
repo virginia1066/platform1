@@ -32,7 +32,8 @@ export class MessageSpliter {
                 }
             }
         }
-        return messages;
+        return messages
+            .filter(Boolean);
     }
 
 }

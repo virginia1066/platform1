@@ -3,13 +3,13 @@ import { get_student_by_tg } from '../../utils/get_student_by_tg';
 import {
     get_student_subscriptions,
     get_subscriptions_groups,
-    MkPeriod, MkPeriodExt,
+    MkPeriod,
+    MkPeriodExt,
     MkSubscriptionStatus
 } from '../../utils/request_mk';
 import { get_subscription_type_hash } from '../../utils/get_subscription_type_hash';
 import { getFixedT, t } from 'i18next';
 import { TG_MK_ADMIN_USER } from '../../constants';
-import dayjs from 'dayjs';
 import { always, isNotNil, pipe } from 'ramda';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { error } from '../../utils/log';
@@ -70,8 +70,11 @@ export const get_subscriptions = (user: User) =>
                                 ? t('unlimited')
                                 : t('interval.details', {
                                     beginDate: format_mk_date(beginDate!),
-                                    endDate: format_mk_date(endDate!)
-                                })
+                                    endDate: format_mk_date(endDate!),
+                                }),
+                        interpolation: {
+                            escapeValue: false
+                        }
                     }),
                     t('status.title', { status: t(`status.${statusId}`) })
                 ].filter(isNotNil).join('\n');

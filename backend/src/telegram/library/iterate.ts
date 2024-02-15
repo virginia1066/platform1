@@ -6,6 +6,7 @@ export const iterate = <T, U>(cb: (item: T, is_last: boolean) => Promise<U>, lis
         const loop = () => {
             if (!copy_list.length) {
                 resolve(result);
+                return void 0;
             }
 
             const item = copy_list.pop()!;

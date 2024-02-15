@@ -60,10 +60,10 @@
       },
       "subscription": {
         "empty": "У вас пока нет абонементов.\n\nКупить или продлить абонемент: {{admin}}",
-        "header_one": "У вас {{count}} действующий абонемент:",
-        "header_few": "У вас {{count}} действующих абонемента:",
-        "header_many": "У вас {{count}} действующих абонементов:",
-        "item": "{{index}} Абонемент <b>{{period}} - {{visitCount}}</b>\nТип абонемента: <b>{{type}}</b>",
+        "header_one": "У вас <b>{{count}}</b> действующий абонемент:",
+        "header_few": "У вас <b>{{count}}</b> действующих абонемента:",
+        "header_many": "У вас <b>{{count}}</b> действующих абонементов:",
+        "item": "{{index}} <b>{{period}} - {{visitCount}}</b>\nТип абонемента: <b>{{type}}</b>",
         "visitCount_zero": "Без лимит",
         "visitCount_one": "{{count}} занятий",
         "visitCount_few": "{{count}} занятия",
@@ -73,15 +73,15 @@
         "unlimited": "Бессрочный",
         "frozen": "Заморожен",
         "interval": {
-          "title": "Срок действия абонемента: <b>{{interval}}</b>",
+          "title": "Срок действия абонемента: {{interval}}",
           "disabled": "Не активный",
-          "details": "c {{beginDate}} по {{endDate}}"
+          "details": "c <code>{{beginDate}}</code> по <code>{{endDate}}</code>"
         },
         "status": {
           "title": "Статус: <b>{{status}}</b>",
-          "1": "Не активный",
-          "2": "Активный",
-          "3": "Заморожен",
+          "1": "⚪Не активный",
+          "2": "✅Активный",
+          "3": "❄Заморожен",
           "4": "Закончен"
         },
         "period": {

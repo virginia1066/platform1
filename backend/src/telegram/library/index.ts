@@ -1,5 +1,5 @@
 import * as TelegramBot from 'node-telegram-bot-api';
-import { Message, User } from 'node-telegram-bot-api';
+import { Message, SendMessageOptions, User } from 'node-telegram-bot-api';
 import {
     BaseItem,
     Buttons,
@@ -15,9 +15,12 @@ import { curry, indexBy, prop, propEq } from 'ramda';
 import { isCommand, isFunction, isPromise } from './utils';
 import { resolveResponse } from './resolveDynamic';
 import { randomUUID } from 'crypto';
-import { info } from '../../utils/log';
+import { error, info, warn } from '../../utils/log';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { iterate } from './iterate';
+import { make_time } from '../../utils/cache';
+import { wait } from '../../utils/wait';
+import { send } from './send';
 
 export { ConfigType, ResponseItem, Buttons, Button } from './types';
 
@@ -98,7 +101,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
                     const messages = text.get_messages();
 
                     return iterate((message: string, is_last: boolean) => {
-                        return tg.sendMessage(user.id, message, {
+                        return send(tg, user.id, message, {
                             parse_mode: config.parseMode,
                             disable_web_page_preview: true,
                             reply_markup: is_last ? keyboard : {
@@ -109,7 +112,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
                         });
                     }, messages);
                 } else {
-                    return tg.sendMessage(user.id, text, {
+                    return send(tg, user.id, text, {
                         parse_mode: config.parseMode,
                         disable_web_page_preview: true,
                         reply_markup: keyboard

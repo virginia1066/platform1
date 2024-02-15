@@ -43,7 +43,7 @@ export const cache = <T extends (...args: Array<any>) => Promise<any>>(callback:
             return active_xhr_store[id];
         }
 
-        return ready_data_store[id]!.data;
+        return Promise.resolve(ready_data_store[id]!.data);
     }) as T;
 };
 

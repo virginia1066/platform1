@@ -7,6 +7,7 @@ import { getFixedT, t } from 'i18next';
 import { always, indexBy, isNotNil, pipe, prop, propEq } from 'ramda';
 import dayjs from 'dayjs';
 import { error } from '../../utils/log';
+import { OFFLINE_FILIAL_ID } from '../../constants';
 
 export const get_time_table =
     (user: User) =>
@@ -37,7 +38,9 @@ export const get_time_table =
 
                 const filial_map: Partial<Record<number, string>> = {
                     30082: '🏠',
-                    30125: '🌐'
+                    30125: '🌐',
+                    30468: '💼',
+                    30424: '🥸'
                 };
 
                 const first_day = lessons[0].date;
@@ -57,7 +60,7 @@ export const get_time_table =
                         time_interval: `${lesson.beginTime}-${lesson.endTime}`,
                         course_type: course_type_map[course.courseType],
                         filial: hash_filials[lesson.filialId].name.toLowerCase(),
-                        icon: filial_map[lesson.filialId] ?? '',
+                        icon: filial_map[lesson.filialId] ?? '❔',
                         lesson_class: hash_classes[lesson.classId],
                         address: hash_filials[lesson.filialId].address
                     };
@@ -94,7 +97,7 @@ export const get_time_table =
                                 t('detailed.date', { date, month, week_day }),
                                 t('detailed.type', { icon, course_type, filial }),
                                 t('detailed.time', { time_interval }),
-                                lesson.filialId === 30082 ? t('detailed.place', {
+                                lesson.filialId === OFFLINE_FILIAL_ID ? t('detailed.place', {
                                     link: `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`,
                                     address
                                 }) : null,
