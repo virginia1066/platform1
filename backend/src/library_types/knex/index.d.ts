@@ -1,4 +1,5 @@
 import { CompanyToken, TgUser, UserFromWebhook, UserToken } from '../../types/general';
+import { Pack, PackLink, Word } from '../../types/Wokobular';
 
 
 declare module 'knex/types/tables' {
@@ -7,9 +8,13 @@ declare module 'knex/types/tables' {
 
         company_access_tokens: CompanyToken<string>;
 
-        user_csrf_tokens: UserToken<string>;
-
         tg_users: TgUser;
+
+        packs: Pack;
+
+        pack_links: PackLink;
+
+        words: Word;
     }
 
 }
