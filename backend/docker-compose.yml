@@ -37,6 +37,9 @@ services:
       - MK_MASTER_PASSWORD=${MK_MASTER_PASSWORD}
       - MK_SITE_ORIGIN=${MK_SITE_ORIGIN}
       - TG_BOT_NAME=${TG_BOT_NAME}
+      - LK_SITE_ORIGIN=${LK_SITE_ORIGIN}
+      - GOOGLE_SHEETS_ID=${GOOGLE_SHEETS_ID}
+      - GOOGLE_SHEETS_API_KEY=${GOOGLE_SHEETS_API_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
