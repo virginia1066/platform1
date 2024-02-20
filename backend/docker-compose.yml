@@ -8,6 +8,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../build:/usr/share/nginx/html:ro
     logging:
       driver: json-file
       options:
