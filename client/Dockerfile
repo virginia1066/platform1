@@ -23,7 +23,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Копировать собранные файлы React из предыдущего этапа в Nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html/web-app
 
 # Указать порт, который будет использоваться во время выполнения контейнера
 EXPOSE 80
