@@ -37,9 +37,5 @@ jobs:
           script: |
             cd ${{ vars.PROJECT_PATH }}
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
-            cd ./client
-            npm run build
-            npm ci
-            cd ../backend
             docker-compose build
             docker-compose up -d

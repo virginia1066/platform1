@@ -8,14 +8,13 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ../build:/usr/share/nginx/html:ro
     logging:
       driver: json-file
       options:
         max-size: 10m
         max-file: "3"
         compress: "true"
-  beowolf:
+  beowolf-backend:
     image: beowolf
     build:
       context: ./

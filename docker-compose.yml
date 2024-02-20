@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  client-nginx:
+    extends:
+      service: client-nginx
+      file: ./client/docker-compose.yml
+  root-nginx:
+    extends:
+      service: root-nginx
+      file: ./backend/docker-compose.yml
+  backend:
+    extends:
+      service: beowolf-backend
+      file: ./backend/docker-compose.yml
