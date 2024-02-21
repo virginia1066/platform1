@@ -1,6 +1,11 @@
 import { Card } from 'fsrs.js';
 import { Replace } from './utils';
 
+export enum WokobularStatus {
+    Active = 'ACTIVE',
+    Deleted = 'Deleted'
+}
+
 /**
  * Колода
  */
@@ -17,6 +22,10 @@ export type Pack = {
      * Кому доступна колода. Колода с parent_user_id = 0 считается системной и доступна всем
      */
     parent_user_id: number;
+    /**
+     * Статус колоды
+     */
+    status: WokobularStatus;
 }
 
 export type BaseCard<Date = string> = Replace<Card, 'due' | 'last_review', Date>;

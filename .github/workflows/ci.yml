@@ -26,14 +26,16 @@ jobs:
           TG_BOT_NAME: ${{ vars.TG_BOT_NAME }}
           MK_MASTER_PASSWORD: ${{ secrets.MK_MASTER_PASSWORD }}
           MK_SITE_ORIGIN: ${{ vars.MK_SITE_ORIGIN }}
+          LK_SITE_ORIGIN: ${{ vars.LK_SITE_ORIGIN }}
+          GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+          GOOGLE_SHEETS_API_KEY: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: CLASS_RPS,SERVER_PORT,DEBUG_MODE,TG_TOKEN,DB_HOST,DB_USER,DB_PASS,DB_PORT,DB_MAX_CONNECTIONS,MY_CLASS_API_KEY,TG_LINK_ATTRIBUTE_ID,TG_MK_ADMIN_USER,MK_MASTER_PASSWORD,MK_SITE_ORIGIN,TG_BOT_NAME
+          envs: CLASS_RPS,SERVER_PORT,DEBUG_MODE,TG_TOKEN,DB_HOST,DB_USER,DB_PASS,DB_PORT,DB_MAX_CONNECTIONS,MY_CLASS_API_KEY,TG_LINK_ATTRIBUTE_ID,TG_MK_ADMIN_USER,MK_MASTER_PASSWORD,MK_SITE_ORIGIN,TG_BOT_NAME,LK_SITE_ORIGIN,GOOGLE_SHEETS_ID,GOOGLE_SHEETS_API_KEY
           script: |
             cd ${{ vars.PROJECT_PATH }}
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
-            cd ./backend
             docker-compose build
             docker-compose up -d

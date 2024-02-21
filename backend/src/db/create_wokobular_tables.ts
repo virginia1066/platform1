@@ -7,6 +7,7 @@ export const create_wokobular_tables = () =>
                 builder.string('name', 50).notNullable();
                 builder.increments('id').notNullable();
                 builder.integer('parent_user_id').notNullable();
+                builder.string('status', 20).notNullable();
 
                 builder.index('parent_user_id');
             }),

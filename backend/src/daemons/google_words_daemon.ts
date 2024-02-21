@@ -1,7 +1,7 @@
 import { interval } from '../utils/interval';
 import { make_time } from '../utils/cache';
 import { get_google_wokobular } from '../utils/get_google_wokobular';
-import { Pack, Word } from '../types/Wokobular';
+import { Pack, WokobularStatus, Word } from '../types/Wokobular';
 import { knex } from '../constants';
 import { always, head, pipe } from 'ramda';
 import { error, info as log_info } from '../utils/log';
@@ -40,7 +40,11 @@ export const google_words_daemon = () => {
                                 if (!pack) {
                                     info(`Has no system pack! Create new pack with name ${value.pack_name}!`);
                                     return knex('packs')
-                                        .insert({ name: value.pack_name, parent_user_id: 0 })
+                                        .insert({
+                                            name: value.pack_name,
+                                            parent_user_id: 0,
+                                            status: WokobularStatus.Active
+                                        })
                                         .returning('*')
                                         .then<Pack>(head);
                                 } else {
