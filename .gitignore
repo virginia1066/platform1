@@ -4,3 +4,5 @@
 **/.env*
 **/swagger-spec.json
 **/build
+.DS_Store
+**/.DS_Store

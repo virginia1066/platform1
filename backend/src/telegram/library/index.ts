@@ -1,5 +1,5 @@
 import * as TelegramBot from 'node-telegram-bot-api';
-import { Message, SendMessageOptions, User } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 import {
     BaseItem,
     Buttons,
@@ -15,11 +15,9 @@ import { curry, indexBy, prop, propEq } from 'ramda';
 import { isCommand, isFunction, isPromise } from './utils';
 import { resolveResponse } from './resolveDynamic';
 import { randomUUID } from 'crypto';
-import { error, info, warn } from '../../utils/log';
+import { info } from '../../utils/log';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { iterate } from './iterate';
-import { make_time } from '../../utils/cache';
-import { wait } from '../../utils/wait';
 import { send } from './send';
 
 export { ConfigType, ResponseItem, Buttons, Button } from './types';
@@ -94,7 +92,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
                             text: item.text
                         });
                     })),
-                    one_time_keyboard: true,
+                    one_time_keyboard: false,
                     resize_keyboard: true
                 };
                 if (text instanceof MessageSpliter) {

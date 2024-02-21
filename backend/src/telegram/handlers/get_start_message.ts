@@ -52,4 +52,4 @@ export const get_start_message = (buttons: Buttons) => (user: User, message: Mes
                 });
         })
         .catch(always({ id: 'start-error' }));
-}
+};
