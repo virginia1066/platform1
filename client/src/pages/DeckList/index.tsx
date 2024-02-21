@@ -1,26 +1,27 @@
-
-import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { Block } from '../../components/Block/inedex';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Header } from '../../components/Header';
-import './DeckList.css';
-import { useEffect } from 'react';
+import { Button, Flex } from '@chakra-ui/react'
 
 export const DeckList = () => {
-  useEffect(() => {
-    console.log(window.Telegram.WebApp.themeParams)
-  },[])
+
+  const { t } = useTranslation();
+
   return (
-    <div className="d-flex flex-column h-100 justify-content-between" style={{backgroundColor:window.Telegram.WebApp.themeParams.secondary_bg_color}}>
-      <Header title='Ваши колоды' />
+    <Flex
+      justifyContent={'space-between'}
+      h={'full'}
+      flexDir={'column'}>
+      <Header title={t('vocabulary.deckList.header')} />
       <div>
         <Block>
           Базовые слова
         </Block>
       </div>
       <ButtonBar>
-        <Button variant="primary">Создавть колоду</Button>
+        <Button variant={"main"}>Создавть колоду</Button>
       </ButtonBar>
-    </div>
+    </Flex>
   );
 }

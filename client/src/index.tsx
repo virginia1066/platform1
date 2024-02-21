@@ -1,16 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-
+import { ChakraProvider } from '@chakra-ui/react';
+import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { App } from './App';
+import { Telegram } from "@twa-dev/types"
+import tgTheme from './theme/delmar/tgTheme';
+
+declare global {
+  interface Window {
+    Telegram: Telegram;
+  }
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
+    <ChakraProvider theme={tgTheme}>
     <App />
+    </ChakraProvider>
   </React.StrictMode>
 );
 

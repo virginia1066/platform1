@@ -1,8 +1,9 @@
+import { Container } from "@chakra-ui/react";
 import { DeckList } from "./pages/DeckList";
-import './bootstrap.scss';
+import { themeParams } from "./theme/defaults";
 
 export const App = () => (
-    <div className="conatainer h-100">
+    <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color}>
         <DeckList />
-    </div>
+    </Container>
 )

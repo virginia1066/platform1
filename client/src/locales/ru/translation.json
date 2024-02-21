@@ -1,0 +1,13 @@
+{
+    "vocabulary": {
+        "deckList": {
+            "header": "Ваши колоды"
+        },
+        "deckEdit": {
+            "header": "Редактирование колоды"
+        },
+        "new": "Новые",
+        "studied": "Изучаемые",
+        "repeatable": "Повторяемые"
+    }
+}
