@@ -1,7 +1,9 @@
 {
     "vocabulary": {
         "deckList": {
-            "header": "Ваши колоды"
+            "header": "Ваши колоды",
+            "content": "Базовые слова",
+            "button": "Создать колоду"
         },
         "deckEdit": {
             "header": "Редактирование колоды"

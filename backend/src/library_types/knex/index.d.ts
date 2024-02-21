@@ -1,5 +1,5 @@
-import { CompanyToken, TgUser, UserFromWebhook, UserToken } from '../../types/general';
-import { Pack, PackLink, Word } from '../../types/Wokobular';
+import { CompanyToken, TgUser, UserFromWebhook } from '../../types/general';
+import { LearnCard, Pack, PackLink, Word } from '../../types/Wokobular';
 
 
 declare module 'knex/types/tables' {
@@ -15,6 +15,8 @@ declare module 'knex/types/tables' {
         pack_links: PackLink;
 
         words: Word;
+
+        learn_cards: LearnCard;
     }
 
 }

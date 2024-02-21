@@ -1,8 +1,8 @@
 import { interval } from '../utils/interval';
 import { make_time } from '../utils/cache';
 import { get_google_wokobular } from '../utils/get_google_wokobular';
-import { Pack, WokobularStatus, Word } from '../types/Wokobular';
-import { knex } from '../constants';
+import { Pack, PackStatus, Word } from '../types/Wokobular';
+import { knex, SYSTEM_PACK_ID } from '../constants';
 import { always, head, pipe } from 'ramda';
 import { error, info as log_info } from '../utils/log';
 
@@ -42,8 +42,8 @@ export const google_words_daemon = () => {
                                     return knex('packs')
                                         .insert({
                                             name: value.pack_name,
-                                            parent_user_id: 0,
-                                            status: WokobularStatus.Active
+                                            parent_user_id: SYSTEM_PACK_ID,
+                                            status: PackStatus.Active
                                         })
                                         .returning('*')
                                         .then<Pack>(head);
