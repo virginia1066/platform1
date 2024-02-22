@@ -53,6 +53,8 @@ services:
       - LK_SITE_ORIGIN=${LK_SITE_ORIGIN}
       - GOOGLE_SHEETS_ID=${GOOGLE_SHEETS_ID}
       - GOOGLE_SHEETS_API_KEY=${GOOGLE_SHEETS_API_KEY}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - AMPLITUDE_API_KEY=${AMPLITUDE_API_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
