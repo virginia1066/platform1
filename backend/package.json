@@ -4,8 +4,10 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "rm -rf ./dist && npx tsc",
-    "start": "node ./dist/src/index.js --color"
+    "build": "rm -rf ./dist && npx tsc && npm run copy-proto",
+    "start": "node ./dist/src/index.js --color",
+    "build-proto": "rm -rf compiled-proto && npx ts-node ./compile-proto.ts -p ./protobuf -o ./compiled-proto",
+    "copy-proto": "cp -r ./compiled-proto ./dist/"
   },
   "repository": {
     "type": "git",
@@ -18,11 +20,15 @@
   },
   "homepage": "https://github.com/virginia1066/platform1#readme",
   "devDependencies": {
+    "@tsigel/async-map": "^1.0.3",
     "@types/node": "^20.11.16",
     "@types/swagger-jsdoc": "^6.0.4",
+    "@types/yargs": "^17.0.32",
+    "protobufjs-cli": "^1.1.2",
     "swagger-jsdoc": "^6.2.8",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "yargs": "^17.7.2"
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
@@ -32,7 +38,7 @@
     "@types/node-telegram-bot-api": "^0.64.2",
     "@types/ramda": "^0.29.10",
     "@waves/bignumber": "^1.1.1",
-    "@waves/ts-lib-crypto": "^0.0.2",
+    "@waves/ts-lib-crypto": "^1.1.0",
     "chalk": "^4.1.2",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",

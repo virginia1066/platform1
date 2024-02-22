@@ -33,7 +33,9 @@ export const ROOT_PATH = join(__dirname, '..');
 const DEBUG = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
 
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
-const TG_TOKEN = get_env_strict('TG_TOKEN');
+export const TG_TOKEN = get_env_strict('TG_TOKEN');
+export const SESSION_SECRET = get_env_strict('SESSION_SECRET');
+export const SESSION_NAME = 'SESSION';
 
 export const TG = new TelegramBot(TG_TOKEN, {
     polling: true,

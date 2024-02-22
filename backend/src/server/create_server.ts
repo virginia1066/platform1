@@ -8,8 +8,10 @@ import mount from 'koa-mount';
 import user_create_webhook_M from './api/v1/webhooks/user-create';
 import { info } from '../utils/log';
 import { replace_mk_id_M } from './api/v1/debug/tg/replace_mk_id_M';
-import { get_user_packs_M } from './api/v1/user/packs/get_user_packs_M';
+import { get_user_packs_M } from './api/v1/web-app/user/packs/get_user_packs_M';
 import { set_headers_M } from './middlewares/headers';
+import { auth_M } from './api/v1/web-app/user/auth';
+import { check_token_M } from './middlewares/check_token_M';
 
 export const create_server = () => {
     const app = new Koa();
@@ -19,9 +21,11 @@ export const create_server = () => {
         .use(set_headers_M({
             'Content-Type': 'application/json'
         }))
-        .get('/user/:id/packs', get_user_packs_M)
         .post('/webhooks/user-create', user_create_webhook_M)
         .post('/debug/tg/replace-mk-id', replace_mk_id_M)
+        .post('/web-app/auth', auth_M)
+        .use(check_token_M)
+        .get('/web-app/user/packs', get_user_packs_M)
 
     const api_v1 = new Koa();
 

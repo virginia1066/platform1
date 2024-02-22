@@ -8,6 +8,7 @@ export const DeckListGate = createGate({
 export const $deckList = coreD.createStore<Array<DeckItem>>([]);
 
 export const fetchDeckFx = coreD.createEffect(() => {
+    Telegram.WebApp.initDataUnsafe.auth_date
     return fetch('/api/v1/user/')
 });
 
