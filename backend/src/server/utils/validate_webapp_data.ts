@@ -81,8 +81,3 @@ export const validate_webapp_data = (init_data: string) => {
         }
     }
 };
-
-
-info(validate_webapp_data('query_id=AAHdpaUHAAAAAN2lpQerNKd8&user=%7B%22id%22%3A128296413%2C%22first_name%22%3A%22Daniil%22%2C%22last_name%22%3A%22Tsigelnitskiy%22%2C%22username%22%3A%22tsDaniil%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1708599037&hash=7ae25447aacb9991ac318be68dddb5ccc76c12168cbfb5fe496cbec423cb68b0'));
-
-process.exit(0);
