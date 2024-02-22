@@ -1,6 +1,7 @@
 import { parse_response } from './parse_response';
 import { warn } from './log';
 import { always, pipe } from 'ramda';
+import fetch from 'node-fetch';
 
 export const send_amplitude_event = ({ event_type, event_properties, user_id }: EventParams) =>
     fetch('https://api2.amplitude.com/2/httpapi', {
