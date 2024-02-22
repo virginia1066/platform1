@@ -11,6 +11,7 @@ import { Token } from '../../../../../../compiled-proto/token';
 import { base64Encode } from '@waves/ts-lib-crypto';
 import { SESSION_NAME } from '../../../../../constants';
 import { set_body } from '../../../../utils/set_body';
+import { info } from '../../../../../utils/log';
 
 const schema = object().shape({
     auth_data: string().required()
@@ -50,8 +51,9 @@ const schema = object().shape({
  *          description: Ошибки авторизации
  */
 
-export const auth_M: Middleware = (ctx, next) =>
-    yup_validate(schema, ctx.request.body)
+export const auth_M: Middleware = (ctx, next) => {
+    info(`Auth body:`, ctx.request.body, typeof ctx.request.body);
+    return yup_validate(schema, ctx.request.body)
         .then(({ auth_data }) => {
             const {
                 auth_date,
@@ -88,3 +90,4 @@ export const auth_M: Middleware = (ctx, next) =>
                 .then(set_body(ctx))
                 .then(next);
         });
+};
