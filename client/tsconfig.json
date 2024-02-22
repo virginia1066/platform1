@@ -12,6 +12,10 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/telegram-webapps-types"
+    ],
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
