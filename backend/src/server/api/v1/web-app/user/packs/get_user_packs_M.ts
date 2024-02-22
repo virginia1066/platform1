@@ -48,8 +48,8 @@ import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
  *         in: cookie
  *         name: SESSION
  */
-export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
-    Promise
+export const get_user_packs_M: MiddlewareWithToken = (ctx, next) => {
+    return Promise
         .all([
             knex('packs')
                 .where('status', PackStatus.Active)
@@ -83,6 +83,7 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
                 .map(omit(['pack_id'])))
         .then(set_body(ctx))
         .then(next);
+};
 
 type PackStat = {
     pack_id: number;

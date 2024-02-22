@@ -15,23 +15,28 @@ import { check_token_M } from './middlewares/check_token_M';
 
 export const create_server = () => {
     const app = new Koa();
-    const router_v1 = new Router();
+    const public_router = new Router();
+    const private_user_router = new Router();
 
-    router_v1
+    public_router
         .use(set_headers_M({
             'Content-Type': 'application/json'
         }))
         .post('/webhooks/user-create', user_create_webhook_M)
         .post('/debug/tg/replace-mk-id', replace_mk_id_M)
-        .post('/web-app/user/auth', auth_M)
+        .post('/web-app/user/auth', auth_M);
+
+    private_user_router
         .use(check_token_M)
-        .get('/web-app/user/packs', get_user_packs_M)
+        .get('/web-app/user/packs', get_user_packs_M);
 
     const api_v1 = new Koa();
 
     api_v1
-        .use(router_v1.routes())
-        .use(router_v1.allowedMethods());
+        .use(public_router.routes())
+        .use(private_user_router.routes())
+        .use(public_router.allowedMethods())
+        .use(private_user_router.allowedMethods());
 
     app
         .use(applyErrorM)

@@ -30,7 +30,7 @@ BigNumber.config.set({
 
 export const ROOT_PATH = join(__dirname, '..');
 
-const DEBUG = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
+export const DEBUG_MODE = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
 
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
 export const TG_TOKEN = get_env_strict('TG_TOKEN');
@@ -58,7 +58,7 @@ export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
 
 init({
     lng: 'ru',
-    debug: DEBUG,
+    debug: DEBUG_MODE,
     ns: ['translation'],
     defaultNS: 'translation',
     resources: {
@@ -70,7 +70,7 @@ init({
 
 export const knex = Knex({
     client: 'pg',
-    debug: DEBUG,
+    debug: DEBUG_MODE,
     connection: {
         host: get_env_strict('DB_HOST'),
         user: get_env_strict('DB_USER'),

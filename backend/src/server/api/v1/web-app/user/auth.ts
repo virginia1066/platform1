@@ -82,7 +82,7 @@ export const auth_M: Middleware = (ctx, next) => {
                     ctx.cookies.set(SESSION_NAME, token_str, {
                         httpOnly: true,
                         path: '/',
-                        maxAge: make_time(1, 'day') / 1_000
+                        maxAge: make_time(1, 'day')
                     });
 
                     return { ok: true };

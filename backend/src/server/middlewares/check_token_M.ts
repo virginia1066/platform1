@@ -15,6 +15,7 @@ export const check_token_M: MiddlewareWithToken = (ctx, next) => {
         .then((token) => {
             ctx.state.token = token;
         })
+        .then(next)
 }
 
 export type MiddlewareWithToken = Middleware<{ token: Token }>
