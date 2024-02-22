@@ -78,6 +78,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
 
     const sendResponseItem = curry((message: Message, response: ResponseItem) => {
         const user = getUser(message);
+        info(`Send response item:`, response);
         return Promise
             .all([
                 dynamic(message, response.text),
@@ -85,6 +86,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
                     .then((buttons) => loadButtons(message, buttons))
             ])
             .then(([text, buttons]): Promise<unknown> => {
+                info(`Send response resolved item:`, response);
                 const keyboard = {
                     keyboard: buttons.map((line) => line.map((item) => {
                         bind(item.text, user, item.action);
