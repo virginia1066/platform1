@@ -7,6 +7,8 @@ const serialize = (data: any) => {
         case 'string':
         case 'symbol':
             return data;
+        case 'function':
+            return String(data);
         default:
             return JSON.stringify(data, null, 4);
     }

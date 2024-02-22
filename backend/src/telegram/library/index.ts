@@ -57,7 +57,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
     };
 
     const dynamic = <T extends DynamicEntryTypes>(message: Message, item: Dynamic<T>): Promise<Resolve<T>> => {
-        info(`Dynamic:`, item.toString());
+        info(`Dynamic:`, item);
         if (isFunction(item)) {
             const res = item(getUser(message), message);
 
