@@ -152,6 +152,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
 
         if (isCommand) {
             const commandItem = tree[command];
+            info(`Launch command:`, commandItem);
 
             if (!commandItem || commandItem.type !== ConfigType.Command) {
                 return dynamic(message, config.unknownMessage)
