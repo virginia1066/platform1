@@ -23,7 +23,7 @@ export const create_server = () => {
         }))
         .post('/webhooks/user-create', user_create_webhook_M)
         .post('/debug/tg/replace-mk-id', replace_mk_id_M)
-        .post('/web-app/auth', auth_M)
+        .post('/web-app/user/auth', auth_M)
         .use(check_token_M)
         .get('/web-app/user/packs', get_user_packs_M)
 
