@@ -5,8 +5,11 @@ import { options } from 'yargs';
 import { asyncMap } from '@tsigel/async-map';
 import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
-import { info, error } from './src/utils/log';
 
+const { info, error } = {
+    info: console.log,
+    error: console.error
+};
 
 const { out, path } = options({
     out: {
