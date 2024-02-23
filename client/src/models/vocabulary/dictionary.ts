@@ -1,6 +1,7 @@
 import { createGate } from 'effector-react';
 import { coreD } from '../core';
 import { request } from '../../utils/request';
+import { prop } from 'ramda';
 
 export const DeckListGate = createGate({
     domain: coreD
@@ -10,6 +11,7 @@ export const $deckList = coreD.createStore<Array<DeckItem>>([]);
 
 export const fetchDeckFx = coreD.createEffect(() =>
     request<Array<DeckItem>>('/api/v1/web-app/user/packs')
+        .then(prop('data'))
 );
 
 type DeckItem = {
