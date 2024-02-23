@@ -73,7 +73,7 @@ export const auth_M: Middleware = (ctx, next) =>
             } = validate_webapp_data(auth_data);
 
             if (hash !== process.env.TEST_HASH) {
-                if (auth_date < dayjs().subtract(10, 'minute').valueOf()) {
+                if (auth_date * 1_000 < dayjs().subtract(10, 'minute').valueOf()) {
                     throw new BadRequest(`Auth date is too old!`);
                 }
             }
