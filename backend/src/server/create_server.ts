@@ -12,6 +12,7 @@ import { get_user_packs_M } from './api/v1/web-app/user/packs/get_user_packs_M';
 import { set_headers_M } from './middlewares/headers';
 import { auth_M } from './api/v1/web-app/user/auth';
 import { check_token_M } from './middlewares/check_token_M';
+import { get_pack_words_M } from './api/v1/web-app/user/packs/get_pack_words_M';
 
 export const create_server = () => {
     const app = new Koa();
@@ -28,7 +29,8 @@ export const create_server = () => {
 
     private_user_router
         .use(check_token_M)
-        .get('/web-app/user/packs', get_user_packs_M);
+        .get('/web-app/user/packs', get_user_packs_M)
+        .get('/web-app/user/packs/:pack_id', get_pack_words_M);
 
     const api_v1 = new Koa();
 

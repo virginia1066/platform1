@@ -6,7 +6,7 @@ import { make_auth_link_daemon } from './daemons/make_auth_link_daemon';
 import { pipe } from 'ramda';
 import { create_server } from './server/create_server';
 import { launch_tg_service } from './telegram/launch_tg_service';
-import { google_words_daemon } from './daemons/google_words_daemon';
+import { google_words_daemon } from './daemons/google_words_daemon/google_words_daemon';
 
 create_users()
     .then(() =>

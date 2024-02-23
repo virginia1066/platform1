@@ -1,8 +1,8 @@
-import { knex, SYSTEM_PACK_ID } from '../../../../../../constants';
-import { PackStatus } from '../../../../../../types/Wokobular';
-import { __, converge, identity, indexBy, map, mergeLeft, omit, pipe, prop } from 'ramda';
+import { knex } from '../../../../../../constants';
 import { set_body } from '../../../../../utils/set_body';
 import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
+import { evolve, map, pipe } from 'ramda';
+import { WordStatus } from '../../../../../../types/Wokobular';
 
 /**
  * @swagger
@@ -11,7 +11,8 @@ import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
  *     summary: Получить статистику колод пользователя
  *     description: >
  *       Возвращает статистику по колодам пользователя по его идентификатору.
- *       Требуется наличие httpOnly cookie SESSION.
+ *       Требуется наличие httpOnly cookie SESSION. Для  получения сессии смотри
+ *       /api/v1/web-app/user/auth.
  *     tags: [User Private API]
  *     security:
  *       - httpOnlyCookieAuth: []
@@ -48,47 +49,64 @@ import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
  *         in: cookie
  *         name: SESSION
  */
-export const get_user_packs_M: MiddlewareWithToken = (ctx, next) => {
-    return Promise
-        .all([
-            knex('packs')
-                .where('status', PackStatus.Active)
-                .where('parent_user_id', 'in', [SYSTEM_PACK_ID, ctx.state.token.user_id])
-                .then(map(omit(['parent_user_id', 'status']))),
-            knex('packs as p')
-                .join('pack_links as pl', 'p.id', '=', 'pl.pack_id')
-                .join('words as w', 'pl.word_id', '=', 'w.id')
-                .join('learn_cards as lc', 'w.id', '=', 'lc.word_id')
-                .where('p.parent_user_id', ctx.state.token.user_id)
-                .groupBy('p.id')
-                .select<PackStat[]>(
-                    'p.id as pack_id',
-                    knex.raw('SUM(CASE WHEN lc.state = 0 THEN 1 ELSE 0 END) AS count_new'),
-                    knex.raw('SUM(CASE WHEN lc.state = 1 THEN 1 ELSE 0 END) AS count_learning'),
-                    knex.raw('SUM(CASE WHEN lc.state = 2 THEN 1 ELSE 0 END) AS count_review'),
-                    knex.raw('SUM(CASE WHEN lc.state = 3 THEN 1 ELSE 0 END) AS count_relearning')
-                )
-                .then(indexBy(prop('pack_id')))
-        ])
-        .then(([pack_list, stats_hash]) =>
-            pack_list
-                .map(
-                    converge(
-                        mergeLeft, [
-                            identity,
-                            pipe(prop('id'), prop(__, stats_hash))
-                        ]
-                    )
-                )
-                .map(omit(['pack_id'])))
+
+const update_pack = ({
+                         words_count,
+                         count_new,
+                         count_relearning,
+                         count_learning,
+                         count_review,
+                         ...props
+                     }: PackStat): PackStat => ({
+    ...props,
+    count_review,
+    words_count,
+    count_learning,
+    count_relearning,
+    count_new: words_count - count_review - count_relearning - count_learning
+});
+
+export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
+    knex('packs as p')
+        .leftJoin('pack_links as pl', 'p.id', 'pl.pack_id')
+        .leftJoin('words as w', function () {
+            this.on('pl.word_id', 'w.id')
+                .andOn('w.status',  knex.raw('?', [WordStatus.Active]));
+        })
+        .leftJoin('learn_cards as lc', function () {
+            this.on('w.id', 'lc.word_id')
+                .andOn('lc.student_id', knex.raw('?', [ctx.state.token.user_id ]));
+        })
+        .whereIn('p.parent_user_id', [ctx.state.token.user_id, '0'])
+        .groupBy('p.id')
+        .select<PackStat<string>[]>(
+            'p.id AS id',
+            'p.name AS name',
+            knex.raw('COUNT(w.id) as words_count'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) AS count_new'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning')
+        )
+        .then(map(pipe(
+            evolve({
+                count_new: Number,
+                count_learning: Number,
+                count_review: Number,
+                count_relearning: Number,
+                words_count: Number
+            }),
+            update_pack
+        )))
         .then(set_body(ctx))
         .then(next);
-};
 
-type PackStat = {
-    pack_id: number;
-    count_new: number;
-    count_learning: number;
-    count_review: number;
-    count_relearning: number;
+type PackStat<Int = number> = {
+    id: number;
+    name: string;
+    count_new: Int;
+    count_learning: Int;
+    count_review: Int;
+    count_relearning: Int;
+    words_count: Int;
 };

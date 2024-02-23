@@ -3,7 +3,7 @@ import { object, string } from 'yup';
 import { yup_validate } from '../../../../../utils/yup_validate';
 import { validate_webapp_data } from '../../../../utils/validate_webapp_data';
 import { get_student_by_tg } from '../../../../../utils/get_student_by_tg';
-import { BadRequest } from '../../../../middlewares/errors';
+import { BadRequest, NotFound } from '../../../../middlewares/errors';
 import dayjs from 'dayjs';
 import { create } from '../../../../utils/token';
 import { make_time } from '../../../../../utils/cache';
@@ -11,7 +11,8 @@ import { Token } from '../../../../../../compiled-proto/token';
 import { base64Encode } from '@waves/ts-lib-crypto';
 import { SESSION_NAME } from '../../../../../constants';
 import { set_body } from '../../../../utils/set_body';
-import { info } from '../../../../../utils/log';
+import { get_student, GetStudentResponse } from '../../../../../utils/request_mk';
+import { applySpec, identity, pipe } from 'ramda';
 
 const schema = object().shape({
     auth_data: string().required()
@@ -24,7 +25,8 @@ const schema = object().shape({
  *     summary: Получить токен авторизации для сессии
  *     description: >
  *       Проставляет токен авторизации в сессию
- *     tags: [User Public API]
+ *     tags:
+ *       - User Public API
  *     parameters:
  *       - name: auth_data
  *         type: string
@@ -42,18 +44,25 @@ const schema = object().shape({
  *         schema:
  *           type: object
  *           properties:
- *             ok:
- *               type: boolean
- *               description: Статус ответа.
+ *             server_time:
+ *               type: number
+ *               description: Серверное время
+ *             name:
+ *               type: string
+ *               description: Имя студента из МК
+ *             phone:
+ *               type: string
+ *               description: Телефон студента из МК
+ *             balance:
+ *               type: number
+ *               description: Баланс студента из МК
  *       '401':
- *          description: Ошибки авторизации
- *      '403':
- *          description: Ошибки авторизации
+ *         description: Ошибки авторизации
+ *       '403':
+ *         description: Ошибки авторизации
  */
-
-export const auth_M: Middleware = (ctx, next) => {
-    info(`Auth body:`, ctx.request.body, typeof ctx.request.body);
-    return yup_validate(schema, ctx.request.body)
+export const auth_M: Middleware = (ctx, next) =>
+    yup_validate(schema, ctx.request.body)
         .then(({ auth_data }) => {
             const {
                 auth_date,
@@ -69,10 +78,14 @@ export const auth_M: Middleware = (ctx, next) => {
                 }
             }
 
-            return get_student_by_tg(id, true, BadRequest)
-                .then((user_id) => {
+            return get_student_by_tg(id, true, NotFound)
+                .then(pipe<[number], { student_id: number }, Promise<GetStudentResponse>>(
+                    applySpec({ student_id: identity }),
+                    get_student
+                ))
+                .then(({ id, name, phone, balans }) => {
                     const token = create({
-                        user_id,
+                        user_id: id,
                         scope: 'user',
                         token_live: make_time(1, 'day')
                     });
@@ -81,13 +94,17 @@ export const auth_M: Middleware = (ctx, next) => {
 
                     ctx.cookies.set(SESSION_NAME, token_str, {
                         httpOnly: true,
-                        path: '/',
+                        path: '/web-app',
                         maxAge: make_time(1, 'day')
                     });
 
-                    return { ok: true };
+                    return {
+                        name,
+                        phone,
+                        balance: balans,
+                        server_time: Date.now()
+                    };
                 })
                 .then(set_body(ctx))
                 .then(next);
         });
-};

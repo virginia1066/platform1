@@ -13,7 +13,7 @@ export const create_wokobular_tables = () =>
             }),
             check_table('pack_links', (builder) => {
                 builder.integer('pack_id').notNullable();
-                builder.string('word_id', 50).notNullable();
+                builder.integer('word_id').notNullable();
 
                 builder.unique(['pack_id', 'word_id']);
                 builder.index('pack_id');

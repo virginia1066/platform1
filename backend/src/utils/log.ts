@@ -11,6 +11,9 @@ const serialize = (data: any) => {
         case 'function':
             return String(data);
         default:
+            if (data instanceof Error) {
+                return String(data);
+            }
             return JSON.stringify(data, null, 4);
     }
 };

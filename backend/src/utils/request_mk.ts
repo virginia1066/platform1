@@ -53,7 +53,7 @@ const private_req = (url: string, init?: RequestInit, query?: Record<string, str
 export const get_student = cache(({ student_id }: GetStudentProps) =>
         private_req(`https://api.moyklass.com/v1/company/users/${student_id}`)
             .then<GetStudentResponse>(parse_response),
-    make_time(5, 'minutes'));
+    make_time(24, 'hours'));
 
 export const update_student = (student_id: number, update_props: UpdateStudentProps) =>
     private_req(`https://api.moyklass.com/v1/company/users/${student_id}`, {
@@ -97,7 +97,8 @@ export const get_classes = cache(() =>
     make_time(4, 'hour')
 );
 
-export const get_student_payments = cache((student_id: number) =>
+export const
+    get_student_payments = cache((student_id: number) =>
         private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
             userId: student_id,
             limit: 500
