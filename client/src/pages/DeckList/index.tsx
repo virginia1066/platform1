@@ -3,8 +3,12 @@ import { Block } from '../../components/Block/inedex';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Header } from '../../components/Header';
 import { Button, Flex } from '@chakra-ui/react';
+import { useGate } from 'effector-react';
+import { DeckListGate } from '../../models/vocabulary';
 
 export const DeckList = () => {
+    useGate(DeckListGate);
+
     const { t } = useTranslation('translation', {
         keyPrefix: 'vocabulary.deckList'
     });
