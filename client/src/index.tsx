@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 import { App } from './App';
 import { Telegram } from "@twa-dev/types"
-import tgTheme from './theme/delmar/tgTheme';
+
 
 declare global {
   interface Window {
@@ -19,9 +18,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={tgTheme}>
     <App />
-    </ChakraProvider>
   </React.StrictMode>
 );
 

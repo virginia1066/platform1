@@ -1,5 +1,6 @@
+import { Heading } from "@chakra-ui/react";
 import { FC } from "react";
 
 export const Header:FC<{title:string}> = ({title}) => (
-    <div>{title}</div>
+    <Heading textAlign={'center'} size={'lg'}>{title}</Heading>
 )

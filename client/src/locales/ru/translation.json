@@ -3,10 +3,21 @@
         "deckList": {
             "header": "Ваши колоды",
             "content": "Базовые слова",
-            "button": "Создать колоду"
+            "button": "+ Создать колоду"
         },
         "deckEdit": {
-            "header": "Редактирование колоды"
+            "header": "Редактирование колоды",
+            "button": "Сохранить"
+        },
+        "deck": {
+            "buttonTranslate": "Показать перевод",
+            "buttonBack": "К списку колод",
+            "anki":{
+                "buttonAgain": "Не помню",
+                "buttonHard": "С трудом",
+                "buttonGood": "Нормально",
+                "buttonEasy": "Легко"
+            }
         },
         "new": "Новые",
         "studied": "Изучаемые",
