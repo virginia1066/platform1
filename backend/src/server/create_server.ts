@@ -13,6 +13,8 @@ import { set_headers_M } from './middlewares/headers';
 import { auth_M } from './api/v1/web-app/user/auth';
 import { check_token_M } from './middlewares/check_token_M';
 import { get_pack_words_M } from './api/v1/web-app/user/packs/get_pack_words_M';
+import { word_update_M } from './api/v1/web-app/user/word-update/word_update_M';
+import { on_home_task_update_M } from './api/v1/webhooks/home-task-update';
 
 export const create_server = () => {
     const app = new Koa();
@@ -24,13 +26,15 @@ export const create_server = () => {
             'Content-Type': 'application/json'
         }))
         .post('/webhooks/user-create', user_create_webhook_M)
+        .post('/webhooks/on-home-task-update', on_home_task_update_M)
         .post('/debug/tg/replace-mk-id', replace_mk_id_M)
         .post('/web-app/user/auth', auth_M);
 
     private_user_router
         .use(check_token_M)
         .get('/web-app/user/packs', get_user_packs_M)
-        .get('/web-app/user/packs/:pack_id', get_pack_words_M);
+        .get('/web-app/user/packs/:pack_id', get_pack_words_M)
+        .patch('/web-app/user/word-update', word_update_M);
 
     const api_v1 = new Koa();
 

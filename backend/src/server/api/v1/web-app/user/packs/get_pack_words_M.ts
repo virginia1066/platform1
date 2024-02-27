@@ -7,6 +7,7 @@ import { always, applySpec, head, identity } from 'ramda';
 import { NotFound, PermissionDenied } from '../../../../../middlewares/errors';
 import { set_body } from '../../../../../utils/set_body';
 import { get_words_by_pack } from '../../../../../../utils/get_words_by_pack';
+import { get_stats_by_pack } from '../../../../../../utils/get_stats_by_pack';
 
 
 const schema = object().shape({
@@ -28,12 +29,22 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                         throw new PermissionDenied();
                     }
 
-                    return get_words_by_pack(pack.id)
-                        .then(applySpec({
-                            pack_name: always(pack.name),
-                            pack_id: always(pack.id),
-                            words: identity
-                        }));
+                    return Promise
+                        .all([
+                            get_words_by_pack(pack.id)
+                                .then(applySpec({
+                                    pack_name: always(pack.name),
+                                    pack_id: always(pack.id),
+                                    words: identity
+                                })),
+                            get_stats_by_pack({
+                                pack_id: pack_id,
+                                student_id: Number(ctx.state.token.user_id)
+                            })
+                        ])
+                        .then(([pack, stats]) =>
+                            Object.assign(pack, { stats })
+                        )
                 })
         )
         .then(set_body(ctx))

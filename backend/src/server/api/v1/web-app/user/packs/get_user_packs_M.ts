@@ -71,11 +71,11 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
         .leftJoin('pack_links as pl', 'p.id', 'pl.pack_id')
         .leftJoin('words as w', function () {
             this.on('pl.word_id', 'w.id')
-                .andOn('w.status',  knex.raw('?', [WordStatus.Active]));
+                .andOn('w.status', knex.raw('?', [WordStatus.Active]));
         })
         .leftJoin('learn_cards as lc', function () {
             this.on('w.id', 'lc.word_id')
-                .andOn('lc.student_id', knex.raw('?', [ctx.state.token.user_id ]));
+                .andOn('lc.student_id', knex.raw('?', [ctx.state.token.user_id]));
         })
         .whereIn('p.parent_user_id', [ctx.state.token.user_id, '0'])
         .groupBy('p.id')
