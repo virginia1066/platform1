@@ -1,36 +1,34 @@
-import { Card, FSRS, Rating } from 'fsrs.js';
-import { info } from '../../../utils/log';
-import dayjs from 'dayjs';
+import { Rating } from 'fsrs.js';
+import { knex } from '../../../constants';
+import { head, map } from 'ramda';
+import { LearnCard } from './LearnCard';
+import { LearnCard as LearnCardT } from '../../../types/Wokobular';
 
-export class WordCard extends Card {
-    public readonly word_id: number;
+export const update_word = ({ word_id, student_id, rating }: WordUpdateProps) =>
+    knex('learn_cards')
+        .select('*')
+        .where({
+            word_id,
+            student_id
+        })
+        .then(map(LearnCard.from_bd))
+        .then<LearnCard | undefined>(head)
+        .then((saved_card) => {
+            const card = saved_card
+                ?? LearnCard.empty({ student_id, word_id });
 
-    constructor(word_id: number) {
-        super();
-        this.word_id = word_id;
-    }
+            const updated_card = card.update(rating);
+
+            return knex('learn_cards')
+                .insert(updated_card.to_bd())
+                .onConflict(['word_id', 'student_id'])
+                .merge()
+                .returning('*')
+                .then<LearnCardT>(head);
+        });
+
+export type WordUpdateProps = {
+    word_id: number;
+    rating: Rating;
+    student_id: number;
 }
-
-const fsrs = new FSRS();
-const word = new WordCard(1);
-
-Object.assign(word, {
-    "due": new Date("2024-02-14T13:25:09.506Z"),
-    "stability": 0.6,
-    "difficulty": 5.869999999999999,
-    "elapsed_days": 0,
-    "scheduled_days": 0,
-    "reps": 1,
-    "lapses": 0,
-    "state": 1,
-    "last_review": new Date("2024-02-14T13:20:09.506Z"),
-    "word_id": 1
-});
-
-const scheduling_cards = fsrs.repeat(word, dayjs().subtract(1, 'd').toDate());
-
-info(scheduling_cards);
-
-const repeated = scheduling_cards[Rating.Hard];
-
-info(repeated);

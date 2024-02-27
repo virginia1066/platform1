@@ -19,7 +19,7 @@ dayjs.locale('ru');
 dayjs.extend(customParseFormat);
 
 config({
-    path: join(__dirname, '..', '.env')
+    path: join(__dirname, '..', '..', '.env')
 });
 
 BigNumber.config.set({
