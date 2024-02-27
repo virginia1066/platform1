@@ -78,8 +78,8 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "rm -rf ./build && node scripts/start.js",
-    "build": "PUBLIC_URL=/web-app node scripts/build.js",
+    "start": "PUBLIC_URL=/web-app node scripts/start.js",
+    "build": " rm -rf ./build && PUBLIC_URL=/web-app node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {

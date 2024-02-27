@@ -4,9 +4,14 @@ import { TG_TOKEN } from '../../constants';
 import { yup_validate_sync } from '../../utils/yup_validate';
 import { number, object, string } from 'yup';
 import { BadRequest, ServerError } from '../middlewares/errors';
+import { User } from 'node-telegram-bot-api';
+import { make_id } from '../../utils/make_id';
+import { randomUUID } from 'crypto';
+import { BigNumber } from '@waves/bignumber';
 
 export const validate_webapp_data = (init_data: string) => {
     try {
+        info(`Validate webapp data: ${init_data}`);
         const secret = createHmac('sha256', 'WebAppData')
             .update(TG_TOKEN);
 
@@ -81,3 +86,48 @@ export const validate_webapp_data = (init_data: string) => {
         }
     }
 };
+
+export const make_test_auth = (tg_id: number) => {
+    const secret = createHmac('sha256', 'WebAppData')
+        .update(TG_TOKEN);
+
+    const tg_user: User = {
+        id: tg_id,
+        is_bot: false,
+        first_name: 'Test',
+    };
+    const query_id = make_id(randomUUID());
+    const auth_date = new BigNumber(Date.now())
+        .div(1_000)
+        .roundTo(0)
+        .toString()
+    const user = encodeURIComponent(JSON.stringify(tg_user));
+
+    const check_string = Object
+        .entries({
+            query_id,
+            auth_date,
+            user: JSON.stringify(tg_user)
+        })
+        .filter(([k]) => k !== 'hash')
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => `${key}=${value}`)
+        .join('\n');
+
+    info(`Check string: ${check_string}`);
+
+    const hash = createHmac('sha256', secret.digest())
+        .update(check_string)
+        .digest('hex');
+
+    const result = [
+        `auth_date=${auth_date}`,
+        `user=${user}`,
+        `query_id=${query_id}`,
+        `hash=${hash}`
+    ].join('&');
+
+    info(`Test string: ${result}`);
+
+    return result;
+}

@@ -1,7 +1,7 @@
 import { Middleware } from 'koa';
 import { object, string } from 'yup';
 import { yup_validate } from '../../../../../utils/yup_validate';
-import { validate_webapp_data } from '../../../../utils/validate_webapp_data';
+import { make_test_auth, validate_webapp_data } from '../../../../utils/validate_webapp_data';
 import { get_student_by_tg } from '../../../../../utils/get_student_by_tg';
 import { BadRequest, NotFound } from '../../../../middlewares/errors';
 import dayjs from 'dayjs';
@@ -13,10 +13,21 @@ import { SESSION_NAME } from '../../../../../constants';
 import { set_body } from '../../../../utils/set_body';
 import { get_student, GetStudentResponse } from '../../../../../utils/request_mk';
 import { applySpec, identity, pipe } from 'ramda';
+import { info } from '../../../../../utils/log';
 
-const schema = object().shape({
-    auth_data: string().required()
-});
+const schema =
+    process.env.TEST_TG_USER
+        ? object().shape({
+            auth_data: string()
+                .optional()
+                .transform((value) => value === '' ? undefined : value)
+                .default(make_test_auth(Number(process.env.TEST_TG_USER)))
+        })
+        : object().shape({
+            auth_data: string().required()
+        });
+
+info(`Has test user: "${process.env.TEST_TG_USER}"`);
 
 /**
  * @swagger
@@ -66,16 +77,13 @@ export const auth_M: Middleware = (ctx, next) =>
         .then(({ auth_data }) => {
             const {
                 auth_date,
-                hash,
                 user: {
                     id
                 }
             } = validate_webapp_data(auth_data);
 
-            if (hash !== process.env.TEST_HASH) {
-                if (auth_date * 1_000 < dayjs().subtract(10, 'minute').valueOf()) {
-                    throw new BadRequest(`Auth date is too old!`);
-                }
+            if (auth_date * 1_000 < dayjs().subtract(10, 'minute').valueOf()) {
+                throw new BadRequest(`Auth date is too old!`);
             }
 
             return get_student_by_tg(id, true, NotFound)

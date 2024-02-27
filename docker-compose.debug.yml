@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  root-nginx:
+    image: nginx:latest
+    mem_limit: 50m
+    restart: always
+    ports:
+      - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./root-nginx-debug.conf:/etc/nginx/nginx.conf:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+        compress: "true"
+  client-nginx-debug:
+    image: nginx:latest
+    mem_limit: 50m
+    restart: always
+    volumes:
+      - ./client-nginx-debug.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+        compress: "true"
