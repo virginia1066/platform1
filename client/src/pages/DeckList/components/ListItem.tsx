@@ -5,20 +5,30 @@ import { ProgressStats } from "../../../components/ProgressStats";
 import { themeParams } from "../../../theme/defaults";
 import { Colors } from "../../../theme/Colors";
 import { DeckItem } from "../../../models/vocabulary/dictionary";
-import { FC } from "react";
+import { FC, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../utils/constants";
 
-export const ListItem:FC<DeckListItem> = ({isEditMode, name, count_new, count_review, count_learning, count_relearning}) => (
-    <Block minH={'114px'}>
-        <HStack spacing={4} me={isEditMode ? '55px' : 'auto'}>
+export const ListItem:FC<DeckListItem> = ({editMode, id, name, count_new, count_review, count_learning, count_relearning}) => {
+    
+    const navigate = useNavigate();
+    
+    const gotoDeck = useCallback(() => {
+        navigate(`${BASE_URL}/deck/${id}`)
+    }, [id])
+    
+    return(
+    <Block minH={'114px'} onClick={editMode ? undefined : gotoDeck} cursor={editMode ? 'auto' : 'pointer'}>
+        <HStack spacing={4} me={editMode ? '55px' : 'auto'}>
             {
-                isEditMode
+                editMode
                     ? <Checkbox variant={'tg'} />
                     : null
             }
             <Heading as={'h2'} size={'md'}>{name}</Heading>
         </HStack>
         {
-            isEditMode
+            editMode
                 ? <Box position={'absolute'} h={'full'} w={'55px'} right={0} borderRightRadius={8}>
                     <Flex h={'50%'} bgColor={Colors.red[500]} justifyContent={'center'} alignItems={'center'}><DeleteIcon color={themeParams.button_text_color} mx={'auto'} /></Flex>
                     <Flex h={'50%'} bgColor={Colors.triteary_bg_color[500]} justifyContent={'center'} alignItems={'center'}><EditIcon color={themeParams.hint_color} /></Flex>
@@ -26,8 +36,6 @@ export const ListItem:FC<DeckListItem> = ({isEditMode, name, count_new, count_re
                 : <ProgressStats textAlign={'end'} new_ones={count_new} studied={count_learning + count_relearning} repeatable={count_review} />
         }
     </Block>
-)
+)}
 
-type DeckListItem = {
-    isEditMode : boolean
-} & Pick<DeckItem, 'name' | 'count_new' | 'count_learning' | 'count_review' | 'count_relearning'>;
+type DeckListItem = DeckItem & { editMode: boolean };
