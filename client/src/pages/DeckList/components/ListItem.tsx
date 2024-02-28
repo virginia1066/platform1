@@ -18,6 +18,8 @@ export const ListItem: FC<DeckListItem> = ({ editMode, id, name, count_new, coun
         navigate(`${BASE_URL}/deck/${id}`)
     }, [id])
 
+    const isEditable = false // user_can_edit
+
     const isActive = count_can_be_shown > 0 && !editMode
 
     return (

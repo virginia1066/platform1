@@ -13,12 +13,19 @@
         "deck": {
             "buttonTranslate": "Показать перевод",
             "buttonBack": "К списку колод",
+            "finished": {
+                "title": "Ура! Колода завершена",
+                "text": "Можете передохнуть на сегодня или выбрать еше одну колоду из списка."
+            },
             "anki":{
                 "buttonAgain": "Не помню",
                 "buttonHard": "С трудом",
                 "buttonGood": "Нормально",
                 "buttonEasy": "Легко"
             }
+        },
+        "403": {
+            "text":"Доступ запрещен.<br/><br/> Эта страница доступна только через телеграм бота <a href=\"https://t.me/{{TG_BOT_NAME}}\">https://t.me/{{TG_BOT_NAME}}</a> <br/><br/> Для доступа к этой странице вам нужно быть клиентом школы Virginia Beowulf. <br/><br/> Что бы стать клиентом, обратитесь к <a href=\"https://t.me/{{TG_ADMIN_NAME}}\">@{{TG_ADMIN_NAME}}</a>"
         },
         "new": "Новые",
         "studied": "Изучаю",
