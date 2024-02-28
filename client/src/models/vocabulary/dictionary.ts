@@ -31,4 +31,5 @@ export type DeckItem = {
     count_review: number;
     count_relearning: number;
     words_count: number;
+    count_can_be_shown: number;
 };

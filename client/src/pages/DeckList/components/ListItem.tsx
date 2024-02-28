@@ -8,17 +8,25 @@ import { DeckItem } from "../../../models/vocabulary/dictionary";
 import { FC, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../utils/constants";
+import { BlockLabel } from "../../../components/Block/BlockLabel";
 
-export const ListItem:FC<DeckListItem> = ({editMode, id, name, count_new, count_review, count_learning, count_relearning}) => {
+export const ListItem:FC<DeckListItem> = ({editMode, id, name, count_new, count_review, count_learning, count_relearning, count_can_be_shown}) => {
     
     const navigate = useNavigate();
     
     const gotoDeck = useCallback(() => {
         navigate(`${BASE_URL}/deck/${id}`)
     }, [id])
+
+    const isActive =  count_can_be_shown > 0 && !editMode
     
     return(
-    <Block minH={'114px'} onClick={editMode ? undefined : gotoDeck} cursor={editMode ? 'auto' : 'pointer'}>
+    <Block minH={'114px'} onClick={isActive ? gotoDeck : undefined} cursor={isActive ? 'pointer' : 'auto'} opacity={isActive ? 1 : 0.6}>
+        {
+        count_can_be_shown === 0
+        ?<BlockLabel text="Сделано" color={Colors.green[500]}/>
+        : null
+        }
         <HStack spacing={4} me={editMode ? '55px' : 'auto'}>
             {
                 editMode
