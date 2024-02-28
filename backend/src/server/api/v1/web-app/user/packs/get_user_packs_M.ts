@@ -1,9 +1,8 @@
 import { knex } from '../../../../../../constants';
 import { set_body } from '../../../../../utils/set_body';
 import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
-import { evolve, map, pipe } from 'ramda';
+import { evolve, map } from 'ramda';
 import { WordStatus } from '../../../../../../types/Wokobular';
-import { log_query } from '../../../../../../utils/log_query';
 
 /**
  * @swagger
@@ -50,25 +49,6 @@ import { log_query } from '../../../../../../utils/log_query';
  *         in: cookie
  *         name: SESSION
  */
-
-const update_pack = ({
-                         words_count,
-                         count_new,
-                         count_relearning,
-                         count_learning,
-                         count_review,
-                         count_can_be_shown,
-                         ...props
-                     }: PackStat): PackStat => ({
-    ...props,
-    count_review,
-    words_count,
-    count_learning,
-    count_relearning,
-    count_new: words_count - count_review - count_relearning - count_learning,
-    count_can_be_shown: (words_count - count_review - count_relearning - count_learning) + count_can_be_shown
-});
-
 export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
     knex('packs as p')
         .leftJoin('pack_links as pl', 'p.id', 'pl.pack_id')
@@ -87,13 +67,13 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
             'p.name AS name',
             'p.user_can_edit as user_can_edit',
             knex.raw('COUNT(w.id) as words_count'),
-            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) AS count_new'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) AS count_new'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
-            knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) as count_can_be_shown')
+            knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) as count_can_be_shown')
         )
-        .then(map(pipe(
+        .then(map(
             evolve({
                 count_new: Number,
                 count_learning: Number,
@@ -101,9 +81,8 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
                 count_relearning: Number,
                 words_count: Number,
                 count_can_be_shown: Number
-            }),
-            update_pack
-        )))
+            })
+        ))
         .then(set_body(ctx))
         .then(next);
 
