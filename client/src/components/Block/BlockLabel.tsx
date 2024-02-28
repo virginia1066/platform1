@@ -13,8 +13,7 @@ export const BlockLabel: FC<{ text: string, color?: string }> = ({ text, color =
         py={2}
         left={0}
         top={0}
-        color={themeParams.bg_color}
-    >
+        color={themeParams.bg_color}>
         {text}
     </Box>
 )

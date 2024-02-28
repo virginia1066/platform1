@@ -8,6 +8,7 @@ import { useCallback, useState } from "react";
 import { Word } from "./components/Word";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../utils/constants";
+import { BackButton } from "../../components/BackButton";
 
 export const Deck = () => {
 
@@ -49,7 +50,7 @@ export const Deck = () => {
                                 <Button w={'full'} variant={'main'} size={'md'}>{t('anki.buttonEasy')}</Button>
                             </VStack>
                             : <HStack spacing={4}>
-                                <Button maxW={'50px'} onClick={goBack} w={'full'} variant={'main'} size={'lg'}>{"<"}</Button>
+                                <BackButton url={`${BASE_URL}/`}/>
                                 <Button onClick={showAnswer} w={'full'} variant={'main'} size={'lg'}>{t('buttonTranslate')}</Button>
                             </HStack>
                     }
