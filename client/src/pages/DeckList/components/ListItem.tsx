@@ -21,7 +21,7 @@ export const ListItem: FC<DeckListItem> = ({ editMode, id, name, count_new, coun
     const isActive = count_can_be_shown > 0 && !editMode
 
     return (
-        <Block minH={'114px'} onClick={isActive ? gotoDeck : undefined} cursor={isActive ? 'pointer' : 'auto'} opacity={isActive ? 1 : 0.6}>
+        <Block minH={'114px'} onClick={isActive ? gotoDeck : undefined} cursor={isActive ? 'pointer' : 'auto'} opacity={count_can_be_shown === 0 && !editMode ? 0.6 : 1}>
             {
                 count_can_be_shown === 0
                     ? <BlockLabel text="Сделано" color={Colors.green[500]} />
