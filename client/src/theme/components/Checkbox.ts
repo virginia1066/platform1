@@ -24,7 +24,7 @@ export const Checkbox = {
                 transitionProperty: "box-shadow",
                 transitionDuration: "normal",
                 border: "2px solid",
-                borderRadius: "sm",
+                borderRadius: '4px',
                 borderColor: themeParams.button_color,
                 color: themeParams.button_color,
                 verticalAlign: "top",
@@ -37,12 +37,12 @@ export const Checkbox = {
                         bg: themeParams.bg_color,
                     },
                     _disabled: {
-                        opacity: 0.8
+                        opacity: 0.6
                     },
                 },
 
                 _disabled: {
-                    opacity: 0.8
+                    opacity: 0.6
                 },
 
                 _invalid: {
