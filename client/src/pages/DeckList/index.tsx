@@ -15,21 +15,8 @@ export const DeckList = () => {
 
     const [setEditMode, editMode] = useUnit([setEditModeE, $editMode]);
 
-    const deck_list = useList($deckListC, ({
-                                               id,
-                                               editMode,
-                                               name,
-                                               count_review,
-                                               count_learning,
-                                               count_new,
-                                               count_relearning
-                                           }) => (
-        <ListItem key={`deck-${id}`} isEditMode={editMode}
-                  name={name}
-                  count_learning={count_learning}
-                  count_relearning={count_relearning}
-                  count_review={count_review}
-                  count_new={count_new}/>
+    const deck_list = useList($deckListC, (props) => (
+        <ListItem key={`deck-${props.id}`} {...props}/>
     ));
 
     const switchEditMode = useCallback(() => {

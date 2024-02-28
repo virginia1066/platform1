@@ -9,18 +9,19 @@ import {
 import { DeckList } from "./pages/DeckList";
 import { DeckEdit } from "./pages/DeckEdit";
 import { Deck } from "./pages/Deck";
+import { BASE_URL } from "./utils/constants";
 
 const router = createBrowserRouter([
     {
-        path: "/web-app",
+        path: `${BASE_URL}/`,
         element: <DeckList />,
     },
     {
-        path: "/web-app/edit",
+        path: `${BASE_URL}/edit`,
         element: <DeckEdit />,
     },
     {
-        path: "/web-app/deck",
+        path: `${BASE_URL}/deck/:deckId`,
         element: <Deck />,
     },
 ]);
@@ -31,4 +32,4 @@ export const App = () => (
             <RouterProvider router={router} />
         </Container>
     </ChakraProvider>
-)/*  */
+)
