@@ -12,15 +12,15 @@ import { Deck } from "./pages/Deck";
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/web-app",
         element: <DeckList />,
     },
     {
-        path: "/edit",
+        path: "/web-app/edit",
         element: <DeckEdit />,
     },
     {
-        path: "/deck",
+        path: "/web-app/deck",
         element: <Deck />,
     },
 ]);

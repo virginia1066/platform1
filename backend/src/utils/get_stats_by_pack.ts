@@ -40,7 +40,7 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             count_learning: stats.count_learning,
             count_review: stats.count_review,
             count_relearning: stats.count_relearning,
-            count_new: stats.words_count - (stats.count_relearning + stats.count_relearning + stats.count_review)
+            count_new: stats.words_count - (stats.count_relearning + stats.count_learning + stats.count_review)
         }));
 
 

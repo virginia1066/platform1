@@ -2,11 +2,10 @@ import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
 import { number, object } from 'yup';
 import { yup_validate } from '../../../../../../utils/yup_validate';
 import { knex, SYSTEM_PACK_ID } from '../../../../../../constants';
-import { Pack, Word, WordStatus } from '../../../../../../types/Wokobular';
-import { always, applySpec, head, identity } from 'ramda';
+import { Pack, WordStatus } from '../../../../../../types/Wokobular';
+import { head, omit } from 'ramda';
 import { NotFound, PermissionDenied } from '../../../../../middlewares/errors';
 import { set_body } from '../../../../../utils/set_body';
-import { get_words_by_pack } from '../../../../../../utils/get_words_by_pack';
 import { get_stats_by_pack } from '../../../../../../utils/get_stats_by_pack';
 
 
@@ -29,22 +28,36 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                         throw new PermissionDenied();
                     }
 
+                    const student_id = ctx.state.token.user_id;
+
                     return Promise
                         .all([
-                            get_words_by_pack(pack.id)
-                                .then(applySpec({
-                                    pack_name: always(pack.name),
-                                    pack_id: always(pack.id),
-                                    words: identity
-                                })),
+                            knex('pack_links')
+                                .select('pack_links.word_id as id', 'ru', 'en', 'status')
+                                .innerJoin('words', 'words.id', 'pack_links.word_id')
+                                .leftJoin('learn_cards', function () {
+                                    this.on('words.id', 'learn_cards.word_id')
+                                        .andOn(knex.raw(`"learn_cards"."student_id" = ${student_id}`));
+                                })
+                                .where('words.status', WordStatus.Active)
+                                .where('pack_id', pack_id)
+                                .andWhere(function () {
+                                    this.where(knex.raw('CURRENT_TIMESTAMP >= learn_cards.due'))
+                                        .orWhereNull('learn_cards.word_id');
+                                }),
                             get_stats_by_pack({
                                 pack_id: pack_id,
                                 student_id: Number(ctx.state.token.user_id)
                             })
                         ])
-                        .then(([pack, stats]) =>
-                            Object.assign(pack, { stats })
-                        )
+                        .then(([words, stats]) => Object.assign(
+                            Object.create(null),
+                            {
+                                ...omit(['parent_user_id', 'status'], pack),
+                                words,
+                                stats
+                            })
+                        );
                 })
         )
         .then(set_body(ctx))
