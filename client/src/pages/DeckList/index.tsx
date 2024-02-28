@@ -7,7 +7,7 @@ import { PageWrap } from '../../components/PageWrap';
 import { useCallback, useState } from 'react';
 import { themeParams } from '../../theme/defaults';
 import { fontSizes } from '../../theme/constants';
-import { ListItem } from '../Deck/components/ListItem';
+import { ListItem } from './components/ListItem';
 
 
 export const DeckList = () => {
