@@ -3,7 +3,7 @@ import { Word, WordStatus } from '../types/Wokobular';
 import { to_array } from './to_array';
 import { log_query } from './log_query';
 
-export const get_words_by_pack = (pack_id: number, status_or_list: WordStatus | Array<WordStatus> = WordStatus.Active) =>
+export const get_words_by_pack = (pack_id: number, status_or_list: WordStatus | Array<WordStatus> = WordStatus.Active): Promise<Array<Word>> =>
     log_query(knex('pack_links')
         .where('pack_id', pack_id)
         .innerJoin('words', function () {
