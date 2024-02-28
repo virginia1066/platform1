@@ -10,6 +10,7 @@ import { DeckList } from "./pages/DeckList";
 import { DeckEdit } from "./pages/DeckEdit";
 import { Deck } from "./pages/Deck";
 import { BASE_URL } from "./utils/constants";
+import { Error403 } from "./pages/Error403";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
     {
         path: `${BASE_URL}/deck/:deckId`,
         element: <Deck />,
+    },
+    {
+        path: `${BASE_URL}/403`,
+        element: <Error403 />,
     },
 ]);
 

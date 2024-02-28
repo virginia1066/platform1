@@ -24,6 +24,9 @@ export const Heading = {
         },
         'xl': {
             fontSize: fontSizes.xl
+        },
+        'xxl': {
+            fontSize: fontSizes.xxl
         }
     }
 }
