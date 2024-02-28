@@ -14,7 +14,7 @@ export const fetchDeckFx = coreD.createEffect(() =>
         .then(prop('data'))
 );
 
-type DeckItem = {
+export type DeckItem = {
     id: number;
     name: string;
     count_new: number;

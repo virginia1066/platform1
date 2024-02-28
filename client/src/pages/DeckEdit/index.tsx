@@ -16,7 +16,7 @@ export const DeckEdit = () => {
             </Flex>
             <ButtonBar>
                 <>
-                    <Button w={'full'} variant={'main'} size={'lg'}>{t('button')}</Button>
+                    <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
                 </>
             </ButtonBar>
         </PageWrap>

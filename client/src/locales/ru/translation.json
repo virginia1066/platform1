@@ -3,11 +3,12 @@
         "deckList": {
             "header": "Ваши колоды",
             "content": "Базовые слова",
-            "button": "+ Создать колоду"
+            "buttonCreate": "+ Создать колоду",
+            "buttonSave": "Сохранить"
         },
         "deckEdit": {
             "header": "Редактирование колоды",
-            "button": "Сохранить"
+            "buttonSave": "Сохранить"
         },
         "deck": {
             "buttonTranslate": "Показать перевод",
