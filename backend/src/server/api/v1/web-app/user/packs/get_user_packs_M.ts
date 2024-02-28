@@ -3,6 +3,7 @@ import { set_body } from '../../../../../utils/set_body';
 import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
 import { evolve, map, pipe } from 'ramda';
 import { WordStatus } from '../../../../../../types/Wokobular';
+import { log_query } from '../../../../../../utils/log_query';
 
 /**
  * @swagger
@@ -90,7 +91,7 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
-            knex.raw('SUM(CASE WHEN lc.due > CURRENT_TIMESTAMP THEN 1 ELSE 0 END) as count_can_be_shown')
+            knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) as count_can_be_shown')
         )
         .then(map(pipe(
             evolve({
