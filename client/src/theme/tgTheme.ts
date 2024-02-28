@@ -4,6 +4,8 @@ import { Text } from "./components/Text";
 import { Colors } from "./Colors";
 import { Button } from './components/Button';
 import { Heading } from './components/Heading';
+import { Badge } from "./components/Badge";
+import { Checkbox } from "./components/Checkbox";
 
 const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), {
     colors: Colors,
@@ -15,6 +17,8 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
         Text: Text,
         Heading: Heading,
         Button: Button,
+        Badge: Badge,
+        Checkbox: Checkbox,
     },
     styles: {
         global: {
@@ -25,7 +29,7 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
         }
     },
     space: spaces,
-    fontSize: fontSizes,
+    fontSizes: fontSizes,
     breakpoints: breakpoints,
     sizes: sizes,
 });

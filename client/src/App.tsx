@@ -1,9 +1,34 @@
 import { Container } from "@chakra-ui/react";
-import { DeckList } from "./pages/DeckList";
 import { themeParams } from "./theme/defaults";
+import tgTheme from './theme/tgTheme';
+import { ChakraProvider } from '@chakra-ui/react';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import { DeckList } from "./pages/DeckList";
+import { DeckEdit } from "./pages/DeckEdit";
+import { Deck } from "./pages/Deck";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <DeckList />,
+    },
+    {
+        path: "/edit",
+        element: <DeckEdit />,
+    },
+    {
+        path: "/deck",
+        element: <Deck />,
+    },
+]);
 
 export const App = () => (
-    <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color}>
-        <DeckList />
-    </Container>
-)
+    <ChakraProvider theme={tgTheme}>
+        <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color}>
+            <RouterProvider router={router} />
+        </Container>
+    </ChakraProvider>
+)/*  */
