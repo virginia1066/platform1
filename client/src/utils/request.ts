@@ -3,7 +3,7 @@ let auth_done: boolean = false;
 
 
 const req = <T>(url: string, init?: RequestInit): Promise<ParsedResponse<T>> =>
-    fetch(url, {
+    fetch(`${window.location.origin}${url}`, {
         method: init?.method ?? 'GET',
         headers: Object.assign({
             'Content-Type': 'application/json'

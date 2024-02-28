@@ -15,7 +15,7 @@ import { get_student, GetStudentResponse } from '../../../../../utils/request_mk
 import { applySpec, identity, pipe } from 'ramda';
 import { info } from '../../../../../utils/log';
 
-const schema =
+const get_schema = () =>
     process.env.TEST_TG_USER
         ? object().shape({
             auth_data: string()
@@ -26,8 +26,6 @@ const schema =
         : object().shape({
             auth_data: string().required()
         });
-
-info(`Has test user: "${process.env.TEST_TG_USER}"`);
 
 /**
  * @swagger
@@ -73,7 +71,7 @@ info(`Has test user: "${process.env.TEST_TG_USER}"`);
  *         description: Ошибки авторизации
  */
 export const auth_M: Middleware = (ctx, next) =>
-    yup_validate(schema, ctx.request.body)
+    yup_validate(get_schema(), ctx.request.body)
         .then(({ auth_data }) => {
             const {
                 auth_date,
