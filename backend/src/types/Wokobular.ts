@@ -25,6 +25,10 @@ export type Pack = {
      * Статус колоды
      */
     status: PackStatus;
+    /**
+     * Может ли быть отредактирована пользователем
+     */
+    user_can_edit: boolean;
 }
 
 /**

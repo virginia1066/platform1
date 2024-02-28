@@ -9,7 +9,7 @@ export const get_or_create_pack = (name: string): Promise<Pack> =>
         .where({
             name,
             parent_user_id: SYSTEM_PACK_ID,
-            status: PackStatus.Active
+            status: PackStatus.Active,
         })
         .then<Pack | undefined>(head)
         .then((pack) => {
@@ -19,7 +19,8 @@ export const get_or_create_pack = (name: string): Promise<Pack> =>
                     .insert({
                         name,
                         parent_user_id: SYSTEM_PACK_ID,
-                        status: PackStatus.Active
+                        status: PackStatus.Active,
+                        user_can_edit: false
                     })
                     .returning('*')
                     .then<Pack>(head);

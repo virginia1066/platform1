@@ -56,6 +56,7 @@ const update_pack = ({
                          count_relearning,
                          count_learning,
                          count_review,
+                         count_can_be_shown,
                          ...props
                      }: PackStat): PackStat => ({
     ...props,
@@ -63,7 +64,8 @@ const update_pack = ({
     words_count,
     count_learning,
     count_relearning,
-    count_new: words_count - count_review - count_relearning - count_learning
+    count_new: words_count - count_review - count_relearning - count_learning,
+    count_can_be_shown: (words_count - count_review - count_relearning - count_learning) + count_can_be_shown
 });
 
 export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
@@ -82,11 +84,13 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
         .select<PackStat<string>[]>(
             'p.id AS id',
             'p.name AS name',
+            'p.user_can_edit as user_can_edit',
             knex.raw('COUNT(w.id) as words_count'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) AS count_new'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
-            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning')
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
+            knex.raw('SUM(CASE WHEN lc.due > CURRENT_TIMESTAMP THEN 1 ELSE 0 END) as count_can_be_shown')
         )
         .then(map(pipe(
             evolve({
@@ -94,7 +98,8 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
                 count_learning: Number,
                 count_review: Number,
                 count_relearning: Number,
-                words_count: Number
+                words_count: Number,
+                count_can_be_shown: Number
             }),
             update_pack
         )))
@@ -109,4 +114,5 @@ type PackStat<Int = number> = {
     count_review: Int;
     count_relearning: Int;
     words_count: Int;
+    count_can_be_shown: Int;
 };
