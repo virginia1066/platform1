@@ -70,6 +70,13 @@ export const get_user_lessons = cache((student_id: number) =>
     }).then<GetLessonsRecordResponse>(parse_response), make_time(5, 'minutes')
 );
 
+export const get_lesson_by_id = cache((lesson_id: number) =>
+    private_req(`https://api.moyklass.com/v1/company/lessons/${lesson_id}`, {}, {
+        includeTasks: String(true),
+        includeRecords: String(true)
+    }).then<LessonResponse>(parse_response), make_time(5, 'seconds')
+);
+
 export const get_manager = cache(
     (manager_id: number) =>
         private_req(`https://api.moyklass.com/v1/company/managers/${manager_id}`)
@@ -99,13 +106,13 @@ export const get_classes = cache(() =>
 
 export const
     get_student_payments = cache((student_id: number) =>
-        private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
-            userId: student_id,
-            limit: 500
-        })
-            .then<PaymentsResponse>(parse_response),
-    make_time(5, 'minutes')
-);
+            private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
+                userId: student_id,
+                limit: 500
+            })
+                .then<PaymentsResponse>(parse_response),
+        make_time(5, 'minutes')
+    );
 
 export enum PaymentOpType {
     Income = 'income',
@@ -176,6 +183,8 @@ type GetUserSubscriptionsResponse = {
     }>
 }
 
+
+
 type GetUserSubscriptionsProps = {
     userId: number;
     statusId: Array<number>;
@@ -212,6 +221,33 @@ export type CurseResponse = {
     description: string;
     createdAt: string;
     courseType: 'master' | 'course' | 'personal';
+}
+
+export enum LessonStatus {
+    Planned,
+    Completed
+}
+
+type LessonResponse = {
+    id: number;
+    date: string;
+    beginTime: string;
+    endTime: string;
+    filialId: number;
+    roomId: number;
+    classId: number;
+    status: LessonStatus;
+    homeTask?: HomeTask;
+    records?: Array<LessonStudent>;
+}
+
+type LessonStudent = {
+    userId: number;
+    visit: boolean;
+}
+
+type HomeTask = {
+    text: string;
 }
 
 type GetFilialsResponse = {

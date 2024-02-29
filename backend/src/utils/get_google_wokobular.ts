@@ -1,10 +1,9 @@
-import { Word, WordStatus } from '../types/Wokobular';
+import { Word, WordSource, WordStatus } from '../types/Wokobular';
 import { GaxiosResponse } from 'gaxios/build/src/common';
 import { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
 import { head } from 'ramda';
 import { google } from 'googleapis';
 import { GOOGLE_SHEETS_API_KEY, GOOGLE_SHEETS_ID } from '../constants';
-import { make_id } from './make_id';
 
 function getColumnIndex(columnCount: number): string {
     let columnIndex = '';
@@ -17,7 +16,7 @@ function getColumnIndex(columnCount: number): string {
     return columnIndex;
 }
 
-const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): Record<string, Array<Omit<Word, 'id'>>> => {
+const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): Record<string, Array<ParsedWord>> => {
     const sheets = (response.config.params.ranges! as Array<string>)
         .map((range) => head(range.split('!'))!);
 
@@ -37,33 +36,33 @@ const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): R
             .map((row) => row.values!.map(extract_value))
             .reduce((acc, values) => {
 
-                const word = titles.reduce<Omit<Word, 'id'>>((acc, title, index) => {
+                const word = titles.reduce<ParsedWord>((acc, title, index) => {
                     const value = values[index];
                     switch (title as Title) {
                         case 'en':
-                            acc.en = value;
+                            acc.en = value.trim();
                             break;
                         case 'ru':
-                            acc.ru = value;
+                            acc.ru = value.trim();
                             break;
                         case 'disabled':
                             acc.status = Boolean(value) ? WordStatus.Deleted : WordStatus.Active;
                             break;
                     }
                     return acc;
-                }, Object.create(null));
+                }, Object.assign(Object.create(null), { source: WordSource.GoogleSheets }));
 
                 if (word.ru && word.en) {
                     acc.push(word);
                 }
                 return acc;
-            }, [] as Array<Omit<Word, 'id'>>);
+            }, [] as Array<ParsedWord>);
 
         return Object.assign(acc, { [sheet_name]: table });
     }, Object.create(null));
 };
 
-export const get_google_wokobular = (): Promise<Record<string, Array<Omit<Word, 'id'>>>> => {
+export const get_google_wokobular = (): Promise<Record<string, Array<ParsedWord>>> => {
     const sheets = google.sheets({
         version: 'v4',
         auth: GOOGLE_SHEETS_API_KEY
@@ -81,3 +80,5 @@ export const get_google_wokobular = (): Promise<Record<string, Array<Omit<Word, 
         });
     }).then(parse_sheets);
 };
+
+type ParsedWord = Omit<Word, 'id' | 'insert_id'>;

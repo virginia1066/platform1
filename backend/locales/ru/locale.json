@@ -1,4 +1,7 @@
 {
+  "server": {
+    "home_task_pack": "Домашние задания"
+  },
   "telegram": {
     "dictionary": {
       "course": "Групповое",

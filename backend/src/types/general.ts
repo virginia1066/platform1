@@ -6,6 +6,16 @@ export type UserFromWebhook = {
     attribute_status: WebhookUserStatus;
 }
 
+export enum WebhookHomeTaskStatus {
+    Done = 'DONE',
+    Pending = 'PENDING'
+}
+
+export type HomeTaskWebhook = {
+    lesson_id: number;
+    status: WebhookHomeTaskStatus;
+}
+
 export enum WebhookUserStatus {
     Done = 'DONE',
     Pending = 'PENDING'

@@ -29,14 +29,12 @@ BigNumber.config.set({
 });
 
 export const ROOT_PATH = join(__dirname, '..');
-
+export const HOME_TASK_WORDS_REG = /##([^#]+)#([^#]+)##/g;
 export const DEBUG_MODE = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
-
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
 export const TG_TOKEN = get_env_strict('TG_TOKEN');
 export const SESSION_SECRET = get_env_strict('SESSION_SECRET');
 export const SESSION_NAME = 'SESSION';
-
 export const TG = new TelegramBot(TG_TOKEN, {
     polling: true,
 });
@@ -55,6 +53,7 @@ export const MAX_TG_MESSAGE_LENGTH = 1_024;
 export const OFFLINE_FILIAL_ID = 30082;
 export const SYSTEM_PACK_ID = 0;
 export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
+export const WORD_CONFLICT_COLUMNS = ['ru', 'en', 'source'];
 
 init({
     lng: 'ru',
