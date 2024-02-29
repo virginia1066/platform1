@@ -3,6 +3,7 @@ import { set_body } from '../../../../../utils/set_body';
 import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
 import { applySpec, map, pipe, prop } from 'ramda';
 import { WordStatus } from '../../../../../../types/Wokobular';
+import { log_query } from '../../../../../../utils/log_query';
 
 /**
  * @swagger
@@ -50,9 +51,9 @@ import { WordStatus } from '../../../../../../types/Wokobular';
  *         name: SESSION
  */
 export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
-    knex('packs as p')
-        .leftJoin('pack_links as pl', 'p.id', 'pl.pack_id')
-        .leftJoin('words as w', function () {
+    log_query(knex('packs as p')
+        .innerJoin('pack_links as pl', 'p.id', 'pl.pack_id')
+        .innerJoin('words as w', function () {
             this.on('pl.word_id', 'w.id')
                 .andOn('w.status', knex.raw('?', [WordStatus.Active]));
         })
@@ -72,7 +73,7 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
             knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) as count_can_be_shown')
-        )
+        ))
         .then(map(
             applySpec<any>({
                 name: prop('name'),

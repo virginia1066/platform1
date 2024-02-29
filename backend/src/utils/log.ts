@@ -24,6 +24,7 @@ const get_from = () => {
     } catch (e: any) {
         return e.stack
             .split(' at ')
+            .slice(1)
             .map((stack: string) => stack.trim())
             .filter((stack: string) => !(
                 stack.includes('node_modules') ||

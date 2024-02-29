@@ -1,11 +1,12 @@
 import { knex } from '../constants';
 import { WordStatus } from '../types/Wokobular';
 import { defaultTo, evolve, head } from 'ramda';
+import { log_query } from './log_query';
 
 export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): Promise<StatByPack> =>
-    knex('pack_links')
+    log_query(knex('pack_links')
         .where({ pack_id })
-        .leftJoin('words as w', function () {
+        .innerJoin('words as w', function () {
             this.on('pack_links.word_id', 'w.id')
                 .andOn('w.status', knex.raw('?', [WordStatus.Active]));
         })
@@ -15,11 +16,11 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
         })
         .select<StatByPack[]>(
             knex.raw('COUNT(w.id) as words_count'),
-            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) AS count_new'),
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) AS count_new'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning')
-        )
+        ))
         .then<StatByPack | undefined>(head)
         .then(defaultTo({
             words_count: 0,
@@ -34,13 +35,6 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             count_new: Number,
             count_review: Number,
             count_relearning: Number,
-        }))
-        .then((stats) => ({
-            words_count: stats.words_count,
-            count_learning: stats.count_learning,
-            count_review: stats.count_review,
-            count_relearning: stats.count_relearning,
-            count_new: stats.words_count - (stats.count_relearning + stats.count_learning + stats.count_review)
         }));
 
 
