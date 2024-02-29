@@ -38,7 +38,7 @@ export const DeckList = () => {
                         editMode
                             ? (
                                 <Text size={'sm'} lineHeight={fontSizes.sm} color={themeParams.hint_color}>
-                                    Редактируйте
+                                    Редактируйте {/*TODO translate*/}
                                     колоды <br/> или управляйте их видимостью.
                                 </Text>
                             )
@@ -48,7 +48,7 @@ export const DeckList = () => {
                 <Box textAlign={'end'}>
                     <Button size={'xs'} variant={'link'} onClick={switchEditMode}>{
                         editMode
-                            ? 'Назад'
+                            ? 'Назад' /*TODO translate*/
                             : 'Редактировать список'
                     }</Button>
                 </Box>

@@ -38,7 +38,7 @@ export const ListItem: FC<DeckListItem> = ({
                opacity={count_can_be_shown === 0 && !editMode ? 0.6 : 1}>
             {
                 count_can_be_shown === 0
-                    ? <BlockLabel text="Сделано" color={Colors.green[500]}/>
+                    ? <BlockLabel text="Сделано" color={Colors.green[500]}/> /*TODO translate*/
                     : null
             }
             <HStack spacing={4} me={editMode ? '55px' : 'auto'}>
