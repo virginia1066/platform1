@@ -8,12 +8,16 @@ import { useCallback } from 'react';
 import { themeParams } from '../../theme/defaults';
 import { fontSizes } from '../../theme/constants';
 import { ListItem } from './components/ListItem';
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../utils/constants';
 
 
 export const DeckList = () => {
     useGate(DeckListGate);
 
     const [setEditMode, editMode] = useUnit([setEditModeE, $editMode]);
+
+    const navigate = useNavigate()
 
     const deck_list = useList($deckListC, (props) => (
         <ListItem key={`deck-${props.id}`} {...props}/>
@@ -22,6 +26,10 @@ export const DeckList = () => {
     const switchEditMode = useCallback(() => {
         setEditMode(!editMode);
     }, [editMode]);
+
+    const gotoCreate = useCallback(() => {
+        navigate(`${BASE_URL}/edit`)
+    },[navigate])
 
     const { t } = useTranslation('translation', {
         keyPrefix: 'vocabulary.deckList'
@@ -59,7 +67,7 @@ export const DeckList = () => {
                 {
                     editMode
                         ? <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
-                        : <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonCreate')}</Button>
+                        : <Button w={'full'} variant={'main'} onClick={gotoCreate} size={'lg'}>{t('buttonCreate')}</Button>
                 }
             </ButtonBar>
         </PageWrap>

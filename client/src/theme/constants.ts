@@ -18,9 +18,11 @@ export const fontSizes = {
     md: "1.125rem",
     lg: "1.25rem",
     xl: "1.5rem",
+    xxl: "3rem",
 }
 
 export const breakpoints = {
+    xs: '360px',
     sm: '480px',
     md: '768px',
     lg: '992px',

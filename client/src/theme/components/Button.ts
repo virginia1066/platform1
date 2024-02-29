@@ -31,9 +31,24 @@ export const Button = {
         }
     },
     variants: {
+        color: defineStyle((props) => {
+            const { colorScheme: c } = props;
+
+            return {
+                bg: `${c}.500`,
+                color: themeParams.button_text_color,
+                borderColor: `${c}.500`,
+                _hover: {
+    
+                },
+                _active: {
+    
+                },
+            };
+        }),
         main: {
             bg: themeParams.button_color,
-            color: themeParams.bg_color,
+            color: themeParams.button_text_color,
             borderColor: themeParams.button_color,
             _hover: {
 
@@ -44,7 +59,7 @@ export const Button = {
         },
         delete: {
             bg: Colors.red[500],
-            color: themeParams.bg_color,
+            color: themeParams.button_text_color,
             borderColor: Colors.red[500],
             _hover: {
 

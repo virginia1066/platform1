@@ -1,7 +1,9 @@
-import { Button, Flex } from "@chakra-ui/react"
+import { Button, Flex, HStack } from "@chakra-ui/react"
 import { ButtonBar } from "../../components/ButtonBar"
 import { PageWrap } from "../../components/PageWrap"
 import { useTranslation } from "react-i18next"
+import { BackButton } from "../../components/BackButton"
+import { BASE_URL } from "../../utils/constants"
 
 export const DeckEdit = () => {
 
@@ -16,7 +18,11 @@ export const DeckEdit = () => {
             </Flex>
             <ButtonBar>
                 <>
-                    <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                    <HStack spacing={4}>
+                        <BackButton url={`${BASE_URL}/`} />
+                        <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                    </HStack>
+
                 </>
             </ButtonBar>
         </PageWrap>
