@@ -25,7 +25,10 @@ export const google_words_daemon = () => {
                     const iterator = packs_with_links[Symbol.iterator]();
                     const insert_id = randomUUID();
 
-                    const loop = (iterator: Iterator<{ pack_name: string, words: Array<Omit<Word, 'id' | 'insert_id'>> }>) => {
+                    const loop = (iterator: Iterator<{
+                        pack_name: string,
+                        words: Array<Omit<Word, 'id' | 'insert_id'>>
+                    }>) => {
                         const { done, value } = iterator.next();
 
                         if (!value || done) {
@@ -56,7 +59,7 @@ export const google_words_daemon = () => {
                                                 return true;
                                             }
 
-                                            return !equals(word, omit(['id', 'insert_id'], duplicate))
+                                            return !equals(omit(['source'], word), omit(['id', 'insert_id'], duplicate));
                                         }).map<Omit<Word, 'id'>>(assoc('insert_id', insert_id));
 
                                         if (!new_words.length) {
