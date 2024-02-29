@@ -13,6 +13,10 @@ export const home_task_words_daemon = () => {
 
 
     const prepare_lesson = (task: HomeTaskWebhook): Promise<unknown> => {
+        if (task.status === WebhookHomeTaskStatus.Done) {
+            return Promise.resolve();
+        }
+
         return get_lesson_by_id(task.lesson_id)
             .then((data) => {
                 const insert_id = randomUUID();

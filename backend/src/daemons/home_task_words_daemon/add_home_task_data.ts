@@ -26,7 +26,7 @@ export const add_home_task_data = ({ words, visitors, insert_id, lesson_id }: Ad
 
             ])
             .then(([packs, words]) => {
-                const links = packs.map((pack) =>
+                const links = packs.reduce<Array<PackLink>>((acc, pack) =>
                     words.reduce<Array<PackLink>>((acc, word) => {
                         acc.push({
                             pack_id: pack.id,
@@ -34,8 +34,8 @@ export const add_home_task_data = ({ words, visitors, insert_id, lesson_id }: Ad
                             insert_id
                         });
                         return acc;
-                    }, [])
-                );
+                    }, acc)
+                , []);
 
                 return knex('pack_links')
                     .insert(links)
