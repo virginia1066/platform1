@@ -29,7 +29,7 @@ export const home_task_words_daemon = () => {
                 const home_task_text = homeTask?.text ?? '';
 
                 const words = Array.from(home_task_text.matchAll(HOME_TASK_WORDS_REG))
-                    .map<Omit<Word, 'id'>>(([_, ru, en]) => ({
+                    .map<Omit<Word, 'id'>>(([_, en, ru]) => ({
                         ru: ru.trim(),
                         en: en.trim(),
                         status: WordStatus.Active,

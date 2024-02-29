@@ -57,7 +57,9 @@ export const ListItem: FC<DeckListItem> = ({
                         <Flex h={'50%'} bgColor={Colors.triteary_bg_color[500]} justifyContent={'center'}
                               alignItems={'center'}><EditIcon color={themeParams.hint_color}/></Flex>
                     </Box>
-                    : <ProgressStats textAlign={'end'} new_ones={count_new} studied={count_learning + count_relearning}
+                    : <ProgressStats textAlign={'end'}
+                                     new_ones={count_new}
+                                     studied={count_learning + count_relearning}
                                      repeatable={count_review}/>
             }
         </Block>
