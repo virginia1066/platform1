@@ -1,3 +1,6 @@
+import { __, assoc, pipe } from 'ramda';
+import { BASE_URL } from './constants';
+
 let auth_xhr: Promise<unknown> | null = null;
 let auth_done: boolean = false;
 
@@ -15,20 +18,30 @@ export type ParsedResponse<T> = Response & {
     data: T
 };
 
+const get_content = (r: Response) =>
+    r.headers.get('Content-Type')?.toLowerCase()?.includes('application/json')
+        ? r.json()
+        : r.text();
+
+const add_content = <T>(response: Response): (data: T) => ParsedResponse<T> =>
+    assoc('data', __, response);
+
+const reject = <T>(data: T) => Promise.reject(data);
+
 export const parse_response = <T>(r: Response): Promise<ParsedResponse<T>> =>
     r.ok
-        ? r.headers.get('Content-Type')?.toLowerCase()?.includes('application/json')
-            ? r.json()
-                .then<ParsedResponse<T>>(data => ({ ...r, data }))
-            : r.text()
-                .then<ParsedResponse<T>>(data => ({ ...r, data }) as ParsedResponse<T>)
-        : r.text()
-            .then((text: string) => Promise.reject(text));
+        ? get_content(r)
+            .then(add_content(r))
+        : get_content(r)
+            .then(pipe(add_content(r), reject));
 
 const auth = () => {
     auth_xhr = req('/api/v1/web-app/user/auth', {
         method: 'POST',
         body: JSON.stringify({ auth_data: Telegram.WebApp.initData })
+    }).catch(() => {
+        window.location.href = `${window.location.origin}${BASE_URL}/403`;
+        return void 0;
     });
 
     auth_xhr.then(() => {
@@ -42,8 +55,8 @@ const auth = () => {
 export const request = <T>(url: string, init?: RequestInit): Promise<ParsedResponse<T>> =>
     (
         auth_done
-        ? req(url, init)
-        : auth_xhr
-            ? auth_xhr.then(() => req(url, init))
-            : auth().then(() => req(url, init))
+            ? req(url, init)
+            : auth_xhr
+                ? auth_xhr.then(() => req(url, init))
+                : auth().then(() => req(url, init))
     ) as Promise<ParsedResponse<T>>;

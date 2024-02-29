@@ -1,7 +1,7 @@
 import { knex } from '../../../../../../constants';
 import { set_body } from '../../../../../utils/set_body';
 import { MiddlewareWithToken } from '../../../../../middlewares/check_token_M';
-import { evolve, map } from 'ramda';
+import { applySpec, map, pipe, prop } from 'ramda';
 import { WordStatus } from '../../../../../../types/Wokobular';
 
 /**
@@ -74,15 +74,20 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
             knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) as count_can_be_shown')
         )
         .then(map(
-            evolve({
-                count_new: Number,
-                count_learning: Number,
-                count_review: Number,
-                count_relearning: Number,
-                words_count: Number,
-                count_can_be_shown: Number
-            })
-        ))
+            applySpec<any>({
+                name: prop('name'),
+                id: prop('id'),
+                user_can_edit: prop('user_can_edit'),
+                stats: applySpec({
+                    count_new: pipe(prop('count_new'), Number),
+                    count_learning: pipe(prop('count_learning'), Number),
+                    count_review: pipe(prop('count_review'), Number),
+                    count_relearning: pipe(prop('count_relearning'), Number),
+                    words_count: pipe(prop('words_count'), Number),
+                    count_can_be_shown: pipe(prop('count_can_be_shown'), Number)
+                })
+            }))
+        )
         .then(set_body(ctx))
         .then(next);
 

@@ -53,7 +53,7 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                         .then(([words, stats]) => Object.assign(
                             Object.create(null),
                             {
-                                ...omit(['parent_user_id', 'status'], pack),
+                                ...omit(['parent_user_id', 'status', 'insert_id'], pack),
                                 words,
                                 stats
                             })

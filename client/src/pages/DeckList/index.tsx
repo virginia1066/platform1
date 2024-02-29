@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useGate, useList, useUnit } from 'effector-react';
-import { $deckListC, $editMode, DeckListGate, setEditModeE } from '../../models/vocabulary';
+import { $deckListC, $editMode, DeckListGate, setEditModeE } from './model';
 import { PageWrap } from '../../components/PageWrap';
 import { useCallback } from 'react';
 import { themeParams } from '../../theme/defaults';
@@ -10,30 +10,25 @@ import { fontSizes } from '../../theme/constants';
 import { ListItem } from './components/ListItem';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/constants';
+import { always, not, pipe } from 'ramda';
 
+const TRANS_OPTIONS = {
+    keyPrefix: 'vocabulary.deckList'
+} as const;
 
 export const DeckList = () => {
     useGate(DeckListGate);
 
     const [setEditMode, editMode] = useUnit([setEditModeE, $editMode]);
-
-    const navigate = useNavigate()
+    const navigate: (to: string) => void = useNavigate();
 
     const deck_list = useList($deckListC, (props) => (
         <ListItem key={`deck-${props.id}`} {...props}/>
     ));
 
-    const switchEditMode = useCallback(() => {
-        setEditMode(!editMode);
-    }, [editMode]);
-
-    const gotoCreate = useCallback(() => {
-        navigate(`${BASE_URL}/edit`)
-    },[navigate])
-
-    const { t } = useTranslation('translation', {
-        keyPrefix: 'vocabulary.deckList'
-    });
+    const switchEditMode = useCallback(pipe(always(editMode), not, setEditMode), [editMode]);
+    const gotoCreate = useCallback(pipe(always(`${BASE_URL}/edit`), navigate), [navigate]);
+    const { t } = useTranslation('translation', TRANS_OPTIONS);
 
     return (
         <PageWrap headerTitle={t('header')}>
@@ -41,8 +36,12 @@ export const DeckList = () => {
                 <Box h={'38px'} textAlign={'center'}>
                     {
                         editMode
-                            ? <Text size={'sm'} lineHeight={fontSizes.sm} color={themeParams.hint_color}>Редактируйте
-                                колоды <br/> или управляйте их видимостью.</Text>
+                            ? (
+                                <Text size={'sm'} lineHeight={fontSizes.sm} color={themeParams.hint_color}>
+                                    Редактируйте
+                                    колоды <br/> или управляйте их видимостью.
+                                </Text>
+                            )
                             : null
                     }
                 </Box>
@@ -67,7 +66,8 @@ export const DeckList = () => {
                 {
                     editMode
                         ? <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
-                        : <Button w={'full'} variant={'main'} onClick={gotoCreate} size={'lg'}>{t('buttonCreate')}</Button>
+                        : <Button w={'full'} variant={'main'} onClick={gotoCreate}
+                                  size={'lg'}>{t('buttonCreate')}</Button>
                 }
             </ButtonBar>
         </PageWrap>

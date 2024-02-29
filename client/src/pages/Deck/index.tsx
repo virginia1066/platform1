@@ -1,66 +1,112 @@
-import { Button, Flex, HStack, Heading, VStack } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { ButtonBar } from "../../components/ButtonBar";
-import { PageWrap } from "../../components/PageWrap";
-import { Block } from "../../components/Block/inedex";
-import { ProgressStats } from "../../components/ProgressStats";
-import { useCallback, useState } from "react";
-import { Word } from "./components/Word";
-import { useNavigate, useParams } from "react-router-dom";
-import { BASE_URL } from "../../utils/constants";
-import { BackButton } from "../../components/BackButton";
+import { Button, Flex, HStack, VStack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import { ButtonBar } from '../../components/ButtonBar';
+import { PageWrap } from '../../components/PageWrap';
+import { Block } from '../../components/Block/inedex';
+import { ProgressStats } from '../../components/ProgressStats';
+import { useCallback, useState } from 'react';
+import { Word } from './components/Word';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BASE_URL } from '../../utils/constants';
+import { BackButton } from '../../components/BackButton';
+import { useGate } from 'effector-react';
+import {
+    $active_word,
+    $count_learning,
+    $count_new,
+    $count_review, $is_finish,
+    $pack_name,
+    $translate_shown,
+    DeckG,
+    set_again,
+    set_easy,
+    set_good,
+    set_hard,
+    show_translate
+} from './model';
+import { useUnit } from 'effector-react/effector-react.umd';
+import { always, pipe } from 'ramda';
+import { Func } from '../../types/utils';
+
+const TRANS_PROPS = {
+    keyPrefix: 'vocabulary.deck'
+} as const;
 
 export const Deck = () => {
+    const deckId = Number(useParams<{ deckId: string }>().deckId);
+    const navigate: Func<[string], void> = useNavigate();
+    useGate(DeckG, deckId);
 
-    const { t } = useTranslation('translation', {
-        keyPrefix: 'vocabulary.deck'
-    });
+    const { t } = useTranslation('translation', TRANS_PROPS);
 
-    const navigate = useNavigate()
+    const [
+        name,
+        count_new,
+        count_learning,
+        count_review,
+        word,
+        translate_shown,
+        is_finish
+    ] = useUnit([$pack_name, $count_new, $count_learning, $count_review, $active_word, $translate_shown, $is_finish]);
 
-    const { deckId } = useParams<{ deckId: string }>();
+    const [
+        again_click,
+        hard_click,
+        good_click,
+        easy_click,
+        show_translate_click
+    ] = useUnit([set_again, set_hard, set_good, set_easy, show_translate]);
 
-    const [isFinished, setFinished] = useState(false)
+    const go_back = useCallback(pipe(always(`${BASE_URL}/`), navigate), []);
 
-    const [isAnswer, setAnswer] = useState(false);
+    if (isNaN(deckId)) {
+        navigate(`${BASE_URL}/`);
+    }
 
-    const showAnswer = useCallback(() => {
-        setAnswer(true)
-    }, [])
+    if (!word) {
+        return null;
+    }
 
     return (
-        <PageWrap headerTitle={"Название колоды"}>
+        <PageWrap headerTitle={name}>
             <Block minH={'54px'} justifyContent={'center'}>
-                <ProgressStats new_ones={12} studied={0} repeatable={176} direction={{ base: 'column', xs: 'row' }}/>
+                <ProgressStats new_ones={count_new}
+                               studied={count_learning}
+                               repeatable={count_review}
+                               direction={{ base: 'column', xs: 'row' }}/>
             </Block>
-            
+
             <Flex h={'full'} alignItems={'center'}>
-            {
-                isFinished 
-                ?
-                <Word showTranslate={true} word={t('finished.title')} translate={t('finished.text')} />
-                : 
-                <Word showTranslate={isAnswer} word="Winter is Comming" translate="Зима близко" />
-            }   
+                {
+                    is_finish
+                        ? <Word showTranslate={true} word={t('finished.title')} translate={t('finished.text')}/>
+                        : <Word showTranslate={translate_shown} word={word.en} translate={word.ru}/>
+                }
             </Flex>
 
             <ButtonBar>
                 {
-                    isFinished
-                    ? <Button onClick={showAnswer} w={'full'} variant={'main'} size={'lg'}>{t('buttonBack')}</Button>
-                    : isAnswer
-                    ? <VStack spacing={4}>
-                        <Button w={'full'} colorScheme="blue" variant={'color'} size={'md'}>{t('anki.buttonAgain')}</Button>
-                        <Button w={'full'} colorScheme="teal" variant={'color'} size={'md'}>{t('anki.buttonHard')}</Button>
-                        <Button w={'full'} colorScheme="teal" variant={'color'} size={'md'}>{t('anki.buttonGood')}</Button>
-                        <Button w={'full'} colorScheme="green" variant={'color'} size={'md'}>{t('anki.buttonEasy')}</Button>
-                    </VStack>
-                    : <HStack spacing={4}>
-                        <BackButton url={`${BASE_URL}/`}/>
-                        <Button onClick={showAnswer} w={'full'} variant={'main'} size={'lg'}>{t('buttonTranslate')}</Button>
-                    </HStack>
+                    is_finish
+                        ? <Button onClick={go_back} w={'full'} variant={'main'}
+                                size={'lg'}>{t('buttonBack')}</Button>
+                        : translate_shown
+                            ? <VStack spacing={4}>
+                                <Button onClick={again_click} w={'full'} colorScheme="blue" variant={'color'}
+                                        size={'md'}>{t('anki.buttonAgain')}</Button>
+                                <Button onClick={hard_click} w={'full'} colorScheme="teal" variant={'color'}
+                                        size={'md'}>{t('anki.buttonHard')}</Button>
+                                <Button onClick={good_click} w={'full'} colorScheme="teal" variant={'color'}
+                                        size={'md'}>{t('anki.buttonGood')}</Button>
+                                <Button onClick={easy_click} w={'full'} colorScheme="green" variant={'color'}
+                                        size={'md'}>{t('anki.buttonEasy')}</Button>
+                            </VStack>
+                            : <HStack spacing={4}>
+                                <BackButton url={`${BASE_URL}/`}/>
+                                <Button onClick={show_translate_click} w={'full'} variant={'main'}
+                                        size={'lg'}>{t('buttonTranslate')}</Button>
+                            </HStack>
                 }
             </ButtonBar>
         </PageWrap>
-    )
-}
+    );
+};
