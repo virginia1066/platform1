@@ -4,13 +4,15 @@ import { Block } from '../../../components/Block/inedex';
 import { ProgressStats } from '../../../components/ProgressStats';
 import { colorScheme, themeParams } from '../../../theme/defaults';
 import { Colors, get_triteary_bg_color } from '../../../theme/Colors';
-import { FC, useCallback } from 'react';
+import { ChangeEvent, FC, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../constants';
 import { BlockLabel } from '../../../components/Block/BlockLabel';
 import { DeckItemShort } from '../../../types/vocabulary';
 import { always, pipe } from 'ramda';
 import { Func } from '../../../types/utils';
+import { useUnit } from 'effector-react';
+import { $tmpDeckList, changeSkipList } from '../model';
 import { useTranslation } from "react-i18next";
 
 export const ListItem: FC<DeckListItem> = ({
@@ -27,9 +29,19 @@ export const ListItem: FC<DeckListItem> = ({
                                                },
                                            }) => {
 
+    const [onChange, skipList] = useUnit([changeSkipList, $tmpDeckList]);
     const navigate: Func<[string], void> = useNavigate();
     const gotoDeck = useCallback(pipe(always(`${BASE_URL}/deck/${id}`), navigate), [id]);
     const isActive = count_can_be_shown > 0 && !editMode;
+    const isChecked = !skipList.includes(id);
+
+    const onChangeChecked = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        onChange({
+            id,
+            checked
+        });
+    }, [id]);
 
     const { t } = useTranslation('translation', {
         keyPrefix: 'vocabulary.deckList'
@@ -52,7 +64,9 @@ export const ListItem: FC<DeckListItem> = ({
             <HStack spacing={4} me={editMode ? '55px' : 'auto'}>
                 {
                     editMode
-                        ? <Checkbox variant={'tg'}/>
+                        ? <Checkbox onChange={onChangeChecked}
+                                    defaultChecked={isChecked}
+                                    variant={'tg'}/>
                         : null
                 }
                 <Heading as={'h2'} size={'md'}>{name}</Heading>
