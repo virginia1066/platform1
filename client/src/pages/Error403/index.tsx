@@ -25,7 +25,7 @@ export const Error403 = () => {
               flexDir={'column'}>
             <Block>
                 <VStack spacing={7}>
-                    <Heading color={Colors.red[500]} size={'xxl'}>403</Heading>
+                    <Heading color={Colors.red} size={'xxl'}>403</Heading>
                     <VStack textAlign={'center'} spacing={4}>
                         <Text color={themeParams.hint_color}>
                             <Trans t={t} i18nKey={'text'}

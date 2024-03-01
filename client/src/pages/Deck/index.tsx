@@ -93,9 +93,9 @@ export const Deck = () => {
                             ? <VStack spacing={4}>
                                 <Button onClick={again_click} w={'full'} colorScheme="blue" variant={'color'}
                                         size={'md'}>{t('anki.buttonAgain')}</Button>
-                                <Button onClick={hard_click} w={'full'} colorScheme="teal" variant={'color'}
+                                <Button onClick={hard_click} w={'full'} colorScheme="purple" variant={'color'}
                                         size={'md'}>{t('anki.buttonHard')}</Button>
-                                <Button onClick={good_click} w={'full'} colorScheme="teal" variant={'color'}
+                                <Button onClick={good_click} w={'full'} colorScheme="purple" variant={'color'}
                                         size={'md'}>{t('anki.buttonGood')}</Button>
                                 <Button onClick={easy_click} w={'full'} colorScheme="green" variant={'color'}
                                         size={'md'}>{t('anki.buttonEasy')}</Button>

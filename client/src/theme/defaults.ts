@@ -7,3 +7,5 @@ export const themeParams = {
     'secondary_bg_color': (Telegram.WebApp.themeParams as any).secondary_bg_color ?? '#F3F2F8',
     'text_color': Telegram.WebApp.themeParams.text_color ?? '#020202',
 };
+
+export const colorScheme = 'light' //The color scheme currently used in the Telegram app. Either “light” or “dark”. Also available as the CSS variable var(--tg-color-scheme).

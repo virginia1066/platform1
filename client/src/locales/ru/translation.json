@@ -2,13 +2,17 @@
     "vocabulary": {
         "deckList": {
             "header": "Ваши колоды",
+            "subtitleEdit": "Редактируйте колоды <br/> или управляйте их видимостью.",
             "content": "Базовые слова",
             "buttonCreate": "+ Создать колоду",
-            "buttonSave": "Сохранить"
+            "buttonSave": "Сохранить",
+            "labelDone": "Сделано"
         },
         "deckEdit": {
             "header": "Редактирование колоды",
-            "buttonSave": "Сохранить"
+            "buttonSave": "Сохранить",
+            "labelDeckTitle": "Название колоды",
+            "labelWords": "Слова"
         },
         "deck": {
             "buttonTranslate": "Показать перевод",
