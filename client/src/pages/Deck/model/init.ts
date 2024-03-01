@@ -6,7 +6,8 @@ import {
     $count_new,
     $count_review,
     $pack_id,
-    $pack_name, $translate_shown,
+    $pack_name,
+    $translate_shown,
     $word_list,
     DeckG,
     get_pack_fx,
@@ -14,11 +15,11 @@ import {
     set_again,
     set_easy,
     set_good,
-    set_hard, show_translate
+    set_hard,
+    show_translate
 } from './dictionary';
 import { add, always, converge, nthArg, pipe, prop } from 'ramda';
-import { DeckItemDetailed, DeckStats, Word } from '../../../types/vocabulary';
-import { ParsedResponse } from '../../../utils/request';
+import { Word } from '../../../types/vocabulary';
 
 sample({
     clock: DeckG.open,
@@ -56,7 +57,7 @@ $count_new
     .reset(DeckG.close);
 
 $count_learning
-    .on(get_pack_fx.doneData, pipe<[number, ParsedResponse<DeckItemDetailed>], ParsedResponse<DeckItemDetailed>, DeckItemDetailed, DeckStats, number>(
+    .on(get_pack_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
         prop('stats'),
@@ -65,7 +66,7 @@ $count_learning
             prop('count_relearning')
         ])
     ))
-    .on(send_progress_fx.doneData, pipe<[number, ParsedResponse<Omit<DeckStats, 'count_can_be_shown'>>], ParsedResponse<Omit<DeckStats, 'count_can_be_shown'>>, Omit<DeckStats, 'count_can_be_shown'>, number>(
+    .on(send_progress_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
         converge(add, [

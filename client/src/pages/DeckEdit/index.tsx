@@ -4,6 +4,8 @@ import { PageWrap } from '../../components/PageWrap';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../components/BackButton';
 import { BASE_URL } from '../../constants';
+import { useUnit } from 'effector-react';
+import { add_word_e } from './model';
 
 const TRANS_PROPS = {
     keyPrefix: 'vocabulary.deckEdit'
