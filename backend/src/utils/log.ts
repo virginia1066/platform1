@@ -20,11 +20,20 @@ const serialize = (data: any) => {
 
 const get_from = () => {
     try {
-        throw new Error()
+        throw new Error();
     } catch (e: any) {
-        return `"${e.stack.split(" at ")[4].trim()}"`
+        return e.stack
+            .split(' at ')
+            .slice(1)
+            .map((stack: string) => stack.trim())
+            .filter((stack: string) => !(
+                stack.includes('node_modules') ||
+                stack.includes('node:internal') ||
+                stack.includes('utils/log')
+            ))
+            .join('\n');
     }
-}
+};
 
 const out = (isError: boolean, formatter: (message: string) => string, data: Array<any>) => {
     const message = data.map(serialize).join(' ');

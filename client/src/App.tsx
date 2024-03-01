@@ -1,34 +1,30 @@
-import { Container, Fade } from "@chakra-ui/react";
-import { themeParams } from "./theme/defaults";
+import { ChakraProvider, Container } from '@chakra-ui/react';
+import { themeParams } from './theme/defaults';
 import tgTheme from './theme/tgTheme';
-import { ChakraProvider } from '@chakra-ui/react';
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
-import { DeckList } from "./pages/DeckList";
-import { DeckEdit } from "./pages/DeckEdit";
-import { Deck } from "./pages/Deck";
-import { BASE_URL } from "./utils/constants";
-import { Error403 } from "./pages/Error403";
+import { createBrowserRouter, RouterProvider, } from 'react-router-dom';
+import { DeckList } from './pages/DeckList';
+import { DeckEdit } from './pages/DeckEdit';
+import { Deck } from './pages/Deck';
+import { BASE_URL } from './constants';
+import { Error403 } from './pages/Error403';
 import { useEffect, useState } from "react";
 
 const router = createBrowserRouter([
     {
         path: `${BASE_URL}/`,
-        element: <DeckList />,
+        element: <DeckList/>,
     },
     {
         path: `${BASE_URL}/edit`,
-        element: <DeckEdit />,
+        element: <DeckEdit/>,
     },
     {
         path: `${BASE_URL}/deck/:deckId`,
-        element: <Deck />,
+        element: <Deck/>,
     },
     {
         path: `${BASE_URL}/403`,
-        element: <Error403 />,
+        element: <Error403/>,
     },
 ]);
 

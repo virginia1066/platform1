@@ -1,10 +1,12 @@
-import { CompanyToken, TgUser, UserFromWebhook } from '../../types/general';
-import { LearnCard, Pack, PackLink, Word } from '../../types/Wokobular';
+import { CompanyToken, HomeTaskWebhook, TgUser, UserFromWebhook } from '../../types/general';
+import { LearnCard, LessonUpdate, Pack, PackLink, Word } from '../../types/Wokobular';
 
 
 declare module 'knex/types/tables' {
     interface Tables {
         users_from_webhook: UserFromWebhook;
+
+        home_task_webhook: HomeTaskWebhook;
 
         company_access_tokens: CompanyToken<string>;
 
@@ -17,6 +19,8 @@ declare module 'knex/types/tables' {
         words: Word;
 
         learn_cards: LearnCard;
+
+        lesson_updates: LessonUpdate;
     }
 
 }

@@ -8,12 +8,12 @@ import mount from 'koa-mount';
 import user_create_webhook_M from './api/v1/webhooks/user-create';
 import { info } from '../utils/log';
 import { replace_mk_id_M } from './api/v1/debug/tg/replace_mk_id_M';
-import { get_user_packs_M } from './api/v1/web-app/user/packs/get_user_packs_M';
+import { get_user_packs_M } from './api/v1/webapp/user/packs/get_user_packs_M';
 import { set_headers_M } from './middlewares/headers';
-import { auth_M } from './api/v1/web-app/user/auth';
+import { auth_M } from './api/v1/webapp/user/auth';
 import { check_token_M } from './middlewares/check_token_M';
-import { get_pack_words_M } from './api/v1/web-app/user/packs/get_pack_words_M';
-import { word_update_M } from './api/v1/web-app/user/word-update/word_update_M';
+import { get_pack_words_M } from './api/v1/webapp/user/packs/get_pack_words_M';
+import { word_update_M } from './api/v1/webapp/user/word-update/word_update_M';
 import { on_home_task_update_M } from './api/v1/webhooks/home-task-update';
 
 export const create_server = () => {

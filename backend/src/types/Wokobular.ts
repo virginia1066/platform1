@@ -29,6 +29,10 @@ export type Pack = {
      * Может ли быть отредактирована пользователем
      */
     user_can_edit: boolean;
+    /**
+     * Id вставки (для удаления)
+     */
+    insert_id: string;
 }
 
 /**
@@ -43,11 +47,20 @@ export type PackLink = {
      * id слова в колоде
      */
     word_id: number;
+    /**
+     * Id вставки (для удаления)
+     */
+    insert_id: string;
 }
 
 export enum WordStatus {
     Active = 'ACTIVE',
     Deleted = 'DELETED'
+}
+
+export enum WordSource {
+    GoogleSheets = 'GOOGLE',
+    HomeTask = 'HOME_TASK'
 }
 
 /**
@@ -71,6 +84,20 @@ export type Word = {
      * Статус слова
      */
     status: WordStatus;
+    /**
+     * Источник получения слова
+     */
+    source: WordSource;
+    /**
+     * Id вставки (для удаления)
+     */
+    insert_id: string;
+}
+
+export type LessonUpdate<Date = string> = {
+    lesson_id: number;
+    insert_id: string;
+    timestamp: Date;
 }
 
 export type LearnCard<Date = string> = {

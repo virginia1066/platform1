@@ -24,7 +24,7 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                     if (!pack) {
                         throw new NotFound();
                     }
-                    if (![SYSTEM_PACK_ID, ctx.state.token.user_id].includes(pack.parent_user_id)) {
+                    if (![SYSTEM_PACK_ID, Number(ctx.state.token.user_id)].includes(pack.parent_user_id)) {
                         throw new PermissionDenied();
                     }
 
@@ -53,7 +53,7 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                         .then(([words, stats]) => Object.assign(
                             Object.create(null),
                             {
-                                ...omit(['parent_user_id', 'status'], pack),
+                                ...omit(['parent_user_id', 'status', 'insert_id'], pack),
                                 words,
                                 stats
                             })

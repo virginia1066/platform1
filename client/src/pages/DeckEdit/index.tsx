@@ -1,9 +1,13 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, IconButton, Input, VStack } from "@chakra-ui/react"
-import { ButtonBar } from "../../components/ButtonBar"
-import { PageWrap } from "../../components/PageWrap"
-import { useTranslation } from "react-i18next"
-import { BackButton } from "../../components/BackButton"
-import { BASE_URL } from "../../utils/constants"
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, IconButton, Input, VStack } from '@chakra-ui/react';
+import { ButtonBar } from '../../components/ButtonBar';
+import { PageWrap } from '../../components/PageWrap';
+import { useTranslation } from 'react-i18next';
+import { BackButton } from '../../components/BackButton';
+import { BASE_URL } from '../../constants';
+
+const TRANS_PROPS = {
+    keyPrefix: 'vocabulary.deckEdit'
+} as const;
 import { ChangeEvent, useCallback, useState } from "react"
 import { Block } from "../../components/Block/inedex"
 import { ProgressStats } from "../../components/ProgressStats"
@@ -12,10 +16,7 @@ import { AddIcon, CloseIcon } from "@chakra-ui/icons"
 import { colorScheme, themeParams } from "../../theme/defaults"
 
 export const DeckEdit = () => {
-
-    const { t } = useTranslation('translation', {
-        keyPrefix: 'vocabulary.deckEdit'
-    });
+    const { t } = useTranslation('translation', TRANS_PROPS);
 
     const [input, setInput] = useState('')
 
@@ -69,13 +70,11 @@ export const DeckEdit = () => {
                 </Block>
             </Flex>
             <ButtonBar>
-                <>
-                    <HStack spacing={4}>
-                        <BackButton url={`${BASE_URL}/`} />
-                        <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
-                    </HStack>
-                </>
+                <HStack spacing={4}>
+                    <BackButton url={`${BASE_URL}/`}/>
+                    <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                </HStack>
             </ButtonBar>
         </PageWrap>
-    )
-}
+    );
+};

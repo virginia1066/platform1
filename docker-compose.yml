@@ -17,6 +17,9 @@ services:
   client-nginx:
     build:
       context: ./client
+      args:
+        - REACT_APP_TG_BOT_NAME=${TG_BOT_NAME}
+        - REACT_APP_TG_MK_ADMIN_USER=${TG_MK_ADMIN_USER}
     mem_limit: 50m
     restart: always
     volumes:
