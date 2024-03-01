@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useGate, useList, useUnit } from 'effector-react';
-import { $deckListC, $editMode, DeckListGate, setEditModeE } from './model';
+import { $deckListC, $editMode, cancelEditModeE, DeckListGate, enableEditModeE, saveSkipListE } from './model';
 import { PageWrap } from '../../components/PageWrap';
 import { useCallback } from 'react';
 import { themeParams } from '../../theme/defaults';
@@ -10,7 +10,7 @@ import { fontSizes } from '../../theme/constants';
 import { ListItem } from './components/ListItem';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
-import { always, not, pipe } from 'ramda';
+import { always, pipe } from 'ramda';
 
 const TRANS_OPTIONS = {
     keyPrefix: 'vocabulary.deckList'
@@ -19,14 +19,24 @@ const TRANS_OPTIONS = {
 export const DeckList = () => {
     useGate(DeckListGate);
 
-    const [setEditMode, editMode] = useUnit([setEditModeE, $editMode]);
+    const [
+        enableEditMode,
+        cancelEditMode,
+        saveSkipList,
+        editMode,
+    ] = useUnit([enableEditModeE, cancelEditModeE, saveSkipListE, $editMode]);
+
     const navigate: (to: string) => void = useNavigate();
 
     const deck_list = useList($deckListC, (props) => (
         <ListItem key={`deck-${props.id}`} {...props}/>
     ));
 
-    const switchEditMode = useCallback(pipe(always(editMode), not, setEditMode), [editMode]);
+    const switchEditMode = useCallback(() => {
+        editMode
+            ? cancelEditMode()
+            : enableEditMode();
+    }, [editMode]);
     const gotoCreate = useCallback(pipe(always(`${BASE_URL}/edit`), navigate), [navigate]);
     const { t } = useTranslation('translation', TRANS_OPTIONS);
 
@@ -65,7 +75,8 @@ export const DeckList = () => {
             <ButtonBar>
                 {
                     editMode
-                        ? <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                        ? <Button w={'full'} variant={'main'} onClick={saveSkipList}
+                                  size={'lg'}>{t('buttonSave')}</Button>
                         : <Button w={'full'} variant={'main'} onClick={gotoCreate}
                                   size={'lg'}>{t('buttonCreate')}</Button>
                 }
