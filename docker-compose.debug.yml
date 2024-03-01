@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  root-nginx:
+  root-nginx-debug:
     image: nginx:latest
     mem_limit: 50m
     restart: always
