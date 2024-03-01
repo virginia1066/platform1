@@ -9,7 +9,7 @@ import { themeParams } from '../../theme/defaults';
 import { fontSizes } from '../../theme/constants';
 import { ListItem } from './components/ListItem';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../utils/constants';
+import { BASE_URL } from '../../constants';
 import { always, not, pipe } from 'ramda';
 
 const TRANS_OPTIONS = {

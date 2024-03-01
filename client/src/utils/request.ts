@@ -1,5 +1,5 @@
 import { __, assoc, pipe } from 'ramda';
-import { BASE_URL } from './constants';
+import { BASE_URL } from '../constants';
 
 let auth_xhr: Promise<unknown> | null = null;
 let auth_done: boolean = false;

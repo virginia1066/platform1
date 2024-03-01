@@ -7,7 +7,7 @@ import { ProgressStats } from '../../components/ProgressStats';
 import { useCallback, useState } from 'react';
 import { Word } from './components/Word';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BASE_URL } from '../../utils/constants';
+import { BASE_URL } from '../../constants';
 import { BackButton } from '../../components/BackButton';
 import { useGate } from 'effector-react';
 import {
