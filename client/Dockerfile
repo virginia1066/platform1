@@ -22,6 +22,7 @@ RUN npm run build
 # Stage 2: Запустить Nginx и использовать собранные файлы React
 FROM nginx:alpine
 
+RUN rm -rf /usr/share/nginx/html/*
 # Копировать собранные файлы React из предыдущего этапа в Nginx
 COPY --from=builder /app/build /usr/share/nginx/html/web-app
 
