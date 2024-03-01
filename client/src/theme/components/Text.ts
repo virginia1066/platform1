@@ -5,6 +5,7 @@ export const Text = {
     baseStyle: {
         fontFamily: "'Inter', sans-serif",
         color: themeParams.text_color,
+        lineHeight: "120%",
     },
     defaultProps: {
         size: 'sm'
@@ -14,19 +15,19 @@ export const Text = {
     },
     sizes: {
         'xs': {
-            fontSize: fontSizes.xs
+            fontSize: fontSizes.xs,
         },
         'sm': {
-            fontSize: fontSizes.sm
+            fontSize: fontSizes.sm,
         },
         'md': {
-            fontSize: fontSizes.md
+            fontSize: fontSizes.md,
         },
         'lg': {
-            fontSize: fontSizes.lg
+            fontSize: fontSizes.lg,
         },
         'xl': {
-            fontSize: fontSizes.xl
+            fontSize: fontSizes.xl,
         }
     }
 };

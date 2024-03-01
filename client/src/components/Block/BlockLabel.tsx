@@ -4,7 +4,7 @@ import { Colors } from "../../theme/Colors";
 import { themeParams } from "../../theme/defaults";
 
 export const BlockLabel: FC<{ text: string, color?: string }> = ({ text, color = null }) => (
-    <Box bgColor={color ? color : Colors.green[500]}
+    <Box bgColor={color ? color : Colors.green}
         position={'absolute'}
         borderTopLeftRadius={8}
         borderBottomRightRadius={8}

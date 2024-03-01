@@ -6,6 +6,9 @@ import { Button } from './components/Button';
 import { Heading } from './components/Heading';
 import { Badge } from "./components/Badge";
 import { Checkbox } from "./components/Checkbox";
+import { FormLabel } from "./components/FormLabel";
+import { FormError } from "./components/FormError";
+import { Input } from "./components/Input";
 
 const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), {
     colors: Colors,
@@ -19,12 +22,23 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
         Button: Button,
         Badge: Badge,
         Checkbox: Checkbox,
+        FormLabel: FormLabel,
+        FormError: FormError,
+        Input: Input,
     },
     styles: {
         global: {
             "html, body, #root": {
                 height: '100%',
-                minHeight: '100%',
+                minHeight: '100%',                
+            },
+            "@keyframes fadeIn": {
+                "0%": {
+                    opacity:0,
+                },
+                "100%": {
+                    opacity: 1,
+                }
             }
         }
     },

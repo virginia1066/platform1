@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Fade } from "@chakra-ui/react";
 import { themeParams } from "./theme/defaults";
 import tgTheme from './theme/tgTheme';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -11,6 +11,7 @@ import { DeckEdit } from "./pages/DeckEdit";
 import { Deck } from "./pages/Deck";
 import { BASE_URL } from "./utils/constants";
 import { Error403 } from "./pages/Error403";
+import { useEffect, useState } from "react";
 
 const router = createBrowserRouter([
     {
@@ -31,10 +32,20 @@ const router = createBrowserRouter([
     },
 ]);
 
-export const App = () => (
-    <ChakraProvider theme={tgTheme}>
-        <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color}>
-            <RouterProvider router={router} />
-        </Container>
-    </ChakraProvider>
-)
+
+export const App = () => {
+
+    const [ready, setReady] = useState<boolean>(false);
+
+    useEffect(() => {
+        setReady(true)
+    }, [])
+
+    return (
+        <ChakraProvider theme={tgTheme}>
+            <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color} opacity={0} animation={ready ? '400ms linear forwards fadeIn;': ''}>
+                <RouterProvider router={router} />
+            </Container>
+        </ChakraProvider>
+    )
+}

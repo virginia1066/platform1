@@ -31,7 +31,7 @@ export const Deck = () => {
     return (
         <PageWrap headerTitle={"Название колоды"}>
             <Block minH={'54px'} justifyContent={'center'}>
-                <ProgressStats new_ones={12} studied={0} repeatable={176} direction={{ base: 'column', xs: 'row' }}/>
+                <ProgressStats w={'full'} justifyContent={'space-between'} new_ones={12} studied={0} repeatable={176} direction={{ base: 'column', xs: 'row' }}/>
             </Block>
             
             <Flex h={'full'} alignItems={'center'}>
@@ -51,8 +51,8 @@ export const Deck = () => {
                     : isAnswer
                     ? <VStack spacing={4}>
                         <Button w={'full'} colorScheme="blue" variant={'color'} size={'md'}>{t('anki.buttonAgain')}</Button>
-                        <Button w={'full'} colorScheme="teal" variant={'color'} size={'md'}>{t('anki.buttonHard')}</Button>
-                        <Button w={'full'} colorScheme="teal" variant={'color'} size={'md'}>{t('anki.buttonGood')}</Button>
+                        <Button w={'full'} colorScheme="purple" variant={'color'} size={'md'}>{t('anki.buttonHard')}</Button>
+                        <Button w={'full'} colorScheme="purple" variant={'color'} size={'md'}>{t('anki.buttonGood')}</Button>
                         <Button w={'full'} colorScheme="green" variant={'color'} size={'md'}>{t('anki.buttonEasy')}</Button>
                     </VStack>
                     : <HStack spacing={4}>

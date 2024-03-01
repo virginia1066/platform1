@@ -1,4 +1,4 @@
-export const themeParams = {
+export const themeParams = { //An object containing the current theme settings used in the Telegram app.
   "bg_color": "#ffffff",
   "button_color": "#5AC8FB",
   "button_text_color": "#ffffff",
@@ -7,3 +7,5 @@ export const themeParams = {
   "secondary_bg_color": "#F3F2F8",
   "text_color": "#020202",
 }
+
+export const colorScheme = 'light' //The color scheme currently used in the Telegram app. Either “light” or “dark”. Also available as the CSS variable var(--tg-color-scheme).

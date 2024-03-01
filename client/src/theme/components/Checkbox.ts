@@ -46,7 +46,7 @@ export const Checkbox = {
                 },
 
                 _invalid: {
-                    borderColor: Colors.red[500],
+                    borderColor: Colors.red,
                 },
             }
         }

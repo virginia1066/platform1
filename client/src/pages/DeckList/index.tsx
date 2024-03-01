@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useGate, useList, useUnit } from 'effector-react';
@@ -41,8 +41,7 @@ export const DeckList = () => {
                 <Box h={'38px'} textAlign={'center'}>
                     {
                         editMode
-                            ? <Text size={'sm'} lineHeight={fontSizes.sm} color={themeParams.hint_color}>Редактируйте
-                                колоды <br/> или управляйте их видимостью.</Text>
+                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t} i18nKey={'subtitleEdit'}/></Text>
                             : null
                     }
                 </Box>

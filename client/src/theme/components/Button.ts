@@ -1,7 +1,7 @@
 import { defineStyle } from '@chakra-ui/react';
 import { fontSizes, spaces } from '../constants';
-import { themeParams } from '../defaults';
-import { Colors } from '../Colors';
+import { colorScheme, themeParams } from '../defaults';
+import { Colors, get_triteary_bg_color } from '../Colors';
 
 export const Button = {
     defaultProps: {
@@ -33,11 +33,10 @@ export const Button = {
     variants: {
         color: defineStyle((props) => {
             const { colorScheme: c } = props;
-
             return {
-                bg: `${c}.500`,
+                bg: `${c}`,
                 color: themeParams.button_text_color,
-                borderColor: `${c}.500`,
+                borderColor: `${c}`,
                 _hover: {
     
                 },
@@ -58,9 +57,9 @@ export const Button = {
             },
         },
         delete: {
-            bg: Colors.red[500],
+            bg: Colors.red,
             color: themeParams.button_text_color,
-            borderColor: Colors.red[500],
+            borderColor: Colors.red,
             _hover: {
 
             },
@@ -69,9 +68,9 @@ export const Button = {
             },
         },
         edit: {
-            bg: Colors.triteary_bg_color[500],
+            bg: get_triteary_bg_color(colorScheme),
             color: themeParams.hint_color,
-            borderColor: Colors.triteary_bg_color[500],
+            borderColor: get_triteary_bg_color(colorScheme),
             _hover: {
 
             },

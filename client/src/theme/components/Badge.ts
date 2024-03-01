@@ -20,7 +20,7 @@ export const Badge = {
         'simple': defineStyle((props) => {
             const { colorScheme: c } = props
             return {
-                [vars.bg.variable]: `colors.${c}.500`,
+                [vars.bg.variable]: `colors.${c}`,
             }
         })
     }
