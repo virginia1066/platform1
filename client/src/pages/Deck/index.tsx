@@ -75,6 +75,8 @@ export const Deck = () => {
                 <ProgressStats new_ones={count_new}
                                studied={count_learning}
                                repeatable={count_review}
+                               justifyContent={'space-between'} 
+                               w={'full'}
                                direction={{ base: 'column', xs: 'row' }}/>
             </Block>
 
