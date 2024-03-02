@@ -6,7 +6,9 @@
             "content": "Базовые слова",
             "buttonCreate": "+ Создать колоду",
             "buttonSave": "Сохранить",
-            "labelDone": "Сделано"
+            "labelDone": "Сделано",
+            "backLink": "Назад",
+            "editLink": "Редактировать список"
         },
         "deckEdit": {
             "header": "Редактирование колоды",

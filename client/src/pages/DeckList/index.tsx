@@ -2,7 +2,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useGate, useList, useUnit } from 'effector-react';
-import { $deckListC, $editMode, cancelEditModeE, DeckListGate, enableEditModeE, saveSkipListE } from './model';
+import { $deckListC, $editMode, cancelEditModeE, DeckListGate, enableEditModeE, fetchDeckListFx, saveSkipListE } from './model';
 import { PageWrap } from '../../components/PageWrap';
 import { useCallback } from 'react';
 import { themeParams } from '../../theme/defaults';
@@ -29,8 +29,10 @@ export const DeckList = () => {
     const navigate: (to: string) => void = useNavigate();
 
     const deck_list = useList($deckListC, (props) => (
-        <ListItem key={`deck-${props.id}`} {...props}/>
+        <ListItem key={`deck-${props.id}`} {...props} />
     ));
+
+    const is_pending = useUnit(fetchDeckListFx.pending)
 
     const switchEditMode = useCallback(() => {
         editMode
@@ -46,21 +48,21 @@ export const DeckList = () => {
                 <Box h={'38px'} textAlign={'center'}>
                     {
                         editMode
-                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t} i18nKey={'subtitleEdit'}/></Text>
+                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t} i18nKey={'subtitleEdit'} /></Text>
                             : null
                     }
                 </Box>
                 <Box textAlign={'end'}>
                     <Button size={'xs'} variant={'link'} onClick={switchEditMode}>{
                         editMode
-                            ? 'Назад' /*TODO translate*/
-                            : 'Редактировать список'
+                            ? t('backLink')
+                            : t('editLink')
                     }</Button>
                 </Box>
             </Flex>
             <Flex h={'full'} position={'relative'}>
                 <Box position={'absolute'} w={'full'} h={'full'} overflowY={'auto'}>
-                    <VStack spacing={4} h={'max-content'} justifyContent={'center'}>
+                    <VStack spacing={4} h={'max-content'} justifyContent={'center'} opacity={0} animation={is_pending ? 'none' : 'fadeIn 500ms forwards'}>
                         {
                             deck_list
                         }
@@ -71,9 +73,9 @@ export const DeckList = () => {
                 {
                     editMode
                         ? <Button w={'full'} variant={'main'} onClick={saveSkipList}
-                                  size={'lg'}>{t('buttonSave')}</Button>
+                            size={'lg'}>{t('buttonSave')}</Button>
                         : <Button w={'full'} variant={'main'} onClick={gotoCreate}
-                                  size={'lg'}>{t('buttonCreate')}</Button>
+                            size={'lg'}>{t('buttonCreate')}</Button>
                 }
             </ButtonBar>
         </PageWrap>
