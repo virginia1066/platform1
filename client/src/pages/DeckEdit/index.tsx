@@ -4,16 +4,16 @@ import { PageWrap } from '../../components/PageWrap';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../components/BackButton';
 import { BASE_URL } from '../../constants';
-
-const TRANS_PROPS = {
-    keyPrefix: 'vocabulary.deckEdit'
-} as const;
 import { ChangeEvent, useCallback, useState } from "react"
 import { Block } from "../../components/Block/inedex"
 import { ProgressStats } from "../../components/ProgressStats"
 import { get_triteary_bg_color } from "../../theme/Colors"
 import { AddIcon, CloseIcon } from "@chakra-ui/icons"
 import { colorScheme, themeParams } from "../../theme/defaults"
+
+const TRANS_PROPS = {
+    keyPrefix: 'vocabulary.deckEdit'
+} as const;
 
 export const DeckEdit = () => {
     const { t } = useTranslation('translation', TRANS_PROPS);
