@@ -1,6 +1,14 @@
 {
   "server": {
-    "home_task_pack": "Домашние задания"
+    "home_task_pack": "Домашние задания",
+    "errors": {
+      "name_home_task": "Название \"{{name}}\" уже используется!",
+      "pack": {
+        "name": {
+          "required": "В названии колоды должен быть хотябы 1 символ."
+        }
+      }
+    }
   },
   "telegram": {
     "dictionary": {

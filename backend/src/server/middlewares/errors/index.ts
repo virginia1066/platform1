@@ -15,6 +15,10 @@ export abstract class ServerError extends Error {
 
         Object.setPrototypeOf(this, ServerError.prototype);
     }
+
+    public toString(): string {
+        return `${this.message}. Details: ${this.details}`;
+    }
 }
 
 export class AuthError extends ServerError {

@@ -29,6 +29,8 @@ BigNumber.config.set({
 });
 
 export const ROOT_PATH = join(__dirname, '..');
+export const MAX_PACK_NAME_LENGTH = 100;
+export const MAX_WORD_LENGTH = 100;
 export const HOME_TASK_WORDS_REG = /##([^#]+)#([^#]+)##/g;
 export const DEBUG_MODE = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
 const CLASS_RPS = get_env_strict('CLASS_RPS', Number);

@@ -44,7 +44,6 @@ export const $deckListC = combine(
 );
 
 export const changeSkipList = coreD.createEvent<ChangeSkipProps>();
-
 export const enableEditModeE = coreD.createEvent();
 export const cancelEditModeE = coreD.createEvent();
 export const saveSkipListE = coreD.createEvent();

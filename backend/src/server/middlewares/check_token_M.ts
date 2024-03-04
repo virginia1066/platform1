@@ -14,8 +14,9 @@ export const check_token_M: MiddlewareWithToken = (ctx, next) => {
     return parse(token_str)
         .then((token) => {
             ctx.state.token = token;
+            ctx.state.student_id = Number(token.user_id);
         })
         .then(next)
 }
 
-export type MiddlewareWithToken = Middleware<{ token: Token }>
+export type MiddlewareWithToken = Middleware<{ token: Token; student_id: number }>
