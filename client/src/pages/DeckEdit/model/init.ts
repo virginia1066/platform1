@@ -6,19 +6,20 @@ import {
     $words,
     add_word_e,
     create_deck_fx,
-    DeckEditG, edit_word_e,
+    DeckEditG,
+    edit_word_e,
+    EditWord,
+    EditWordEvent,
     load_deck_fx,
     save_click_e,
     save_deck_fx
 } from './dictionary';
-import { concat, not, nthArg, pipe, prop } from 'ramda';
-
-const is_edit = (data: number | 'new'): data is number =>
-    typeof data === 'number';
+import { concat, converge, is, not, nthArg, pipe, prop, update } from 'ramda';
+import { Func } from '../../../types/utils';
 
 sample({
     clock: DeckEditG.open,
-    filter: is_edit,
+    filter: is(Number),
     target: load_deck_fx
 });
 
@@ -30,7 +31,7 @@ sample({
         id: $id,
         words: $words
     },
-    filter: pipe(prop('is_edit'), is_edit),
+    filter: pipe(prop('is_edit'), is(Number)),
     target: save_deck_fx,
 });
 
@@ -41,7 +42,7 @@ sample({
         name: $name,
         words: $words
     },
-    filter: pipe(prop('is_edit'), is_edit, not),
+    filter: pipe(prop('is_edit'), is(Number), not),
     target: create_deck_fx,
 });
 
@@ -71,11 +72,15 @@ $words
         nthArg(0),
         concat([{ ru: '', en: '' }])
     ))
-    .on(edit_word_e, (list, { word, index }) => {
-        const copy = list.slice();
-        copy[index] = word;
-        return copy;
-    })
+    .on(edit_word_e, converge(
+        update, [
+            pipe<[Array<EditWord>, EditWordEvent], EditWordEvent, number>(nthArg(1), prop('index')),
+            pipe<[Array<EditWord>, EditWordEvent], EditWordEvent, EditWord>(nthArg(1), prop('word')),
+            nthArg(0) as Func<[Array<EditWord>, EditWordEvent], Array<EditWord>>
+        ])
+    )
     .reset(DeckEditG.close);
+
+
 
 

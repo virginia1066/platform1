@@ -18,7 +18,7 @@ export const $is_edit: Store<boolean> = combine(DeckEditG.state, pipe<[number | 
 
 export const $name = coreD.createStore('');
 export const $id = coreD.createStore(0);
-export const $words = coreD.createStore<Array<Omit<Word, 'id'>>>([]);
+export const $words = coreD.createStore<Array<EditWord>>([]);
 export const add_word_e = coreD.createEvent();
 export const edit_word_e = coreD.createEvent<EditWordEvent>();
 export const save_click_e = coreD.createEvent();
@@ -42,7 +42,7 @@ export const save_deck_fx = coreD.createEffect((props: SaveDeckProps) =>
 
 export type CreateDeckProps = {
     name: string;
-    words: Array<Optional<Word, 'id'>>;
+    words: Array<EditWord>;
 }
 
 export type SaveDeckProps = CreateDeckProps & {
@@ -50,6 +50,8 @@ export type SaveDeckProps = CreateDeckProps & {
 }
 
 export type EditWordEvent = {
-    word: Optional<Word, 'id'>;
+    word: EditWord;
     index: number;
 }
+
+export type EditWord = Optional<Word, 'id'>;

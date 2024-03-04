@@ -1,11 +1,11 @@
 import { check_table } from './utils/check_table';
-import { WORD_CONFLICT_COLUMNS } from '../constants';
+import { MAX_PACK_NAME_LENGTH, MAX_WORD_LENGTH, WORD_CONFLICT_COLUMNS } from '../constants';
 
 export const create_wokobular_tables = () =>
     Promise
         .all([
             check_table('packs', (builder) => {
-                builder.string('name', 50).notNullable();
+                builder.string('name', MAX_PACK_NAME_LENGTH).notNullable();
                 builder.increments('id').notNullable();
                 builder.integer('parent_user_id').notNullable();
                 builder.string('status', 20).notNullable()
@@ -24,8 +24,8 @@ export const create_wokobular_tables = () =>
             }),
             check_table('words', builder => {
                 builder.increments('id').notNullable();
-                builder.string('ru', 100).notNullable();
-                builder.string('en', 100).notNullable();
+                builder.string('ru', MAX_WORD_LENGTH).notNullable();
+                builder.string('en', MAX_WORD_LENGTH).notNullable();
                 builder.string('status', 10).notNullable();
                 builder.string('source', 20).notNullable();
                 builder.string('insert_id', 50).notNullable();
