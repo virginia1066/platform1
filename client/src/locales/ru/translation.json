@@ -14,7 +14,10 @@
             "header": "Редактирование колоды",
             "buttonSave": "Сохранить",
             "labelDeckTitle": "Название колоды",
-            "labelWords": "Слова"
+            "labelWords": "Слова",
+            "required": "Поле не может быть пустым",
+            "alreadyUsed": "Название уже используется",
+            "max": "Не больше 100 символов"
         },
         "deck": {
             "buttonTranslate": "Показать перевод",
