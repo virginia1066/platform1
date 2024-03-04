@@ -1,10 +1,10 @@
-import { Button, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Button, Flex, HStack, VStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { PageWrap } from '../../components/PageWrap';
 import { Block } from '../../components/Block/inedex';
 import { ProgressStats } from '../../components/ProgressStats';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Word } from './components/Word';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
@@ -28,6 +28,7 @@ import {
 import { useUnit } from 'effector-react/effector-react.umd';
 import { always, pipe } from 'ramda';
 import { Func } from '../../types/utils';
+import { themeParams } from '../../theme/defaults';
 
 const TRANS_PROPS = {
     keyPrefix: 'vocabulary.deck'
@@ -95,6 +96,7 @@ export const Deck = () => {
                                 size={'lg'}>{t('buttonBack')}</Button>
                         : translate_shown
                             ? <VStack spacing={4}>
+                                <Text size={'xs'} color={themeParams.hint_color}>{t('anki.hint')}</Text>
                                 <Button onClick={again_click} w={'full'} colorScheme="blue" variant={'color'}
                                         size={'md'}>{t('anki.buttonAgain')}</Button>
                                 <Button onClick={hard_click} w={'full'} colorScheme="purple" variant={'color'}
