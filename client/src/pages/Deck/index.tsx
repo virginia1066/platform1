@@ -18,6 +18,7 @@ import {
     $pack_name,
     $translate_shown,
     DeckG,
+    get_pack_fx,
     set_again,
     set_easy,
     set_good,
@@ -40,6 +41,7 @@ export const Deck = () => {
     const { t } = useTranslation('translation', TRANS_PROPS);
 
     const [
+        is_pending,
         name,
         count_new,
         count_learning,
@@ -47,7 +49,7 @@ export const Deck = () => {
         word,
         translate_shown,
         is_finish
-    ] = useUnit([$pack_name, $count_new, $count_learning, $count_review, $active_word, $translate_shown, $is_finish]);
+    ] = useUnit([get_pack_fx.pending, $pack_name, $count_new, $count_learning, $count_review, $active_word, $translate_shown, $is_finish]);
 
     const [
         again_click,
@@ -68,11 +70,13 @@ export const Deck = () => {
     }
 
     return (
-        <PageWrap headerTitle={name}>
+        <PageWrap headerTitle={name} opacity={0} animation={is_pending ? 'none' : 'fadeIn 500ms forwards'}>
             <Block minH={'54px'} justifyContent={'center'}>
                 <ProgressStats new_ones={count_new}
                                studied={count_learning}
                                repeatable={count_review}
+                               justifyContent={'space-between'} 
+                               w={'full'}
                                direction={{ base: 'column', xs: 'row' }}/>
             </Block>
 

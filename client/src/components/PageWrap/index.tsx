@@ -1,9 +1,9 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, FlexProps, VStack } from "@chakra-ui/react";
 import { FC, PropsWithChildren } from "react";
 import { Header } from "../Header";
 
-export const PageWrap: FC<PropsWithChildren<{ headerTitle: string | null }>> = ({ children, headerTitle = null }) => (
-    <Flex h={'full'} direction={'column'} gap={3}>
+export const PageWrap: FC<PropsWithChildren<{ headerTitle: string | null } & FlexProps>> = ({ children, headerTitle = null, ...flexProps }) => (
+    <Flex h={'full'} direction={'column'} gap={3} {...flexProps}>
         {
             headerTitle
                 ? <Header title={headerTitle} />
