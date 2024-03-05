@@ -5,18 +5,10 @@ import { Schema, ValidationError } from "yup";
 import { Func } from '../../types/utils';
 
 
-export const FormElement = <T extends string | number>({ default_value, validate, onChange, inputLeftElement = null, inputRightElement = null, input_lenght = undefined, ...props }: Props<T>) => {
+export const FormElement = <T extends string | number>({ default_value, error, onChange, inputLeftElement = null, inputRightElement = null, input_length = undefined, ...props }: Props<T>) => {
     const id = useId();
 
     const [value, set_value] = useState(default_value);
-    const [errors, set_error] = useState<Array<string>>([]);
-
-    const blur = useCallback(() => {
-        validate.validate(value)
-            .catch((e: ValidationError) => set_error(e.errors));
-    }, [validate, value]);
-
-    const focus = useCallback(() => set_error([]), []);
 
     useEffect(() => {
         if (default_value !== value) {
@@ -27,21 +19,17 @@ export const FormElement = <T extends string | number>({ default_value, validate
 
     const change_callback = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
         const value: T = e.target.value as T;
-        if (!input_lenght) {
+        if (!input_length) {
             set_value(value);
             onChange(value);
-        } else if (value.toString().length < input_lenght) {
+        } else if (value.toString().length < input_length) {
             set_value(value);
             onChange(value);
         }
     }, [onChange]);
 
-    useEffect(() => {
-        set_error([]);
-    }, [value]);
-
     return (
-        <FormControl isInvalid={!!errors?.length}>
+        <FormControl isInvalid={!!error}>
             <InputGroup>
                 {
                     inputLeftElement
@@ -53,10 +41,8 @@ export const FormElement = <T extends string | number>({ default_value, validate
                     id={id}
                     value={value}
                     onChange={change_callback}
-                    onBlur={blur}
-                    onFocus={focus}
                     variant={'tg'}
-                    isInvalid={!!errors?.length}
+                    isInvalid={!!error}
                 />
                 {
                     inputRightElement
@@ -64,17 +50,17 @@ export const FormElement = <T extends string | number>({ default_value, validate
                         : null
                 }
             </InputGroup>
-            <FormErrorMessage>{head(errors ?? [])}</FormErrorMessage>
+            <FormErrorMessage>{error}</FormErrorMessage>
         </FormControl>
     );
 };
 
 type Props<T extends string | number | undefined> = {
     default_value: T;
-    validate: Schema<T>;
     inputLeftElement?: ReactElement | null;
     inputRightElement?: ReactElement | null;
-    input_lenght?: number;
+    input_length?: number;
     onChange: Func<[T], void>;
     borderColor?: string;
-} & Omit<Partial<InputProps>, 'id' | 'size' | 'onChange' | 'onBlur' | 'onFocus' | 'variant' | 'isInvalid' | 'value'>;
+    error?: string | undefined;
+} & Omit<Partial<InputProps>, 'id' | 'size' | 'onChange' | 'variant' | 'isInvalid' | 'value'>;

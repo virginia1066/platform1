@@ -1,6 +1,6 @@
-import { knex, WORD_CONFLICT_COLUMNS } from '../../constants';
+import { knex, WORD_CONFLICT_COLUMNS } from '../../../constants';
 import { always } from 'ramda';
-import { Pack, Word } from '../../types/Wokobular';
+import { Pack, Word } from '../../../types/Wokobular';
 
 export const insert_new_words = (new_words: Array<Omit<Word, 'id' | 'insert_id'>>, pack: Pack, insert_id: string) =>
     knex('words')

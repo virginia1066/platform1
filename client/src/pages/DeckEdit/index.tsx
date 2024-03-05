@@ -4,14 +4,16 @@ import { PageWrap } from '../../components/PageWrap';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../components/BackButton';
 import { BASE_URL } from '../../constants';
-import { useCallback } from 'react';
 import { Block } from '../../components/Block/inedex';
 import { ProgressStats } from '../../components/ProgressStats';
 import { get_triteary_bg_color } from '../../theme/Colors';
-import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import { colorScheme, themeParams } from '../../theme/defaults';
 import { FormElement } from '../../components/FormElement';
-import { string } from 'yup';
+import { useUnit } from 'effector-react';
+import { $errors, $words, add_word_e, change_name_e, input_blur_e, input_focus_e, save_click_e } from './model';
+import { WordEdit } from './WordEdit';
+import { useCallback } from 'react';
 
 const TRANS_PROPS = {
     keyPrefix: 'vocabulary.deckEdit'
@@ -19,35 +21,42 @@ const TRANS_PROPS = {
 
 export const DeckEdit = () => {
     const { t } = useTranslation('translation', TRANS_PROPS);
-
-    const validation = string().required(t('required')).max(100, t('max'));
-
-    const handleInputChange = useCallback((e: any) => console.log(e), []);
+    const [
+        add_word,
+        save_click,
+        change_name,
+        focus,
+        blur
+    ] = useUnit([add_word_e, save_click_e, change_name_e, input_focus_e, input_blur_e]);
+    const words = useUnit($words);
+    const errors = useUnit($errors);
+    const on_name_focus = useCallback(() => focus('name'), []);
+    const on_name_blur = useCallback(() => blur('name'), []);
 
     return (
         <PageWrap headerTitle={t('header')}>
             <Flex h={'full'}>
                 <Block h={'max-content'}>
                     <VStack spacing={4} alignItems={'start'}>
-                        <FormElement placeholder={t('placeholder.title')} default_value={''}
-                                     onChange={handleInputChange} validate={validation}/>
+                        <FormElement placeholder={t('placeholder.title')}
+                                     default_value={''}
+                                     onFocus={on_name_focus}
+                                     onBlur={on_name_blur}
+                                     error={errors['name']}
+                                     onChange={change_name}/>
                         <ProgressStats justifyContent={'space-between'} w={'full'} new_ones={1} repeatable={2}
                                        studied={3} direction={'row'}/>
                         <VStack spacing={3} alignItems={'start'}>
                             <FormLabel m={0}>{t('labelWords')}</FormLabel>
                             <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
-                                <Flex gap={4} alignItems={'center'}>
-                                    <Flex direction={'column'} gap={3}>
-                                        <FormElement placeholder={t('placeholder.lang1')} default_value={''}
-                                                     onChange={handleInputChange} validate={validation}/>
-                                        <FormElement placeholder={t('placeholder.lang2')} default_value={''}
-                                                     onChange={handleInputChange} validate={validation}/>
-                                    </Flex>
-                                    <IconButton size={'xs'} variant={'delete'} aria-label="Delete"
-                                                icon={<CloseIcon w={'10px'} h={'10px'}/>}/>
-                                </Flex>
+                                {words.map((word, i) => (
+                                    <WordEdit key={word.id ? `id-${word.id}` : `${word.en}-${word.ru}-${i}`}
+                                              errors={errors}
+                                              can_remove={words.length !== 1} word={word} index={i}/>
+                                ))}
                             </Block>
                             <IconButton bgColor={themeParams.button_text_color} color={themeParams.button_color}
+                                        onClick={add_word}
                                         borderWidth={'2px'} alignSelf={'center'} variant={'main'} size={'lg'}
                                         aria-label="Add" icon={<AddIcon/>}/>
                         </VStack>
@@ -57,7 +66,7 @@ export const DeckEdit = () => {
             <ButtonBar>
                 <HStack spacing={4}>
                     <BackButton url={`${BASE_URL}/`}/>
-                    <Button w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                    <Button onClick={save_click} w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
                 </HStack>
             </ButtonBar>
         </PageWrap>

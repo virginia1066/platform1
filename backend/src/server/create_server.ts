@@ -15,6 +15,7 @@ import { check_token_M } from './middlewares/check_token_M';
 import { get_pack_words_M } from './api/v1/webapp/user/packs/get_pack_words_M';
 import { word_update_M } from './api/v1/webapp/user/word-update/word_update_M';
 import { on_home_task_update_M } from './api/v1/webhooks/home-task-update';
+import { create_pack_M } from './api/v1/webapp/user/packs/create_pack_M';
 
 export const create_server = () => {
     const app = new Koa();
@@ -34,6 +35,7 @@ export const create_server = () => {
         .use(check_token_M)
         .get('/web-app/user/packs', get_user_packs_M)
         .get('/web-app/user/packs/:pack_id', get_pack_words_M)
+        .post('/web-app/user/packs/new', create_pack_M)
         .patch('/web-app/user/word-update', word_update_M);
 
     const api_v1 = new Koa();

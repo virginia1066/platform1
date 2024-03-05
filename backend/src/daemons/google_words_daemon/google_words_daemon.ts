@@ -8,8 +8,9 @@ import * as console from '../../utils/log';
 import { get_or_create_pack } from '../../utils/get_or_create_pack';
 import { get_words_by_pack } from '../../utils/get_words_by_pack';
 import { randomUUID } from 'crypto';
-import { get_new_words } from './get_new_words';
-import { insert_new_words } from './insert_new_words';
+import { get_new_words } from '../../server/utils/words/get_new_words';
+import { insert_new_words } from '../../server/utils/words/insert_new_words';
+import { add_pack_words } from '../../server/utils/words/add_pack_words';
 
 const info = console.info.bind(null, 'Google words daemon:');
 const warn = console.warn.bind(null, 'Google words daemon:');
@@ -21,22 +22,7 @@ const add_pack = (name: string, google_words: Array<Omit<Word, 'id' | 'insert_id
         parent_user_id: SYSTEM_PACK_ID,
         user_can_edit: false,
         insert_id
-    }).then((pack) =>
-        get_words_by_pack(pack.id, [WordStatus.Active, WordStatus.Deleted])
-            .then((words) => {
-                const new_words = get_new_words(words, google_words)
-                    .map<Omit<Word, 'id'>>(assoc('insert_id', insert_id));
-
-                if (!new_words.length) {
-                    info(`Has no new words in pack ${pack.id} ${pack.name}`);
-                    return void 0;
-                }
-
-                info(`New words (${new_words.length}):`, new_words);
-
-                return insert_new_words(new_words, pack, insert_id);
-            })
-    );
+    }).then((pack) => add_pack_words(pack, google_words, insert_id));
 
 export const google_words_daemon = () => {
     info(`Launch google words daemon!`);
