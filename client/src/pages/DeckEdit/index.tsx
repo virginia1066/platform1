@@ -29,8 +29,8 @@ export const DeckEdit = () => {
             <Flex h={'full'}>
                 <Block h={'max-content'}>
                     <VStack spacing={4} alignItems={'start'}>
-                        <FormElement placeholder="Название колоды" default_value={''} onChange={handleInputChange}
-                                     validate={validation}/>
+                        <FormElement placeholder={t('placeholder.title')} default_value={''}
+                                     onChange={handleInputChange} validate={validation}/>
                         <ProgressStats justifyContent={'space-between'} w={'full'} new_ones={1} repeatable={2}
                                        studied={3} direction={'row'}/>
                         <VStack spacing={3} alignItems={'start'}>
@@ -38,10 +38,10 @@ export const DeckEdit = () => {
                             <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
                                 <Flex gap={4} alignItems={'center'}>
                                     <Flex direction={'column'} gap={3}>
-                                        <FormElement placeholder="RU" default_value={''} onChange={handleInputChange}
-                                                     validate={validation}/>
-                                        <FormElement placeholder="EN" default_value={''} onChange={handleInputChange}
-                                                     validate={validation}/>
+                                        <FormElement placeholder={t('placeholder.lang1')} default_value={''}
+                                                     onChange={handleInputChange} validate={validation}/>
+                                        <FormElement placeholder={t('placeholder.lang2')} default_value={''}
+                                                     onChange={handleInputChange} validate={validation}/>
                                     </Flex>
                                     <IconButton size={'xs'} variant={'delete'} aria-label="Delete"
                                                 icon={<CloseIcon w={'10px'} h={'10px'}/>}/>
