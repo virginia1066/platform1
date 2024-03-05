@@ -1,7 +1,7 @@
-import { knex, SYSTEM_PACK_ID } from '../../constants';
+import { knex, SYSTEM_PACK_ID } from '../constants';
 import { head } from 'ramda';
-import { Pack, PackStatus } from '../../types/Wokobular';
-import { info } from '../../utils/log';
+import { Pack, PackStatus } from '../types/Wokobular';
+import { info } from './log';
 
 export const get_or_create_pack = ({ name, parent_user_id, user_can_edit, insert_id }: Props): Promise<Pack> =>
     knex('packs')

@@ -14,5 +14,7 @@ export const get_words_by_pack = (pack_id: number, status_or_list: WordStatus | 
             'word_id AS id',
             'ru',
             'en',
-            'status'
+            'status',
+            'source',
+            'words.insert_id'
         ))

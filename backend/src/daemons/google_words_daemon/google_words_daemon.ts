@@ -2,14 +2,41 @@ import { interval } from '../../utils/interval';
 import { make_time } from '../../utils/cache';
 import { get_google_wokobular } from '../../utils/get_google_wokobular';
 import { Word, WordStatus } from '../../types/Wokobular';
-import { knex, SYSTEM_PACK_ID, WORD_CONFLICT_COLUMNS } from '../../constants';
-import { always, assoc, equals, groupBy, omit, pipe, prop, propEq } from 'ramda';
-import { error, info as log_info } from '../../utils/log';
-import { get_or_create_pack } from './get_or_create_pack';
+import { MAX_PACK_NAME_LENGTH, SYSTEM_PACK_ID } from '../../constants';
+import { assoc, pipe } from 'ramda';
+import * as console from '../../utils/log';
+import { get_or_create_pack } from '../../utils/get_or_create_pack';
 import { get_words_by_pack } from '../../utils/get_words_by_pack';
 import { randomUUID } from 'crypto';
+import { get_new_words } from './get_new_words';
+import { insert_new_words } from './insert_new_words';
 
-const info = log_info.bind(null, 'Google words daemon:');
+const info = console.info.bind(null, 'Google words daemon:');
+const warn = console.warn.bind(null, 'Google words daemon:');
+const error = console.error.bind(null, 'Google words daemon:');
+
+const add_pack = (name: string, google_words: Array<Omit<Word, 'id' | 'insert_id'>>, insert_id: string): Promise<void> =>
+    get_or_create_pack({
+        name,
+        parent_user_id: SYSTEM_PACK_ID,
+        user_can_edit: false,
+        insert_id
+    }).then((pack) =>
+        get_words_by_pack(pack.id, [WordStatus.Active, WordStatus.Deleted])
+            .then((words) => {
+                const new_words = get_new_words(words, google_words)
+                    .map<Omit<Word, 'id'>>(assoc('insert_id', insert_id));
+
+                if (!new_words.length) {
+                    info(`Has no new words in pack ${pack.id} ${pack.name}`);
+                    return void 0;
+                }
+
+                info(`New words (${new_words.length}):`, new_words);
+
+                return insert_new_words(new_words, pack, insert_id);
+            })
+    );
 
 export const google_words_daemon = () => {
     info(`Launch google words daemon!`);
@@ -25,10 +52,7 @@ export const google_words_daemon = () => {
                     const iterator = packs_with_links[Symbol.iterator]();
                     const insert_id = randomUUID();
 
-                    const loop = (iterator: Iterator<{
-                        pack_name: string,
-                        words: Array<Omit<Word, 'id' | 'insert_id'>>
-                    }>) => {
+                    const loop = (iterator: Iterator<IteratorBody>): void | Promise<void> => {
                         const { done, value } = iterator.next();
 
                         if (!value || done) {
@@ -37,60 +61,17 @@ export const google_words_daemon = () => {
                             return void 0;
                         }
 
-                        get_or_create_pack({
-                            name: value.pack_name,
-                            parent_user_id: SYSTEM_PACK_ID,
-                            user_can_edit: false,
-                            insert_id
-                        })
-                            .then((pack) =>
-                                get_words_by_pack(pack.id, [WordStatus.Active, WordStatus.Deleted])
-                                    .then((words) => {
-                                        const saved_words_hash = groupBy(prop('ru'), words);
 
-                                        const new_words = value.words.filter((word) => {
-                                            const saved = saved_words_hash[word.ru];
-                                            if (!saved) {
-                                                return true;
-                                            }
-                                            const duplicate = saved.find(propEq(word.en, 'en'));
+                        const get_result_promise = () => {
+                            if (value.pack_name.length > MAX_PACK_NAME_LENGTH) {
+                                warn(`Wrong pack name from google sheets!`, value.pack_name);
+                                return Promise.resolve(void 0);
+                            }
+                            return add_pack(value.pack_name, value.words, insert_id);
+                        };
 
-                                            if (!duplicate) {
-                                                return true;
-                                            }
-
-                                            return !equals(omit(['source'], word), omit(['id', 'insert_id'], duplicate));
-                                        }).map<Omit<Word, 'id'>>(assoc('insert_id', insert_id));
-
-                                        if (!new_words.length) {
-                                            info(`Has no new words in pack ${pack.id} ${pack.name}`);
-                                            return void 0;
-                                        }
-
-                                        info(`New words (${new_words.length}):`, new_words);
-
-                                        return knex('words')
-                                            .insert(new_words)
-                                            .onConflict(WORD_CONFLICT_COLUMNS)
-                                            .merge()
-                                            .returning('*')
-                                            .then((added_words) =>
-                                                knex('pack_links')
-                                                    .insert(added_words.map((word) => ({
-                                                        pack_id: pack.id,
-                                                        word_id: word.id,
-                                                        insert_id
-                                                    })))
-                                                    .onConflict(['pack_id', 'word_id'])
-                                                    .ignore()
-                                                    .returning('*')
-                                                    .then(always(void 0))
-                                            );
-                                    })
-                            )
-                            .then(() => {
-                                loop(iterator);
-                            })
+                        return get_result_promise()
+                            .then(() => loop(iterator))
                             .catch(pipe(error, reject));
                     };
 
@@ -99,3 +80,8 @@ export const google_words_daemon = () => {
             });
     }, make_time(15, 'minutes'));
 };
+
+type IteratorBody = {
+    pack_name: string;
+    words: Array<Omit<Word, 'id' | 'insert_id'>>;
+}

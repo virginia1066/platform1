@@ -85,7 +85,7 @@ export const get_user_packs_M: MiddlewareWithToken = (ctx, next) =>
                     count_review: pipe(prop('count_review'), Number),
                     count_relearning: pipe(prop('count_relearning'), Number),
                     words_count: pipe(prop('words_count'), Number),
-                    count_can_be_shown: pipe(prop('count_can_be_shown'), Number)
+                    count_can_be_shown: pipe(prop('count_can_be_shown'), Number),
                 })
             }))
         )

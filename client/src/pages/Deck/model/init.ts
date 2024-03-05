@@ -1,14 +1,12 @@
 import { sample } from 'effector';
 import {
-    $active_word,
-    $active_word_index,
     $count_learning,
     $count_new,
     $count_review,
     $pack_id,
     $pack_name,
     $translate_shown,
-    $word_list,
+    $words_collection,
     DeckG,
     get_pack_fx,
     send_progress_fx,
@@ -19,7 +17,7 @@ import {
     show_translate
 } from './dictionary';
 import { add, always, converge, nthArg, pipe, prop } from 'ramda';
-import { Word } from '../../../types/vocabulary';
+import { WordCollection } from '../WordCollection';
 
 sample({
     clock: DeckG.open,
@@ -52,6 +50,7 @@ $count_new
     .on(send_progress_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
+        prop('stats'),
         prop('count_new')
     ))
     .reset(DeckG.close);
@@ -69,6 +68,7 @@ $count_learning
     .on(send_progress_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
+        prop('stats'),
         converge(add, [
             prop('count_learning'),
             prop('count_relearning')
@@ -86,23 +86,21 @@ $count_review
     .on(send_progress_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
+        prop('stats'),
         prop('count_review')
     ))
     .reset(DeckG.close);
 
-$word_list
+$words_collection
     .on(get_pack_fx.doneData, pipe(
         nthArg(1),
         prop('data'),
         prop('words'),
+        WordCollection.create
     ))
-    .reset(DeckG.close);
-
-$active_word_index
-    .on(send_progress_fx.doneData, pipe(
-        nthArg(0),
-        add(1)
-    ))
+    .on(send_progress_fx.doneData, (collection, { data }) =>
+        collection!.update(data.word)
+    )
     .reset(DeckG.close);
 
 $translate_shown
@@ -117,36 +115,36 @@ enum Rating {
     Easy = 4,
 }
 
-const make_fn = (rating: Rating) => ({ word, pack_id }: { word: Word, pack_id: number }) => ({
+const make_fn = (rating: Rating) => ({ word, pack_id }: { word: WordCollection | null, pack_id: number }) => ({
     pack_id,
-    word_id: word.id,
+    word_id: word!.active_word!.id,
     student_choice: rating
 });
 
 sample({
     clock: set_again,
-    source: { word: $active_word, pack_id: $pack_id },
+    source: { word: $words_collection, pack_id: $pack_id },
     fn: make_fn(Rating.Again),
     target: send_progress_fx
 });
 
 sample({
     clock: set_hard,
-    source: { word: $active_word, pack_id: $pack_id },
+    source: { word: $words_collection, pack_id: $pack_id },
     fn: make_fn(Rating.Hard),
     target: send_progress_fx
 });
 
 sample({
     clock: set_good,
-    source: { word: $active_word, pack_id: $pack_id },
+    source: { word: $words_collection, pack_id: $pack_id },
     fn: make_fn(Rating.Good),
     target: send_progress_fx
 });
 
 sample({
     clock: set_easy,
-    source: { word: $active_word, pack_id: $pack_id },
+    source: { word: $words_collection, pack_id: $pack_id },
     fn: make_fn(Rating.Easy),
     target: send_progress_fx
 });

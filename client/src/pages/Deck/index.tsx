@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, VStack, Text } from '@chakra-ui/react';
+import { Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { PageWrap } from '../../components/PageWrap';
@@ -11,12 +11,13 @@ import { BASE_URL } from '../../constants';
 import { BackButton } from '../../components/BackButton';
 import { useGate } from 'effector-react';
 import {
-    $active_word,
     $count_learning,
     $count_new,
-    $count_review, $is_finish,
+    $count_review,
+    $is_finish,
     $pack_name,
     $translate_shown,
+    $words_collection,
     DeckG,
     get_pack_fx,
     set_again,
@@ -26,8 +27,6 @@ import {
     show_translate
 } from './model';
 import { useUnit } from 'effector-react/effector-react.umd';
-import { always, pipe } from 'ramda';
-import { Func } from '../../types/utils';
 import { themeParams } from '../../theme/defaults';
 
 const TRANS_PROPS = {
@@ -36,7 +35,7 @@ const TRANS_PROPS = {
 
 export const Deck = () => {
     const deckId = Number(useParams<{ deckId: string }>().deckId);
-    const navigate: Func<[string], void> = useNavigate();
+    const navigate = useNavigate();
     useGate(DeckG, deckId);
 
     const { t } = useTranslation('translation', TRANS_PROPS);
@@ -47,10 +46,19 @@ export const Deck = () => {
         count_new,
         count_learning,
         count_review,
-        word,
+        words_collection,
         translate_shown,
         is_finish
-    ] = useUnit([get_pack_fx.pending, $pack_name, $count_new, $count_learning, $count_review, $active_word, $translate_shown, $is_finish]);
+    ] = useUnit([
+        get_pack_fx.pending,
+        $pack_name,
+        $count_new,
+        $count_learning,
+        $count_review,
+        $words_collection,
+        $translate_shown,
+        $is_finish
+    ]);
 
     const [
         again_click,
@@ -58,15 +66,21 @@ export const Deck = () => {
         good_click,
         easy_click,
         show_translate_click
-    ] = useUnit([set_again, set_hard, set_good, set_easy, show_translate]);
+    ] = useUnit([
+        set_again,
+        set_hard,
+        set_good,
+        set_easy,
+        show_translate
+    ]);
 
-    const go_back = useCallback(pipe(always(`${BASE_URL}/`), navigate), []);
+    const go_back = useCallback(() => navigate(`${BASE_URL}/`), [navigate]);
 
     if (isNaN(deckId)) {
         navigate(`${BASE_URL}/`);
     }
 
-    if (!word) {
+    if (!words_collection) {
         return null;
     }
 
@@ -76,7 +90,7 @@ export const Deck = () => {
                 <ProgressStats new_ones={count_new}
                                studied={count_learning}
                                repeatable={count_review}
-                               justifyContent={'space-between'} 
+                               justifyContent={'space-between'}
                                w={'full'}
                                direction={{ base: 'column', xs: 'row' }}/>
             </Block>
@@ -85,7 +99,9 @@ export const Deck = () => {
                 {
                     is_finish
                         ? <Word showTranslate={true} word={t('finished.title')} translate={t('finished.text')}/>
-                        : <Word showTranslate={translate_shown} word={word.en} translate={word.ru}/>
+                        : <Word showTranslate={translate_shown}
+                                word={words_collection?.active_word?.en ?? ''}
+                                translate={words_collection?.active_word?.ru ?? ''}/>
                 }
             </Flex>
 
@@ -93,7 +109,7 @@ export const Deck = () => {
                 {
                     is_finish
                         ? <Button onClick={go_back} w={'full'} variant={'main'}
-                                size={'lg'}>{t('buttonBack')}</Button>
+                                  size={'lg'}>{t('buttonBack')}</Button>
                         : translate_shown
                             ? <VStack spacing={4}>
                                 <Text size={'xs'} color={themeParams.hint_color}>{t('anki.hint')}</Text>

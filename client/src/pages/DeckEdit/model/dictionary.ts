@@ -54,4 +54,4 @@ export type EditWordEvent = {
     index: number;
 }
 
-export type EditWord = Optional<Word, 'id'>;
+export type EditWord = Optional<Word, 'id' | 'due'>;

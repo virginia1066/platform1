@@ -2,15 +2,21 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ButtonBar } from '../../components/ButtonBar';
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useGate, useList, useUnit } from 'effector-react';
-import { $deckListC, $editMode, cancelEditModeE, DeckListGate, enableEditModeE, fetchDeckListFx, saveSkipListE } from './model';
+import {
+    $deckListC,
+    $editMode,
+    cancelEditModeE,
+    DeckListGate,
+    enableEditModeE,
+    fetchDeckListFx,
+    saveSkipListE
+} from './model';
 import { PageWrap } from '../../components/PageWrap';
 import { useCallback } from 'react';
 import { themeParams } from '../../theme/defaults';
-import { fontSizes } from '../../theme/constants';
 import { ListItem } from './components/ListItem';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
-import { always, pipe } from 'ramda';
 
 const TRANS_OPTIONS = {
     keyPrefix: 'vocabulary.deckList'
@@ -32,14 +38,15 @@ export const DeckList = () => {
         <ListItem key={`deck-${props.id}`} {...props} />
     ));
 
-    const is_pending = useUnit(fetchDeckListFx.pending)
+    const is_pending = useUnit(fetchDeckListFx.pending);
 
-    const switchEditMode = useCallback(() => {
-        editMode
-            ? cancelEditMode()
-            : enableEditMode();
-    }, [editMode]);
-    const gotoCreate = useCallback(pipe(always(`${BASE_URL}/edit`), navigate), [navigate]);
+    const switchEditMode = useCallback(() =>
+            editMode
+                ? cancelEditMode()
+                : enableEditMode()
+        , [editMode, cancelEditMode, enableEditMode]
+    );
+    const gotoCreate = useCallback(() => navigate(`${BASE_URL}/edit`), [navigate]);
     const { t } = useTranslation('translation', TRANS_OPTIONS);
 
     return (
@@ -48,7 +55,8 @@ export const DeckList = () => {
                 <Box h={'38px'} textAlign={'center'}>
                     {
                         editMode
-                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t} i18nKey={'subtitleEdit'} /></Text>
+                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t}
+                                                                                      i18nKey={'subtitleEdit'}/></Text>
                             : null
                     }
                 </Box>
@@ -62,7 +70,8 @@ export const DeckList = () => {
             </Flex>
             <Flex h={'full'} position={'relative'}>
                 <Box position={'absolute'} w={'full'} h={'full'} overflowY={'auto'}>
-                    <VStack spacing={4} h={'max-content'} justifyContent={'center'} opacity={0} animation={is_pending ? 'none' : 'fadeIn 500ms forwards'}>
+                    <VStack spacing={4} h={'max-content'} justifyContent={'center'} opacity={0}
+                            animation={is_pending ? 'none' : 'fadeIn 500ms forwards'}>
                         {
                             deck_list
                         }
@@ -73,9 +82,9 @@ export const DeckList = () => {
                 {
                     editMode
                         ? <Button w={'full'} variant={'main'} onClick={saveSkipList}
-                            size={'lg'}>{t('buttonSave')}</Button>
+                                  size={'lg'}>{t('buttonSave')}</Button>
                         : <Button w={'full'} variant={'main'} onClick={gotoCreate}
-                            size={'lg'}>{t('buttonCreate')}</Button>
+                                  size={'lg'}>{t('buttonCreate')}</Button>
                 }
             </ButtonBar>
         </PageWrap>

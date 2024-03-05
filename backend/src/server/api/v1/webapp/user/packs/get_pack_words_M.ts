@@ -7,6 +7,7 @@ import { head, omit } from 'ramda';
 import { NotFound, PermissionDenied } from '../../../../../middlewares/errors';
 import { set_body } from '../../../../../utils/set_body';
 import { get_stats_by_pack } from '../../../../../../utils/get_stats_by_pack';
+import { log_query } from '../../../../../../utils/log_query';
 
 
 const schema = object().shape({
@@ -32,19 +33,21 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
 
                     return Promise
                         .all([
-                            knex('pack_links')
-                                .select('pack_links.word_id as id', 'ru', 'en', 'status')
+                            log_query(knex('pack_links')
+                                .select(
+                                    'pack_links.word_id as id',
+                                    'ru',
+                                    'en',
+                                    'status',
+                                    'learn_cards.due as due',
+                                )
                                 .innerJoin('words', 'words.id', 'pack_links.word_id')
                                 .leftJoin('learn_cards', function () {
                                     this.on('words.id', 'learn_cards.word_id')
                                         .andOn(knex.raw(`"learn_cards"."student_id" = ${student_id}`));
                                 })
                                 .where('words.status', WordStatus.Active)
-                                .where('pack_id', pack_id)
-                                .andWhere(function () {
-                                    this.where(knex.raw('CURRENT_TIMESTAMP >= learn_cards.due'))
-                                        .orWhereNull('learn_cards.word_id');
-                                }),
+                                .where('pack_id', pack_id)),
                             get_stats_by_pack({
                                 pack_id: pack_id,
                                 student_id: Number(ctx.state.token.user_id)

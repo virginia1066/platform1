@@ -1,21 +1,35 @@
 import { Rating } from 'fsrs.js';
 import { knex } from '../../../constants';
-import { head, map } from 'ramda';
+import { head, identity, map, pipe } from 'ramda';
 import { LearnCard } from './LearnCard';
-import { LearnCard as LearnCardT } from '../../../types/Wokobular';
+import { Word, WordStatus } from '../../../types/Wokobular';
+import { BadRequest } from '../../middlewares/errors';
 
 export const update_word = ({ word_id, student_id, rating }: WordUpdateProps) =>
-    knex('learn_cards')
-        .select('*')
-        .where({
-            word_id,
-            student_id
-        })
-        .then(map(LearnCard.from_bd))
-        .then<LearnCard | undefined>(head)
-        .then((saved_card) => {
-            const card = saved_card
-                ?? LearnCard.empty({ student_id, word_id });
+    Promise
+        .all([
+            knex('learn_cards')
+                .select('*')
+                .where({
+                    word_id,
+                    student_id
+                })
+                .then(map(LearnCard.from_bd))
+                .then<LearnCard | undefined>(head),
+            knex('words')
+                .select('*')
+                .where({
+                    id: word_id,
+                    status: WordStatus.Active
+                })
+                .then<Word | undefined>(head)
+        ])
+        .then(([saved_card, word]) => {
+            if (!word) {
+                throw new BadRequest('Wrong word id!');
+            }
+
+            const card = saved_card ?? LearnCard.empty({ student_id, word_id });
 
             const updated_card = card.update(rating);
 
@@ -24,7 +38,9 @@ export const update_word = ({ word_id, student_id, rating }: WordUpdateProps) =>
                 .onConflict(['word_id', 'student_id'])
                 .merge()
                 .returning('*')
-                .then<LearnCardT>(head);
+                .then(map(LearnCard.from_bd))
+                .then<LearnCard>(head)
+                .then((card) => ({ card, word }));
         });
 
 export type WordUpdateProps = {

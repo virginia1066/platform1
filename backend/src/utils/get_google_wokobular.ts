@@ -1,9 +1,10 @@
 import { Word, WordSource, WordStatus } from '../types/Wokobular';
 import { GaxiosResponse } from 'gaxios/build/src/common';
 import { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
-import { head } from 'ramda';
+import { head, trim } from 'ramda';
 import { google } from 'googleapis';
-import { GOOGLE_SHEETS_API_KEY, GOOGLE_SHEETS_ID } from '../constants';
+import { GOOGLE_SHEETS_API_KEY, GOOGLE_SHEETS_ID, MAX_WORD_LENGTH } from '../constants';
+import { warn } from './log';
 
 function getColumnIndex(columnCount: number): string {
     let columnIndex = '';
@@ -17,8 +18,9 @@ function getColumnIndex(columnCount: number): string {
 }
 
 const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): Record<string, Array<ParsedWord>> => {
-    const sheets = (response.config.params.ranges! as Array<string>)
-        .map((range) => head(range.split('!'))!);
+    const sheets = (response.config.params.ranges! as Array<string> ?? [])
+        .map((range) => head(range.split('!'))!)
+        .map(trim);
 
     const extract_value = (item: sheets_v4.Schema$CellData): string =>
         String(item!.effectiveValue!.stringValue! ?? item!.effectiveValue!.numberValue ?? '');
@@ -53,7 +55,11 @@ const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): R
                 }, Object.assign(Object.create(null), { source: WordSource.GoogleSheets }));
 
                 if (word.ru && word.en) {
-                    acc.push(word);
+                    if (word.ru.length <= MAX_WORD_LENGTH && word.en.length <= MAX_WORD_LENGTH) {
+                        acc.push(word);
+                    } else {
+                        warn(`Wrong word from google sheets ${sheet_name} length!`, word);
+                    }
                 }
                 return acc;
             }, [] as Array<ParsedWord>);

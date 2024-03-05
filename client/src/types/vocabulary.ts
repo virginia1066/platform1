@@ -18,9 +18,10 @@ export type DeckItemDetailed = DeckItemShort & {
     words: Array<Word>;
 }
 
-export type Word = {
+export type Word<Date = string | null> = {
     id: number;
     ru: string;
     en: string;
+    due: Date;
 }
 

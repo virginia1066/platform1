@@ -1,4 +1,4 @@
-import { get_or_create_pack } from '../google_words_daemon/get_or_create_pack';
+import { get_or_create_pack } from '../../utils/get_or_create_pack';
 import { knex, WORD_CONFLICT_COLUMNS } from '../../constants';
 import { PackLink, Word } from '../../types/Wokobular';
 import { always } from 'ramda';

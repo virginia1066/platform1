@@ -19,7 +19,8 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 0 THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) AS count_new'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 1 THEN 1 ELSE 0 END) AS count_learning'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
-            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning')
+            knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
+            knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) as count_can_be_shown')
         ))
         .then<StatByPack | undefined>(head)
         .then(defaultTo({
@@ -28,6 +29,7 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             count_learning: 0,
             count_review: 0,
             count_relearning: 0,
+            count_can_be_shown: 0
         }))
         .then(evolve({
             words_count: Number,
@@ -35,6 +37,7 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             count_new: Number,
             count_review: Number,
             count_relearning: Number,
+            count_can_be_shown: Number
         }));
 
 
@@ -49,4 +52,5 @@ export type StatByPack = {
     count_learning: number;
     count_review: number;
     count_relearning: number;
+    count_can_be_shown: number;
 }

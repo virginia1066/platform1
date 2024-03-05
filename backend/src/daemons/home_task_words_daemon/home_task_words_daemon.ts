@@ -1,6 +1,6 @@
-import { info } from '../../utils/log';
+import * as console from '../../utils/log';
 import { HomeTaskWebhook, WebhookHomeTaskStatus } from '../../types/general';
-import { HOME_TASK_WORDS_REG, knex, MESSAGE_BUS } from '../../constants';
+import { HOME_TASK_WORDS_REG, knex, MAX_WORD_LENGTH, MESSAGE_BUS } from '../../constants';
 import { get_lesson_by_id } from '../../utils/request_mk';
 import { always, propEq } from 'ramda';
 import { Word, WordSource, WordStatus } from '../../types/Wokobular';
@@ -8,9 +8,12 @@ import { randomUUID } from 'crypto';
 import { delete_old_info } from './delete_old_info';
 import { add_home_task_data } from './add_home_task_data';
 
-export const home_task_words_daemon = () => {
-    info(`Launch home task daemon.`);
+const info = console.info.bind(null, 'Home task daemon:');
+const warn = console.warn.bind(null, 'Home task daemon:');
+const error = console.error.bind(null, 'Home task daemon:');
 
+export const home_task_words_daemon = () => {
+    info(`Launch!`);
 
     const prepare_lesson = (task: HomeTaskWebhook): Promise<unknown> => {
         if (task.status === WebhookHomeTaskStatus.Done) {
@@ -35,7 +38,22 @@ export const home_task_words_daemon = () => {
                         status: WordStatus.Active,
                         source: WordSource.HomeTask,
                         insert_id
-                    }));
+                    }))
+                    .filter((word) => {
+                        if (word.ru.length > MAX_WORD_LENGTH || word.en.length > MAX_WORD_LENGTH) {
+                            warn(`Wrong word length!`, word);
+                            return false;
+                        }
+                        if (!word.ru || !word.en) {
+                            warn(`Wrong word length!`, word);
+                            return false;
+                        }
+                        return true;
+                    });
+
+                if (!words.length || !visitors.length) {
+                    info(`No words or visitors for home task!`);
+                }
 
                 return delete_old_info(task.lesson_id)
                     .then(() => add_home_task_data({

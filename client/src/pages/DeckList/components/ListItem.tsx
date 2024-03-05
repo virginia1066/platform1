@@ -9,29 +9,27 @@ import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../constants';
 import { BlockLabel } from '../../../components/Block/BlockLabel';
 import { DeckItemShort } from '../../../types/vocabulary';
-import { always, pipe } from 'ramda';
-import { Func } from '../../../types/utils';
 import { useUnit } from 'effector-react';
 import { $tmpDeckList, changeSkipList } from '../model';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export const ListItem: FC<DeckListItem> = ({
-    editMode,
-    id,
-    name,
-    user_can_edit,
-    stats: {
-        count_new,
-        count_review,
-        count_learning,
-        count_relearning,
-        count_can_be_shown
-    },
-}) => {
+                                               editMode,
+                                               id,
+                                               name,
+                                               user_can_edit,
+                                               stats: {
+                                                   count_can_be_shown,
+                                                   count_new,
+                                                   count_review,
+                                                   count_learning,
+                                                   count_relearning,
+                                               },
+                                           }) => {
 
     const [onChange, skipList] = useUnit([changeSkipList, $tmpDeckList]);
-    const navigate: Func<[string], void> = useNavigate();
-    const gotoDeck = useCallback(pipe(always(`${BASE_URL}/deck/${id}`), navigate), [id]);
+    const navigate = useNavigate();
+    const gotoDeck = useCallback(() => navigate(`${BASE_URL}/deck/${id}`), [id, navigate]);
     const isActive = count_can_be_shown > 0 && !editMode;
     const isChecked = !skipList.includes(id);
 
@@ -41,7 +39,7 @@ export const ListItem: FC<DeckListItem> = ({
             id,
             checked
         });
-    }, [id]);
+    }, [id, onChange]);
 
     const { t } = useTranslation('translation', {
         keyPrefix: 'vocabulary.deckList'
@@ -49,20 +47,20 @@ export const ListItem: FC<DeckListItem> = ({
 
     return (
         <Block minH={'106px'}
-            onClick={isActive ? gotoDeck : undefined}
-            cursor={isActive ? 'pointer' : 'auto'}
-            opacity={count_can_be_shown === 0 && !editMode ? 0.6 : 1}>
+               onClick={isActive ? gotoDeck : undefined}
+               cursor={isActive ? 'pointer' : 'auto'}
+               opacity={count_can_be_shown === 0 && !editMode ? 0.6 : 1}>
             {
                 count_can_be_shown === 0
-                    ? <BlockLabel text={t('labelDone')} color={Colors.green} /> /*TODO translate*/
+                    ? <BlockLabel text={t('labelDone')} color={Colors.green}/> /*TODO translate*/
                     : null
             }
             <HStack spacing={4} me={editMode ? '55px' : 'auto'}>
                 {
                     editMode
                         ? <Checkbox onChange={onChangeChecked}
-                            defaultChecked={isChecked}
-                            variant={'tg'} />
+                                    defaultChecked={isChecked}
+                                    variant={'tg'}/>
                         : null
                 }
                 <Heading as={'h2'} size={'md'}>{name}</Heading>
@@ -71,15 +69,15 @@ export const ListItem: FC<DeckListItem> = ({
                 editMode && user_can_edit
                     ? <Box position={'absolute'} h={'full'} w={'55px'} right={0} borderRightRadius={8}>
                         <Flex h={'50%'} bgColor={Colors.red} justifyContent={'center'}
-                            alignItems={'center'}><DeleteIcon color={themeParams.button_text_color} mx={'auto'} /></Flex>
+                              alignItems={'center'}><DeleteIcon color={themeParams.button_text_color} mx={'auto'}/></Flex>
                         <Flex h={'50%'} bgColor={get_triteary_bg_color(colorScheme)} justifyContent={'center'}
-                            alignItems={'center'}><EditIcon color={themeParams.hint_color} /></Flex>
+                              alignItems={'center'}><EditIcon color={themeParams.hint_color}/></Flex>
                     </Box>
                     : !editMode
                         ? <ProgressStats textAlign={'end'}
-                            new_ones={count_new}
-                            studied={count_learning + count_relearning}
-                            repeatable={count_review} />
+                                         new_ones={count_new}
+                                         studied={count_learning + count_relearning}
+                                         repeatable={count_review}/>
                         : null
             }
         </Block>

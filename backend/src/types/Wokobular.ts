@@ -60,7 +60,8 @@ export enum WordStatus {
 
 export enum WordSource {
     GoogleSheets = 'GOOGLE',
-    HomeTask = 'HOME_TASK'
+    HomeTask = 'HOME_TASK',
+    UserAdd = 'USER_ADD'
 }
 
 /**
