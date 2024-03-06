@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { delete_word_e, edit_word_e, EditWord, input_blur_e, input_focus_e } from './model';
 import { useUnit } from 'effector-react';
 import { useCallback } from 'react';
+import { Block } from '../../components/Block/inedex';
+import { get_triteary_bg_color } from '../../theme/Colors';
+import { colorScheme } from '../../theme/defaults';
 
 const TRANS_PROPS = {
     keyPrefix: 'vocabulary.deckEdit'
@@ -41,24 +44,28 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
 
 
     return (
-        <Flex mt={index === 0 ? 0 : 3} gap={4} alignItems={'center'}>
-            <Flex direction={'column'} gap={3}>
-                <FormElement placeholder={t('placeholder.lang1')} default_value={word.ru}
-                             error={errors[`words[${index}].ru`]}
-                             onFocus={on_focus_ru}
-                             onBlur={on_blur_ru}
-                             onChange={on_change_ru}/>
-                <FormElement placeholder={t('placeholder.lang2')} default_value={word.en}
-                             error={errors[`words[${index}].en`]}
-                             onFocus={on_focus_en}
-                             onBlur={on_blur_en}
-                             onChange={on_change_en}/>
+        <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
+            <Flex mt={index === 0 ? 0 : 3} gap={4} alignItems={'center'}>
+                <Flex direction={'column'} gap={3}>
+                    <FormElement placeholder={t('placeholder.lang1')} default_value={word.ru}
+                        error={errors[`words[${index}].ru`]}
+                        onFocus={on_focus_ru}
+                        onBlur={on_blur_ru}
+                        onChange={on_change_ru} />
+                    <FormElement placeholder={t('placeholder.lang2')} default_value={word.en}
+                        error={errors[`words[${index}].en`]}
+                        onFocus={on_focus_en}
+                        onBlur={on_blur_en}
+                        onChange={on_change_en} />
+                </Flex>
+                <IconButton size={'xs'}
+                    onClick={on_delete_click}
+                    variant={'delete'}
+                    isDisabled={!can_remove}
+                    aria-label="Delete"
+                    icon={<CloseIcon w={'10px'} h={'10px'} />} />
             </Flex>
-            {can_remove
-                ? <IconButton size={'xs'} onClick={on_delete_click} variant={'delete'} aria-label="Delete"
-                              icon={<CloseIcon w={'10px'} h={'10px'}/>}/>
-                : null}
-        </Flex>
+        </Block >
     );
 };
 
