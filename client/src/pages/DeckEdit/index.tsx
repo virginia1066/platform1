@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../components/BackButton';
 import { BASE_URL } from '../../constants';
 import { Block } from '../../components/Block/inedex';
-import { ProgressStats } from '../../components/ProgressStats';
 import { get_triteary_bg_color } from '../../theme/Colors';
 import { AddIcon } from '@chakra-ui/icons';
 import { colorScheme, themeParams } from '../../theme/defaults';
@@ -44,8 +43,6 @@ export const DeckEdit = () => {
                                      onBlur={on_name_blur}
                                      error={errors['name']}
                                      onChange={change_name}/>
-                        <ProgressStats justifyContent={'space-between'} w={'full'} new_ones={1} repeatable={2}
-                                       studied={3} direction={'row'}/>
                         <VStack spacing={3} alignItems={'start'}>
                             <FormLabel m={0}>{t('labelWords')}</FormLabel>
                             <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
