@@ -39,6 +39,9 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
                 "100%": {
                     opacity: 1,
                 }
+            },
+            '*::-webkit-scrollbar': {
+                display: 'none'
             }
         }
     },

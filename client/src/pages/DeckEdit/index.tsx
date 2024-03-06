@@ -1,4 +1,4 @@
-import { Button, Flex, FormLabel, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, HStack, IconButton, VStack } from '@chakra-ui/react';
 import { ButtonBar } from '../../components/ButtonBar';
 import { PageWrap } from '../../components/PageWrap';
 import { useTranslation } from 'react-i18next';
@@ -34,35 +34,38 @@ export const DeckEdit = () => {
 
     return (
         <PageWrap headerTitle={t('header')}>
-            <Flex h={'full'}>
-                <Block h={'max-content'}>
-                    <VStack spacing={4} alignItems={'start'}>
-                        <FormElement placeholder={t('placeholder.title')}
-                                     default_value={''}
-                                     onFocus={on_name_focus}
-                                     onBlur={on_name_blur}
-                                     error={errors['name']}
-                                     onChange={change_name}/>
-                        <VStack spacing={3} alignItems={'start'}>
-                            <FormLabel m={0}>{t('labelWords')}</FormLabel>
-                            <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
-                                {words.map((word, i) => (
-                                    <WordEdit key={word.id ? `id-${word.id}` : `${word.en}-${word.ru}-${i}`}
-                                              errors={errors}
-                                              can_remove={words.length !== 1} word={word} index={i}/>
-                                ))}
-                            </Block>
-                            <IconButton bgColor={themeParams.button_text_color} color={themeParams.button_color}
-                                        onClick={add_word}
-                                        borderWidth={'2px'} alignSelf={'center'} variant={'main'} size={'lg'}
-                                        aria-label="Add" icon={<AddIcon/>}/>
+            <Flex h={'full'} position={'relative'}>
+                <Box position={'absolute'} w={'full'} h={'full'} overflowY={'auto'}>
+                    <Block h={'max-content'}>
+                        <VStack spacing={4} alignItems={'start'} w={'full'}>
+                            <FormLabel m={0}>{t('labelDeckTitle')}</FormLabel>
+                            <FormElement placeholder={t('placeholder.title')}
+                                default_value={''}
+                                onFocus={on_name_focus}
+                                onBlur={on_name_blur}
+                                error={errors['name']}
+                                onChange={change_name} />
+                            <VStack spacing={3} alignItems={'start'} w={'full'}>
+                                <FormLabel m={0}>{t('labelWords')}</FormLabel>
+                                {
+                                    words.map((word, i) => (
+                                        <WordEdit key={word.id ? `id-${word.id}` : `${word.en}-${word.ru}-${i}`}
+                                            errors={errors}
+                                            can_remove={words.length !== 1} word={word} index={i} />
+                                    ))
+                                }
+                                <IconButton bgColor={themeParams.button_text_color} color={themeParams.button_color}
+                                    onClick={add_word}
+                                    borderWidth={'2px'} alignSelf={'center'} variant={'main'} size={'lg'}
+                                    aria-label="Add" icon={<AddIcon />} />
+                            </VStack>
                         </VStack>
-                    </VStack>
-                </Block>
+                    </Block>
+                </Box>
             </Flex>
             <ButtonBar>
                 <HStack spacing={4}>
-                    <BackButton url={`${BASE_URL}/`}/>
+                    <BackButton url={`${BASE_URL}/`} />
                     <Button onClick={save_click} w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
                 </HStack>
             </ButtonBar>
