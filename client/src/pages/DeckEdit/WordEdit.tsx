@@ -45,7 +45,7 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
 
     return (
         <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
-            <Flex mt={index === 0 ? 0 : 3} gap={4} alignItems={'center'}>
+            <Flex gap={4} alignItems={'center'}>
                 <Flex direction={'column'} gap={3}>
                     <FormElement placeholder={t('placeholder.lang1')} default_value={word.ru}
                         error={errors[`words[${index}].ru`]}
