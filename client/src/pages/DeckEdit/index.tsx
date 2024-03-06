@@ -45,9 +45,7 @@ export const DeckEdit = () => {
                                 onFocus={on_name_focus}
                                 onBlur={on_name_blur}
                                 error={errors['name']}
-                                onChange={change_name} />
-                            <ProgressStats justifyContent={'space-between'} w={'full'} new_ones={1} repeatable={2}
-                                studied={3} direction={'row'} />
+                                onChange={change_name} />                            
                             <VStack spacing={3} alignItems={'start'} w={'full'}>
                                 <FormLabel m={0}>{t('labelWords')}</FormLabel>
                                 {
