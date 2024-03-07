@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         element: <NavigatedDeckList/>,
     },
     {
-        path: `${BASE_URL}/edit`,
+        path: `${BASE_URL}/edit/:id`,
         element: <NavigatedDeckEdit/>,
     },
     {

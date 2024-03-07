@@ -10,7 +10,7 @@ import { BASE_URL } from '../../../constants';
 import { BlockLabel } from '../../../components/Block/BlockLabel';
 import { DeckItemShort } from '../../../types/vocabulary';
 import { useUnit } from 'effector-react';
-import { $tmpDeckList, changeSkipList } from '../model';
+import { $tmpDeckList, changeSkipList, delete_deck_fx } from '../model';
 import { useTranslation } from 'react-i18next';
 
 export const ListItem: FC<DeckListItem> = ({
@@ -32,6 +32,8 @@ export const ListItem: FC<DeckListItem> = ({
     const gotoDeck = useCallback(() => navigate(`${BASE_URL}/deck/${id}`), [id, navigate]);
     const isActive = count_can_be_shown > 0 && !editMode;
     const isChecked = !skipList.includes(id);
+    const delete_pack = useUnit(delete_deck_fx);
+    const on_delete_click = useCallback(() => delete_pack(id), [id]);
 
     const onChangeChecked = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
@@ -44,6 +46,8 @@ export const ListItem: FC<DeckListItem> = ({
     const { t } = useTranslation('translation', {
         keyPrefix: 'vocabulary.deckList'
     });
+
+    const goto_edit = useCallback(() => navigate(`${BASE_URL}/edit/${id}`), [id]);
 
     return (
         <Block minH={'106px'}
@@ -69,9 +73,14 @@ export const ListItem: FC<DeckListItem> = ({
                 editMode && user_can_edit
                     ? <Box position={'absolute'} h={'full'} w={'55px'} right={0} borderRightRadius={8}>
                         <Flex h={'50%'} bgColor={Colors.red} justifyContent={'center'}
-                              alignItems={'center'}><DeleteIcon color={themeParams.button_text_color} mx={'auto'}/></Flex>
+                              alignItems={'center'}>
+                            <DeleteIcon onClick={on_delete_click}
+                                        color={themeParams.button_text_color} mx={'auto'}/>
+                        </Flex>
                         <Flex h={'50%'} bgColor={get_triteary_bg_color(colorScheme)} justifyContent={'center'}
-                              alignItems={'center'}><EditIcon color={themeParams.hint_color}/></Flex>
+                              alignItems={'center'}>
+                            <EditIcon onClick={goto_edit} color={themeParams.hint_color}/>
+                        </Flex>
                     </Box>
                     : !editMode
                         ? <ProgressStats textAlign={'end'}

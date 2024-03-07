@@ -40,8 +40,11 @@ export class InternalError extends ServerError {
 }
 
 export class BadRequest extends ServerError {
-    constructor(details?: string) {
+    public data: any;
+
+    constructor(details: string = '', data?: any) {
         super(400, 'BadRequest', details);
+        this.data = data;
     }
 }
 
@@ -54,7 +57,7 @@ export class PermissionDenied extends ServerError {
 const logger = {
     warn: warn,
     error: error
-}
+};
 
 export const applyErrorM: Middleware = (ctx, next) =>
     next()
@@ -70,7 +73,8 @@ export const applyErrorM: Middleware = (ctx, next) =>
             ctx.status = errorInstance.code;
             ctx.body = {
                 type: 'error',
-                ...pick(['message', 'details'], errorInstance)
+                ...pick(['message', 'details'], errorInstance),
+                data: 'data' in errorInstance ? errorInstance.data : undefined
             };
             logger[method](`Error: ${errorInstance.code}, ${errorInstance.message}. Details: ${errorInstance.details}`);
             if (method === 'error') {

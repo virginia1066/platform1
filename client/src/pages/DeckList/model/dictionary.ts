@@ -5,6 +5,7 @@ import { __, always, assoc, includes, not, pipe, prop } from 'ramda';
 import { combine } from 'effector';
 import { DeckItemShort } from '../../../types/vocabulary';
 import { persist } from 'effector-storage/local';
+import { make_request_fx } from '../../../utils/make_request_fx';
 
 export const DeckListGate = createGate({
     domain: coreD
@@ -50,8 +51,14 @@ export const saveSkipListE = coreD.createEvent();
 
 export const fetchDeckListFx = coreD.createEffect(() =>
     request<Array<DeckItemShort>>('/api/v1/web-app/user/packs')
-        .then(prop('data'))
 );
+
+export const delete_deck_fx = make_request_fx<number, Array<DeckItemShort>>({
+    url: (id: number) => `/api/v1/web-app/user/packs/${id}`,
+    init: {
+        method: 'DELETE'
+    }
+});
 
 export type ChangeSkipProps = {
     id: number;

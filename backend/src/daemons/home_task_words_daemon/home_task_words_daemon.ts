@@ -3,7 +3,7 @@ import { HomeTaskWebhook, WebhookHomeTaskStatus } from '../../types/general';
 import { HOME_TASK_WORDS_REG, knex, MAX_WORD_LENGTH, MESSAGE_BUS } from '../../constants';
 import { get_lesson_by_id } from '../../utils/request_mk';
 import { always, propEq } from 'ramda';
-import { Word, WordSource, WordStatus } from '../../types/Wokobular';
+import { Word, WordSourcePrefix, WordStatus } from '../../types/Wokobular';
 import { randomUUID } from 'crypto';
 import { delete_old_info } from './delete_old_info';
 import { add_home_task_data } from './add_home_task_data';
@@ -36,7 +36,7 @@ export const home_task_words_daemon = () => {
                         ru: ru.trim(),
                         en: en.trim(),
                         status: WordStatus.Active,
-                        source: WordSource.HomeTask,
+                        source: WordSourcePrefix.HomeTask,
                         insert_id
                     }))
                     .filter((word) => {

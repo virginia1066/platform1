@@ -58,11 +58,15 @@ export enum WordStatus {
     Deleted = 'DELETED'
 }
 
-export enum WordSource {
+export enum WordSourcePrefix {
     GoogleSheets = 'GOOGLE',
     HomeTask = 'HOME_TASK',
     UserAdd = 'USER_ADD'
 }
+
+type WordSource = WordSourcePrefix.HomeTask
+    | WordSourcePrefix.GoogleSheets
+    | `${WordSourcePrefix.UserAdd}-${number}`
 
 /**
  * Слово

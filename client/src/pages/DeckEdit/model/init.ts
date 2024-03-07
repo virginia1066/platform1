@@ -8,6 +8,7 @@ import {
     add_word_e,
     change_name_e,
     create_deck_fx,
+    CreateDeckProps,
     DeckEditG,
     delete_word_e,
     edit_word_e,
@@ -19,10 +20,14 @@ import {
     save_click_e,
     save_deck_fx,
     validate_fx,
+    ValidateProps,
     WordStatus
 } from './dictionary';
-import { append, assoc, is, isNil, map, not, nthArg, omit, pipe, prop } from 'ramda';
+import { always, append, assoc, is, isNil, map, mergeRight, nthArg, omit, pipe, prop } from 'ramda';
 import { Word } from '../../../types/vocabulary';
+import { Func } from '../../../types/utils';
+import { navigate_e } from '../../../models/core';
+import { BASE_URL } from '../../../constants';
 
 sample({
     clock: DeckEditG.open,
@@ -52,8 +57,8 @@ $words
         nthArg(1),
         prop('data'),
         prop('words'),
-        map<Word, EditWord>(pipe<[Word], Omit<Word, 'id' | 'due'>, EditWord>(
-            omit(['due', 'id']),
+        map<Word, EditWord>(pipe<[Word], Omit<Word, 'due'>, EditWord>(
+            omit(['due']),
             assoc('status', WordStatus.Active)
         ))
     ))
@@ -103,6 +108,11 @@ $errors
         delete clone[path];
         return clone;
     })
+    .on([create_deck_fx.failData, save_deck_fx.failData], pipe(
+        nthArg(1),
+        prop('data'),
+        prop('data')
+    ))
     .reset(DeckEditG.close);
 
 sample({
@@ -111,7 +121,10 @@ sample({
         name: $name,
         words: $words,
     },
-    fn: assoc('key', undefined),
+    fn: mergeRight({
+        key: undefined,
+        from: 'button_click' as const
+    }) as Func<[CreateDeckProps], ValidateProps>,
     target: validate_fx
 });
 
@@ -119,33 +132,47 @@ sample({
     clock: input_blur_e,
     source: {
         name: $name,
-        words: $words,
+        words: $words
     },
-    fn: (source, key) => ({ ...source, key }),
+    fn: (source, key): ValidateProps => ({
+        ...source,
+        key,
+        from: 'blur'
+    }),
     target: validate_fx
 });
 
 sample({
-    clock: validate_fx.doneData,
+    clock: validate_fx.done,
     source: {
         is_edit: $is_edit,
         name: $name,
         id: $id,
         words: $words
     },
-    filter: pipe(prop('is_edit'), is(Number)),
+    filter: (data, props) => {
+        return data.is_edit && props.params.from === 'button_click';
+    },
     target: save_deck_fx,
 });
 
 sample({
-    clock: validate_fx.doneData,
+    clock: validate_fx.done,
     source: {
         is_edit: $is_edit,
         name: $name,
         words: $words
     },
-    filter: pipe(prop('is_edit'), is(Number), not),
+    filter: (data, props) => {
+        return !data.is_edit && props.params.from === 'button_click';
+    },
     target: create_deck_fx,
+});
+
+sample({
+    clock: [save_deck_fx.done, create_deck_fx.done],
+    fn: always(`${BASE_URL}/`),
+    target: navigate_e
 });
 
 

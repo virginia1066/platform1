@@ -46,7 +46,7 @@ export const DeckList = () => {
                 : enableEditMode()
         , [editMode, cancelEditMode, enableEditMode]
     );
-    const gotoCreate = useCallback(() => navigate(`${BASE_URL}/edit`), [navigate]);
+    const goto_create = useCallback(() => navigate(`${BASE_URL}/edit/new`), [navigate]);
     const { t } = useTranslation('translation', TRANS_OPTIONS);
 
     return (
@@ -55,8 +55,11 @@ export const DeckList = () => {
                 <Box h={'38px'} textAlign={'center'}>
                     {
                         editMode
-                            ? <Text size={'sm'} color={themeParams.hint_color}><Trans t={t}
-                                                                                      i18nKey={'subtitleEdit'}/></Text>
+                            ? (
+                                <Text size={'sm'} color={themeParams.hint_color}>
+                                    <Trans t={t} i18nKey={'subtitleEdit'}/>
+                                </Text>
+                            )
                             : null
                     }
                 </Box>
@@ -83,7 +86,7 @@ export const DeckList = () => {
                     editMode
                         ? <Button w={'full'} variant={'main'} onClick={saveSkipList}
                                   size={'lg'}>{t('buttonSave')}</Button>
-                        : <Button w={'full'} variant={'main'} onClick={gotoCreate}
+                        : <Button w={'full'} variant={'main'} onClick={goto_create}
                                   size={'lg'}>{t('buttonCreate')}</Button>
                 }
             </ButtonBar>

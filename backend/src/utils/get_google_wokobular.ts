@@ -1,4 +1,4 @@
-import { Word, WordSource, WordStatus } from '../types/Wokobular';
+import { Word, WordSourcePrefix, WordStatus } from '../types/Wokobular';
 import { GaxiosResponse } from 'gaxios/build/src/common';
 import { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
 import { head, trim } from 'ramda';
@@ -52,7 +52,7 @@ const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): R
                             break;
                     }
                     return acc;
-                }, Object.assign(Object.create(null), { source: WordSource.GoogleSheets }));
+                }, Object.assign(Object.create(null), { source: WordSourcePrefix.GoogleSheets }));
 
                 if (word.ru && word.en) {
                     if (word.ru.length <= MAX_WORD_LENGTH && word.en.length <= MAX_WORD_LENGTH) {

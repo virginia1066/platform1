@@ -7,11 +7,12 @@ import {
     cancelEditModeE,
     changeSkipList,
     DeckListGate,
+    delete_deck_fx,
     enableEditModeE,
     fetchDeckListFx,
     saveSkipListE
 } from './dictionary';
-import { always, equals, not, nthArg, pipe } from 'ramda';
+import { always, equals, not, nthArg, pipe, prop } from 'ramda';
 
 sample({
     clock: DeckListGate.open,
@@ -24,7 +25,10 @@ $editMode
     .reset(DeckListGate.close);
 
 $deckList
-    .on(fetchDeckListFx.doneData, nthArg(1))
+    .on([fetchDeckListFx.doneData, delete_deck_fx.doneData], pipe(
+        nthArg(1),
+        prop('data')
+    ))
     .reset(DeckListGate.close);
 
 $tmpDeckList
