@@ -4,8 +4,11 @@ import { asyncMap } from '@tsigel/async-map';
 import dayjs from 'dayjs';
 import { wait } from '../utils/wait';
 import { warn } from '../utils/log';
+import { getFixedT } from 'i18next';
 
 export const notification_daemon = () => {
+    const t = getFixedT(null, null, 'server');
+
     const get_time_to_next_loop = () => {
         const now = dayjs();
         const [hours, minutes] = NOTIFY_REPEAT_TIME.split(':').map(Number);
@@ -32,10 +35,7 @@ export const notification_daemon = () => {
             .then(filter(pipe(prop('card_count'), gte(__, MIN_NOTIFY_WORDS_COUNT))))
             .then((list) => {
                 return asyncMap(5, ({ tg_id, card_count }) => {
-                    const message = [ // TODO locale
-                        `В тренажере вас ждут ${card_count} слов для повторения. Рекомендуем на откладывать на потом.`
-                    ].join('\n');
-                    return TG.sendMessage(tg_id, message)
+                    return TG.sendMessage(tg_id, t('notify_message', { count: card_count }))
                         .catch(warn);
                 }, list);
             })

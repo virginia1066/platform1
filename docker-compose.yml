@@ -58,6 +58,8 @@ services:
       - GOOGLE_SHEETS_API_KEY=${GOOGLE_SHEETS_API_KEY}
       - SESSION_SECRET=${SESSION_SECRET}
       - AMPLITUDE_API_KEY=${AMPLITUDE_API_KEY}
+      - MIN_NOTIFY_WORDS_COUNT=${MIN_NOTIFY_WORDS_COUNT}
+      - NOTIFY_REPEAT_TIME=${NOTIFY_REPEAT_TIME}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
