@@ -10,8 +10,10 @@ import { themeParams } from '../../theme/defaults';
 import { FormElement } from '../../components/FormElement';
 import { useGate, useUnit } from 'effector-react';
 import {
-    $errors, $name, $view_words,
-    $words,
+    $errors,
+    $is_edit,
+    $name,
+    $view_words,
     add_word_e,
     change_name_e,
     DeckEditG,
@@ -39,6 +41,7 @@ export const DeckEdit = () => {
         focus,
         blur
     ] = useUnit([add_word_e, save_click_e, change_name_e, input_focus_e, input_blur_e]);
+    const is_edit = useUnit($is_edit);
     const name = useUnit($name);
     const words = useUnit($view_words);
     const errors = useUnit($errors);
@@ -46,7 +49,7 @@ export const DeckEdit = () => {
     const on_name_blur = useCallback(() => blur('name'), []);
 
     return (
-        <PageWrap headerTitle={t('header')}>
+        <PageWrap headerTitle={t(is_edit ? 'headerEdit' : 'headerCreate')}>
             <Flex h={'full'} position={'relative'}>
                 <Box position={'absolute'} w={'full'} h={'full'} overflowY={'auto'}>
                     <Block h={'max-content'}>
@@ -79,7 +82,9 @@ export const DeckEdit = () => {
             <ButtonBar>
                 <HStack spacing={4}>
                     <BackButton url={`${BASE_URL}/`}/>
-                    <Button onClick={save_click} w={'full'} variant={'main'} size={'lg'}>{t('buttonSave')}</Button>
+                    <Button onClick={save_click} w={'full'} variant={'main'} size={'lg'}>
+                        {(is_edit ? 'buttonSave' : 'buttonCreate')}
+                    </Button>
                 </HStack>
             </ButtonBar>
         </PageWrap>

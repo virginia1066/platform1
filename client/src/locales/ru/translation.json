@@ -11,7 +11,9 @@
             "editLink": "Редактировать список"
         },
         "deckEdit": {
-            "header": "Редактирование колоды",
+            "headerEdit": "Редактирование колоды",
+            "headerCreate": "Создание колоды",
+            "buttonCreate": "Создать",
             "buttonSave": "Сохранить",
             "labelDeckTitle": "Название колоды",
             "labelWords": "Слова",
