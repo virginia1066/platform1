@@ -36,7 +36,7 @@ export const home_task_words_daemon = () => {
                         ru: ru.trim(),
                         en: en.trim(),
                         status: WordStatus.Active,
-                        source: WordSourcePrefix.HomeTask,
+                        source: `${WordSourcePrefix.HomeTask}-${task.lesson_id}`,
                         insert_id
                     }))
                     .filter((word) => {

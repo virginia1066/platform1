@@ -64,8 +64,8 @@ export enum WordSourcePrefix {
     UserAdd = 'USER_ADD'
 }
 
-type WordSource = WordSourcePrefix.HomeTask
-    | WordSourcePrefix.GoogleSheets
+type WordSource = WordSourcePrefix.GoogleSheets
+    | `${WordSourcePrefix.HomeTask}-${number}`
     | `${WordSourcePrefix.UserAdd}-${number}`
 
 /**
