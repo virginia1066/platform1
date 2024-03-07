@@ -28,18 +28,15 @@ BigNumber.config.set({
     }
 });
 
+const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
 export const ROOT_PATH = join(__dirname, '..');
 export const MAX_PACK_NAME_LENGTH = 100;
 export const MAX_WORD_LENGTH = 100;
 export const HOME_TASK_WORDS_REG = /##([^#]+)#([^#]+)##/g;
 export const DEBUG_MODE = get_env_strict('DEBUG_MODE', pipe(Number, Boolean));
-const CLASS_RPS = get_env_strict('CLASS_RPS', Number);
 export const TG_TOKEN = get_env_strict('TG_TOKEN');
 export const SESSION_SECRET = get_env_strict('SESSION_SECRET');
 export const SESSION_NAME = 'SESSION';
-export const TG = new TelegramBot(TG_TOKEN, {
-    polling: true,
-});
 export const TG_BOT_NAME = get_env_strict('TG_BOT_NAME');
 export const TG_LINK_ATTRIBUTE_ID = get_env_strict('TG_LINK_ATTRIBUTE_ID', Number);
 export const SERVER_PORT = get_env_strict('SERVER_PORT', Number);
@@ -56,6 +53,11 @@ export const OFFLINE_FILIAL_ID = 30082;
 export const SYSTEM_PACK_ID = 0;
 export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
 export const WORD_CONFLICT_COLUMNS = ['ru', 'en', 'source'];
+export const MIN_NOTIFY_WORDS_COUNT = get_env_strict('MIN_NOTIFY_WORDS_COUNT', Number);
+export const NOTIFY_REPEAT_TIME = get_env_strict('NOTIFY_REPEAT_TIME');
+export const TG = new TelegramBot(TG_TOKEN, {
+    polling: true,
+});
 
 init({
     lng: 'ru',

@@ -12,6 +12,7 @@ import { info } from './utils/log';
 import { HOME_TASK_WORDS_REG } from './constants';
 import { create_wh_home_task } from './db/create_wh_home_task';
 import { home_task_words_daemon } from './daemons/home_task_words_daemon/home_task_words_daemon';
+import { notification_daemon } from './daemons/notification_daemon';
 
 create_users()
     .then(() =>
@@ -25,7 +26,8 @@ create_users()
     .then(pipe(
         make_auth_link_daemon,
         google_words_daemon,
-        home_task_words_daemon
+        home_task_words_daemon,
+        notification_daemon
     ))
     .then(pipe(
         create_server,
