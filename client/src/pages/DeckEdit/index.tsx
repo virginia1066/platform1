@@ -70,7 +70,7 @@ export const DeckEdit = () => {
                                                   can_remove={words.length !== 1} word={word} index={i}/>
                                     ))
                                 }
-                                <IconButton bgColor={themeParams.button_text_color} color={themeParams.button_color}
+                                <IconButton bgColor={'transparent'} color={themeParams.button_color}
                                             onClick={add_word}
                                             borderWidth={'2px'} alignSelf={'center'} variant={'main'} size={'lg'}
                                             aria-label="Add" icon={<AddIcon/>}/>
@@ -83,7 +83,7 @@ export const DeckEdit = () => {
                 <HStack spacing={4}>
                     <BackButton url={`${BASE_URL}/`}/>
                     <Button onClick={save_click} w={'full'} variant={'main'} size={'lg'}>
-                        {(is_edit ? 'buttonSave' : 'buttonCreate')}
+                        {t(is_edit ? 'buttonSave' : 'buttonCreate')}
                     </Button>
                 </HStack>
             </ButtonBar>
