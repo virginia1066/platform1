@@ -54,10 +54,10 @@ export const $view_words = combine($words, filter(
 );
 
 export const validate_fx = make_validate_fx<ValidateProps>(object().shape({
-    name: string().required(t('required')).max(MAX_PACK_NAME_LENGTH),
+    name: string().required(t('required')).max(MAX_PACK_NAME_LENGTH, t('max')),
     words: array().required().min(1).of(object().shape({
-        ru: string().required(t('required')).max(MAX_WORD_LENGTH),
-        en: string().required(t('required')).max(MAX_WORD_LENGTH),
+        ru: string().required(t('required')).max(MAX_WORD_LENGTH, t('max')),
+        en: string().required(t('required')).max(MAX_WORD_LENGTH, t('max')),
         status: string().required().oneOf([
             WordStatus.Active,
             WordStatus.Deleted
