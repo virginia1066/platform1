@@ -1,18 +1,21 @@
 import { sample } from 'effector';
 import {
     $deckList,
+    $delete_list,
     $editMode,
     $skipDeckList,
     $tmpDeckList,
     cancelEditModeE,
     changeSkipList,
     DeckListGate,
-    delete_deck_fx,
+    delete_decks_fx,
+    deleteDeckE,
     enableEditModeE,
     fetchDeckListFx,
     saveSkipListE
 } from './dictionary';
-import { always, equals, not, nthArg, pipe, prop } from 'ramda';
+import { __, always, append, equals, flip, gte, length, not, nthArg, pipe, prop, uniq } from 'ramda';
+import { Func } from '../../../types/utils';
 
 sample({
     clock: DeckListGate.open,
@@ -25,11 +28,18 @@ $editMode
     .reset(DeckListGate.close);
 
 $deckList
-    .on([fetchDeckListFx.doneData, delete_deck_fx.doneData], pipe(
+    .on(fetchDeckListFx.doneData, pipe(
         nthArg(1),
         prop('data')
     ))
     .reset(DeckListGate.close);
+
+$delete_list
+    .on(deleteDeckE, pipe<[Array<number>, number], Array<number>, Array<number>>(
+        flip(append) as Func<[Array<number>, number], Array<number>>,
+        uniq
+    ))
+    .reset(DeckListGate.close, cancelEditModeE);
 
 $tmpDeckList
     .on(changeSkipList, (current_list, { id, checked }) => {
@@ -56,5 +66,29 @@ sample({
 
 sample({
     clock: saveSkipListE,
+    source: $delete_list,
+    filter: pipe(length, gte(__, 1)),
+    target: delete_decks_fx
+});
+
+sample({
+    clock: saveSkipListE,
+    source: $delete_list,
+    filter: pipe(length, equals(0)),
     target: cancelEditModeE
+});
+
+sample({
+    clock: delete_decks_fx.done,
+    target: cancelEditModeE
+});
+
+sample({
+    clock: delete_decks_fx.done,
+    filter: pipe<[{ params: number[] }], Array<number>, number, boolean>(
+        prop('params'),
+        length,
+        gte(__, 1)
+    ),
+    target: fetchDeckListFx
 });

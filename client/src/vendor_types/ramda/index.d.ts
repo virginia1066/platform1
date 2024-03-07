@@ -6,4 +6,8 @@ export module 'ramda' {
     ): (...args: T) => T[Index];
 
     export function prop<K extends string, T>(k: K): Func<[T], K extends keyof T ? T[K] : undefined>;
+
+    export function append<T>(el: T, list: Array<T>): Array<T>;
+
+    export function flip<A, B, T extends Func<[A, B], any>>(cb: T): Func<[B, A], ReturnType<T>>;
 }

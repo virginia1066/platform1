@@ -10,7 +10,7 @@ import { BASE_URL } from '../../../constants';
 import { BlockLabel } from '../../../components/Block/BlockLabel';
 import { DeckItemShort } from '../../../types/vocabulary';
 import { useUnit } from 'effector-react';
-import { $tmpDeckList, changeSkipList, delete_deck_fx } from '../model';
+import { $tmpDeckList, changeSkipList, deleteDeckE } from '../model';
 import { useTranslation } from 'react-i18next';
 
 export const ListItem: FC<DeckListItem> = ({
@@ -32,7 +32,7 @@ export const ListItem: FC<DeckListItem> = ({
     const gotoDeck = useCallback(() => navigate(`${BASE_URL}/deck/${id}`), [id, navigate]);
     const isActive = count_can_be_shown > 0 && !editMode;
     const isChecked = !skipList.includes(id);
-    const delete_pack = useUnit(delete_deck_fx);
+    const delete_pack = useUnit(deleteDeckE);
     const on_delete_click = useCallback(() => delete_pack(id), [id]);
 
     const onChangeChecked = useCallback((e: ChangeEvent<HTMLInputElement>) => {
