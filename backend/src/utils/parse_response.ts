@@ -5,5 +5,9 @@ export const parse_response = <T>(r: Response | NodeResponse): Promise<T> =>
         ? r.headers.get('Content-Type')?.toLowerCase()?.includes('application/json')
             ? r.json()
             : r.text()
-        : r.text()
-            .then((text: string) => Promise.reject(text));
+        : (
+            r.headers.get('Content-Type')?.toLowerCase()?.includes('application/json')
+                ? r.json()
+                : r.text()
+        )
+            .then((text: any) => Promise.reject(text));

@@ -9,7 +9,7 @@
 * 1 CPU 3+ГГц
 * 20GB места на диске (SSD)
 
-### Установка docekr:
+### Установка docker:
 
 Проверить наличие docker и docker-compose можно так:
 ```shell

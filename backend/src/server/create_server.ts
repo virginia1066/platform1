@@ -18,6 +18,7 @@ import { on_home_task_update_M } from './api/v1/webhooks/home-task-update';
 import { create_pack_M } from './api/v1/webapp/user/packs/create_pack_M';
 import { delete_pack_M } from './api/v1/webapp/user/packs/delete_pack_M';
 import { update_pack_M } from './api/v1/webapp/user/packs/update_pack_M';
+import { event_log_M } from './api/v1/event_log_M';
 
 export const create_server = () => {
     const app = new Koa();
@@ -31,7 +32,8 @@ export const create_server = () => {
         .post('/webhooks/user-create', user_create_webhook_M)
         .post('/webhooks/on-home-task-update', on_home_task_update_M)
         .post('/debug/tg/replace-mk-id', replace_mk_id_M)
-        .post('/web-app/user/auth', auth_M);
+        .post('/web-app/user/auth', auth_M)
+        .post('/event/log', event_log_M);
 
     private_user_router
         .use(check_token_M)

@@ -26,8 +26,9 @@ import {
 import { always, append, assoc, is, isNil, map, mergeRight, nthArg, omit, pipe, prop } from 'ramda';
 import { Word } from '../../../types/vocabulary';
 import { Func } from '../../../types/utils';
-import { navigate_e } from '../../../models/core';
+import { navigate_e, send_analytics_fx } from '../../../models/core';
 import { BASE_URL } from '../../../constants';
+import { attach } from 'effector';
 
 sample({
     clock: DeckEditG.open,
@@ -173,6 +174,26 @@ sample({
     clock: [save_deck_fx.done, create_deck_fx.done],
     fn: always(`${BASE_URL}/`),
     target: navigate_e
+});
+
+sample({
+    clock: create_deck_fx.done,
+    target: attach({
+        mapParams: always({
+            event_type: 'WebApp Vocabulary Deck Added'
+        }),
+        effect: send_analytics_fx
+    })
+});
+
+sample({
+    clock: save_deck_fx.done,
+    target: attach({
+        mapParams: always({
+            event_type: 'WebApp Vocabulary Deck Edited'
+        }),
+        effect: send_analytics_fx
+    })
 });
 
 
