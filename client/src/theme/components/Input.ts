@@ -56,6 +56,7 @@ export const Input = {
             fontSize: $fontSize.reference,
             px: $padding.reference,
             borderRadius: $borderRadius.reference,
+            color: themeParams.text_color,
             minWidth: 0,
             outline: 0,
             position: "relative",
@@ -89,9 +90,13 @@ export const Input = {
     variants: {
         tg: {
             field: {
+                color: themeParams.text_color,
                 border: "2px solid",
                 borderColor: "transparent",
                 bg: themeParams.secondary_bg_color,
+                _focus: {
+                    bg: themeParams.secondary_bg_color,
+                },
                 _hover: {
                     bg: themeParams.secondary_bg_color,
                 },
