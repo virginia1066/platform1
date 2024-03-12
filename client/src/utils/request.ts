@@ -1,5 +1,6 @@
 import { __, assoc, pipe } from 'ramda';
 import { BASE_URL } from '../constants';
+import { navigate_e } from '../models/core';
 
 let auth_xhr: Promise<unknown> | null = null;
 let auth_done: boolean = false;
@@ -40,7 +41,7 @@ const auth = () => {
         method: 'POST',
         body: JSON.stringify({ auth_data: Telegram.WebApp.initData })
     }).catch(() => {
-        window.location.href = `${window.location.origin}${BASE_URL}/403`;
+        navigate_e(`${BASE_URL}/403`);
         return void 0;
     });
 

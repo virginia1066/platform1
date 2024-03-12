@@ -20,6 +20,7 @@ services:
       args:
         - REACT_APP_TG_BOT_NAME=${TG_BOT_NAME}
         - REACT_APP_TG_MK_ADMIN_USER=${TG_MK_ADMIN_USER}
+        - REACT_APP_AMPLITUDE_API_KEY=${AMPLITUDE_API_KEY}
     mem_limit: 50m
     restart: always
     volumes:
