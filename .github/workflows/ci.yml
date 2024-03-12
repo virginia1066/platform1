@@ -13,7 +13,7 @@ jobs:
         env:
           CLASS_RPS: ${{ vars.CLASS_RPS }}
           SERVER_PORT: ${{ vars.SERVER_PORT }}
-          DEBUG_MODE: 1
+          DEBUG_MODE: ${{ vars.DEBUG_MODE }}
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
