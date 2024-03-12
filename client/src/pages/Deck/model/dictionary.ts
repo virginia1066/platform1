@@ -10,8 +10,6 @@ export const DeckG = createGate<number>({
     defaultState: 0
 });
 
-export const $deck_open_time = coreD.createStore(0);
-export const $viewed_words = coreD.createStore(0);
 export const $pack_name = coreD.createStore('');
 export const $pack_id = coreD.createStore(0);
 export const $count_new = coreD.createStore(0);

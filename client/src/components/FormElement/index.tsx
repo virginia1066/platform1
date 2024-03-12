@@ -1,11 +1,25 @@
-import { FormControl, FormErrorMessage, Input, InputGroup, InputLeftElement, InputProps, InputRightElement } from '@chakra-ui/react';
-import { head } from "ramda";
-import { ChangeEventHandler, ReactElement, useCallback, useEffect, useId, useState } from "react";
-import { Schema, ValidationError } from "yup";
+import {
+    FormControl,
+    FormErrorMessage,
+    Input,
+    InputGroup,
+    InputLeftElement,
+    InputProps,
+    InputRightElement
+} from '@chakra-ui/react';
+import { ChangeEventHandler, ReactElement, useCallback, useEffect, useId, useState } from 'react';
 import { Func } from '../../types/utils';
 
 
-export const FormElement = <T extends string | number>({ default_value, error, onChange, inputLeftElement = null, inputRightElement = null, input_length = undefined, ...props }: Props<T>) => {
+export const FormElement = <T extends string | number>({
+                                                           default_value,
+                                                           error,
+                                                           onChange,
+                                                           inputLeftElement = null,
+                                                           inputRightElement = null,
+                                                           input_length = undefined,
+                                                           ...props
+                                                       }: Props<T>) => {
     const id = useId();
 
     const [value, set_value] = useState(default_value);

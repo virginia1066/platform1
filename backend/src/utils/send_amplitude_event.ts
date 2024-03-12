@@ -25,7 +25,7 @@ export const send_amplitude_event = ({ event_type, event_properties, user_id }: 
 };
 
 export type EventParams = {
-    user_id: number;
+    user_id: number | string;
     event_type: string;
     event_properties?: Record<string, string | number | undefined>;
 }

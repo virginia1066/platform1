@@ -20,11 +20,11 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
     const [focus, blur] = useUnit([input_focus_e, input_blur_e]);
     const on_delete_click = useCallback(() => delete_word(index), [index]);
 
-    const on_focus_ru = useCallback(() => focus(`words[${index}].ru`), [index]);
-    const on_focus_en = useCallback(() => focus(`words[${index}].en`), [index]);
+    const on_focus_ru = useCallback(() => focus(`words[${index}].ru`), [index, focus]);
+    const on_focus_en = useCallback(() => focus(`words[${index}].en`), [index, focus]);
 
-    const on_blur_ru = useCallback(() => blur(`words[${index}].ru`), [index]);
-    const on_blur_en = useCallback(() => blur(`words[${index}].en`), [index]);
+    const on_blur_ru = useCallback(() => blur(`words[${index}].ru`), [index, blur]);
+    const on_blur_en = useCallback(() => blur(`words[${index}].en`), [index, blur]);
 
     const on_change_ru = useCallback((value: string) => {
         edit_word({
@@ -32,7 +32,7 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
             value,
             lang: 'ru'
         });
-    }, [index]);
+    }, [index, edit_word]);
 
     const on_change_en = useCallback((value: string) => {
         edit_word({
@@ -40,7 +40,7 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
             value,
             lang: 'en'
         });
-    }, [index]);
+    }, [index, edit_word]);
 
 
     return (

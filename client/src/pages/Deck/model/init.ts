@@ -1,13 +1,11 @@
-import { attach, sample } from 'effector';
+import { sample } from 'effector';
 import {
     $count_learning,
     $count_new,
     $count_review,
-    $deck_open_time,
     $pack_id,
     $pack_name,
     $translate_shown,
-    $viewed_words,
     $words_collection,
     DeckG,
     get_pack_fx,
@@ -20,72 +18,11 @@ import {
 } from './dictionary';
 import { add, always, converge, nthArg, pipe, prop } from 'ramda';
 import { WordCollection } from '../WordCollection';
-import { send_analytics_fx } from '../../../models/core';
 
 sample({
     clock: DeckG.open,
     target: get_pack_fx
 });
-
-sample({
-    clock: DeckG.open,
-    target: attach({
-        mapParams: always({
-            event_type: 'WebApp Vocabulary Education Start'
-        }),
-        effect: send_analytics_fx
-    })
-});
-
-sample({
-    clock: DeckG.close,
-    target: attach({
-        source: { time_open: $deck_open_time, viewed: $viewed_words },
-        mapParams: (_, { time_open, viewed }) => ({
-            event_type: 'WebApp Vocabulary Education Ended',
-            props: {
-                education_time: Math.round((((Date.now() - time_open) / 1_000 / 60) + Number.EPSILON) * 100) / 100,
-                viewed_words_count: viewed
-            }
-        }),
-        effect: send_analytics_fx
-    })
-});
-
-sample({
-    clock: show_translate,
-    target: attach({
-        mapParams: always({
-            event_type: 'WebApp Vocabulary Show Answer Click'
-        }),
-        effect: send_analytics_fx
-    })
-});
-
-[
-    { name: 'Again', event: set_again },
-    { name: 'Hard', event: set_hard },
-    { name: 'Good', event: set_good },
-    { name: 'Easy', event: set_easy }
-].forEach(({ name, event }) => {
-    sample({
-        clock: event,
-        target: attach({
-            mapParams: always({
-                event_type: `WebApp Vocabulary ${name} Click`
-            }),
-            effect: send_analytics_fx
-        })
-    });
-});
-
-$viewed_words
-    .on(show_translate, add(1))
-    .reset(DeckG.close);
-
-$deck_open_time
-    .on(DeckG.open, () => Date.now())
-    .reset(DeckG.close);
 
 $pack_name
     .on(get_pack_fx.doneData, pipe(
