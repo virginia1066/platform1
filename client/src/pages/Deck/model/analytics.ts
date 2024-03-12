@@ -17,8 +17,8 @@ import { previous } from 'patronum';
 const $deck_open_time = coreD.createStore(0);
 const $viewed_words = coreD.createStore(0);
 
-const $last_id = previous($pack_name, '');
-const $last_name = previous($pack_id, 0);
+const $last_id = previous($pack_id, 0);
+const $last_name = previous($pack_name, '');
 
 
 sample({
