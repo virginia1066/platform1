@@ -55,18 +55,15 @@ sample({
     source: { id: $last_id, name: $last_name },
     target: attach({
         source: { time_open: $deck_open_time, viewed: $viewed_words },
-        mapParams: ({ id, name }, { time_open, viewed }) => {
-            console.log(`DeckG.close, send_analytics`, time_open, viewed, id, name);
-            return ({
-                event_type: 'WebApp Vocabulary Education Ended',
-                props: {
-                    education_time: Math.round((((Date.now() - time_open) / 1_000 / 60) + Number.EPSILON) * 100) / 100,
-                    viewed_words_count: viewed,
-                    vocabulary_name: name,
-                    vocabulary_id: id
-                }
-            });
-        },
+        mapParams: ({ id, name }, { time_open, viewed }) => ({
+            event_type: 'WebApp Vocabulary Education Ended',
+            props: {
+                education_time: Math.round((((Date.now() - time_open) / 1_000 / 60) + Number.EPSILON) * 100) / 100,
+                viewed_words_count: viewed,
+                vocabulary_name: name,
+                vocabulary_id: id
+            }
+        }),
         effect: send_analytics_fx
     })
 });

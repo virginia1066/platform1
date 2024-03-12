@@ -17,7 +17,6 @@ export class WordCollection {
                 date.toLocaleDateString(),
                 date.toLocaleTimeString()
             ].join(' ')
-            console.log(`Repeat word at ${tpl}`, word);
         });
 
         this.active_word = repeated_list
