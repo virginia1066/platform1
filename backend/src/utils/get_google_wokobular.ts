@@ -1,7 +1,7 @@
 import { Word, WordSourcePrefix, WordStatus } from '../types/Wokobular';
 import { GaxiosResponse } from 'gaxios/build/src/common';
 import { sheets_v4 } from 'googleapis/build/src/apis/sheets/v4';
-import { head, trim } from 'ramda';
+import { head, pipe, trim, toLower } from 'ramda';
 import { google } from 'googleapis';
 import { GOOGLE_SHEETS_API_KEY, GOOGLE_SHEETS_ID, MAX_WORD_LENGTH } from '../constants';
 import { warn } from './log';
@@ -32,7 +32,7 @@ const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): R
         const rows = raw_data.slice(1);
         type Title = 'ru' | 'en' | 'disabled';
 
-        const titles = google_titles.values!.map(extract_value);
+        const titles = google_titles.values!.map(pipe(extract_value, toLower));
 
         const table = rows
             .map((row) => row.values!.map(extract_value))

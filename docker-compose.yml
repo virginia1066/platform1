@@ -35,7 +35,7 @@ services:
     build:
       context: ./backend
     restart: always
-    mem_limit: 512m
+    mem_limit: 1024m
     environment:
       - TZ=UTC
       - TG_TOKEN=${TG_TOKEN}

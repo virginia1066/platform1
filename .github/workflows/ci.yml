@@ -11,8 +11,8 @@ jobs:
       - name: Push to server
         uses: appleboy/ssh-action@master
         env:
-          CLASS_RPS: 7
-          SERVER_PORT: 3000
+          CLASS_RPS: ${{ vars.CLASS_RPS }}
+          SERVER_PORT: ${{ vars.SERVER_PORT }}
           DEBUG_MODE: 1
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: CLASS_RPS,SERVER_PORT,DEBUG_MODE,TG_TOKEN,DB_HOST,DB_USER,DB_PASS,DB_PORT,DB_MAX_CONNECTIONS,MY_CLASS_API_KEY,TG_LINK_ATTRIBUTE_ID,TG_MK_ADMIN_USER,TG_BOT_NAME,LK_SITE_ORIGIN,GOOGLE_SHEETS_ID,GOOGLE_SHEETS_API_KEY,SESSION_SECRET,AMPLITUDE_API_KEY,MIN_NOTIFY_WORDS_COUNT,NOTIFY_REPEAT_TIME
+          envs: CLASS_RPS,SERVER_PORT,DEBUG_MODE,TG_TOKEN,DB_HOST,DB_USER,DB_PASS,DB_PORT,DB_MAX_CONNECTIONS,MY_CLASS_API_KEY,TG_LINK_ATTRIBUTE_ID,TG_MK_ADMIN_USER,TG_BOT_NAME,LK_SITE_ORIGIN,GOOGLE_SHEETS_ID,GOOGLE_SHEETS_API_KEY,SESSION_SECRET,AMPLITUDE_API_KEY,MIN_NOTIFY_WORDS_COUNT,NOTIFY_REPEAT_TIME,CLASS_RPS,SERVER_PORT
           script: |
             cd ${{ vars.PROJECT_PATH }}
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
