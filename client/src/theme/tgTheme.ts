@@ -34,6 +34,9 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
                 minHeight: '100%', 
                 backgroundColor: themeParams.bg_color               
             },
+            "a": {
+                color: themeParams.link_color
+            },
             "@keyframes fadeIn": {
                 "0%": {
                     opacity:0,
