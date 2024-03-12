@@ -14,8 +14,6 @@ import {
 import { curry, indexBy, prop, propEq } from 'ramda';
 import { isCommand, isFunction, isPromise } from './utils';
 import { resolveResponse } from './resolveDynamic';
-import { randomUUID } from 'crypto';
-import { info } from '../../utils/log';
 import { MessageSpliter } from '../../services/MessageSpliter';
 import { iterate } from './iterate';
 import { send } from './send';
@@ -41,8 +39,6 @@ export const bot = (tg: TelegramBot, config: Config) => {
             })
     );
 
-    const makeId = () => randomUUID();
-
     const bind = (id: string, user: User, action: Dynamic<ResponseItem | BaseItem>) => {
         if (!store[user.id]) {
             store[user.id] = Object.create(null);
@@ -57,7 +53,6 @@ export const bot = (tg: TelegramBot, config: Config) => {
     };
 
     const dynamic = <T extends DynamicEntryTypes>(message: Message, item: Dynamic<T>): Promise<Resolve<T>> => {
-        info(`Dynamic:`, item);
         if (isFunction(item)) {
             const res = item(getUser(message), message);
 
@@ -79,7 +74,6 @@ export const bot = (tg: TelegramBot, config: Config) => {
 
     const sendResponseItem = curry((message: Message, response: ResponseItem) => {
         const user = getUser(message);
-        info(`Send response item:`, response);
         return Promise
             .all([
                 dynamic(message, response.text),
@@ -87,7 +81,6 @@ export const bot = (tg: TelegramBot, config: Config) => {
                     .then((buttons) => loadButtons(message, buttons))
             ])
             .then(([text, buttons]): Promise<unknown> => {
-                info(`Send response resolved item:`, response);
                 const keyboard = {
                     keyboard: buttons.map((line) => line.map((item) => {
                         bind(item.text, user, item.action);
@@ -122,17 +115,7 @@ export const bot = (tg: TelegramBot, config: Config) => {
             });
     });
 
-    tg.on('inline_query', (message) => {
-        info(`Inline query:`, message);
-    });
-
-    tg.on('callback_query', (message) => {
-        info(`Callback query:`, message);
-    });
-
     tg.on('message', (message) => {
-        info(`Message:`, message);
-
         const user = message.from;
 
         if (!message.text) {
@@ -155,7 +138,6 @@ export const bot = (tg: TelegramBot, config: Config) => {
 
         if (isCommand) {
             const commandItem = tree[command];
-            info(`Launch command:`, commandItem);
 
             if (!commandItem || commandItem.type !== ConfigType.Command) {
                 return dynamic(message, config.unknownMessage)

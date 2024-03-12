@@ -10,7 +10,6 @@ import { knex } from '../../constants';
 import { UserFromWebhook } from '../../types/general';
 
 export const get_start_message = (buttons: Buttons) => (user: User, message: Message) => {
-    info(`Event from start command!: `, user, message);
     const user_link_id = head(message.text!.split(' ').slice(1));
 
     const success_response = (student: GetStudentResponse): ResponseItem => ({

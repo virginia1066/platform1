@@ -40,4 +40,4 @@ jobs:
             cd ${{ vars.PROJECT_PATH }}
             git pull https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/virginia1066/platform1.git main
             docker-compose build
-            docker-compose up -d
+            docker-compose up -d --force-recreate root-nginx --force-recreate client-nginx
