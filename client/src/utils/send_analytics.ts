@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
 type Props = {
     event_type: string;
     props?: Record<string, string | number | undefined>
@@ -8,11 +6,11 @@ type Props = {
 const get_id = () => {
     const get_local_id = () => {
         try {
-            const id = localStorage.getItem('user_id') ?? randomUUID();
+            const id = localStorage.getItem('user_id') ?? crypto.randomUUID();
             localStorage.setItem('user_id', id);
             return id;
         } catch (e) {
-            return randomUUID();
+            return crypto.randomUUID();
         }
     }
 
