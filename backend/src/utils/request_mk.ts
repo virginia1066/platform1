@@ -55,6 +55,17 @@ export const get_student = cache(({ student_id }: GetStudentProps) =>
             .then<GetStudentResponse>(parse_response),
     make_time(24, 'hours'));
 
+export const get_student_list =
+    (query: StudentListQuery) => private_req(`https://api.moyklass.com/v1/company/users`, {  }, query)
+        .then<{ users: Array<GetStudentResponse> }>(parse_response);
+
+type StudentListQuery = {
+    limit?: number;
+    offset?: number;
+    sort?: 'id' | 'name' | 'createdAt' | 'updatedAt';
+    sortDirection?: 'asc' | 'desc';
+}
+
 export const update_student = (student_id: number, update_props: UpdateStudentProps) =>
     private_req(`https://api.moyklass.com/v1/company/users/${student_id}`, {
         method: 'POST',

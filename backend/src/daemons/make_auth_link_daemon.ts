@@ -23,15 +23,14 @@ export const make_auth_link_daemon = () => {
     const make_auth_link = (class_user_id: number) => {
         info(`Add auth link for user ${class_user_id}`);
         return get_student({ student_id: class_user_id })
-            .then(tap(info))
             .then(add_email)
-            .then(tap(info))
-            .then((student) => {
+            .then(() => {
                 return knex('users_from_webhook')
                     .select('*')
                     .where({ class_id: class_user_id })
                     .then<UserFromWebhook | undefined>(head)
                     .then((link_data) => {
+
                         if (!link_data) {
                             throw new Error(`Has no link data for user!`);
                         }
@@ -47,11 +46,11 @@ export const make_auth_link_daemon = () => {
             .then(tap(info));
     };
 
-    MESSAGE_BUS
-        .on('user_create', ({ class_id }) => make_auth_link(class_id));
+    // MESSAGE_BUS
+    //     .on('user_create', ({ class_id }) => make_auth_link(class_id));
 
-    knex('users_from_webhook')
-        .select('class_id')
-        .where({ attribute_status: WebhookUserStatus.Pending })
-        .then(map(pipe(prop('class_id'), make_auth_link)));
+    // knex('users_from_webhook')
+    //     .select('class_id')
+    //     .where({ attribute_status: WebhookUserStatus.Pending })
+    //     .then(map(pipe(prop('class_id'), make_auth_link)));
 };

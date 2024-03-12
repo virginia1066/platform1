@@ -6,6 +6,7 @@ import { WebhookUserStatus } from '../../../../../types/general';
 import { make_id } from '../../../../../utils/make_id';
 import { randomUUID } from 'crypto';
 import { info, warn } from '../../../../../utils/log';
+import { make_link_params } from '../../../../../utils/make_link_params';
 
 const body_schema = object().shape({
     event: string().required().oneOf(['user_new']),
@@ -37,22 +38,7 @@ const middleware: Middleware = (ctx, next) => {
     const { object: { userId, name } } = yup_validate_sync(body_schema, ctx.request.body);
     info(`Get user create event from my class! ${userId}`, ctx.request.body);
 
-    /**
-     * Код для отладки, пропускаем всех пользователей кроме тестового ученика
-     */
-    if (!/Тестовый Ученик \d/.test(name)) {
-        warn(`Not test student! Skip student!`);
-        ctx.body = { ok: true };
-        return next()
-    }
-
-    return knex('users_from_webhook')
-        .insert([{
-            class_id: userId,
-            attribute_status: WebhookUserStatus.Pending,
-            link_param: make_id(`link-${userId}-${randomUUID()}`)
-        }])
-        .returning('*')
+    return make_link_params({ users: [{ userId }] })
         .then(([user]) => {
             MESSAGE_BUS.trigger('user_create', user);
             ctx.body = { ok: true };
