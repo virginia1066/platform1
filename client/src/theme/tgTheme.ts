@@ -9,6 +9,7 @@ import { Checkbox } from "./components/Checkbox";
 import { FormLabel } from "./components/FormLabel";
 import { FormError } from "./components/FormError";
 import { Input } from "./components/Input";
+import { themeParams } from "./defaults";
 
 const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), {
     colors: Colors,
@@ -30,7 +31,8 @@ const tgTheme = extendTheme(withDefaultColorScheme({ colorScheme: 'primary' }), 
         global: {
             "html, body, #root": {
                 height: '100%',
-                minHeight: '100%',                
+                minHeight: '100%', 
+                backgroundColor: themeParams.bg_color               
             },
             "@keyframes fadeIn": {
                 "0%": {
