@@ -9,6 +9,7 @@ import { BASE_URL } from './constants';
 import { Error403 } from './pages/Error403';
 import { useEffect, useState } from 'react';
 import { Navigate } from './hoks/Navigate';
+import { send_analytics } from './utils/send_analytics';
 
 const NavigatedDeckList = Navigate(DeckList);
 const NavigatedDeckEdit = Navigate(DeckEdit);
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
         element: <NavigatedDeckList/>,
     },
     {
-        path: `${BASE_URL}/edit`,
+        path: `${BASE_URL}/edit/:id`,
         element: <NavigatedDeckEdit/>,
     },
     {
@@ -39,6 +40,13 @@ export const App = () => {
     const [ready, setReady] = useState<boolean>(false);
 
     useEffect(() => {
+        send_analytics({
+            event_type: 'WebApp Vocabulary Open',
+            props: {
+                theme: Telegram.WebApp.colorScheme,
+                page: window.location.pathname
+            }
+        })
         setReady(true);
     }, []);
 

@@ -5,4 +5,5 @@ export const Colors = {
     "purple": "#6D449C" ,
 };
 
-export const get_triteary_bg_color = (colorSheme:string) => colorSheme === 'light' ? '#DFDFE7' : '#3E3E3E';
+export const get_triteary_bg_color = (colorScheme:string) =>
+    colorScheme === 'light' ? '#DFDFE7' : '#3E3E3E';

@@ -47,16 +47,16 @@ export const WordEdit = ({ word, index, can_remove, errors }: Props) => {
         <Block bgColor={get_triteary_bg_color(colorScheme)} flexDir={'column'}>
             <Flex w={'full'} gap={4} alignItems={'center'}>
                 <Flex direction={'column'} w={'full'} gap={3}>
-                    <FormElement placeholder={t('placeholder.lang1')} default_value={word.ru}
-                        error={errors[`words[${index}].ru`]}
-                        onFocus={on_focus_ru}
-                        onBlur={on_blur_ru}
-                        onChange={on_change_ru} />
                     <FormElement placeholder={t('placeholder.lang2')} default_value={word.en}
                         error={errors[`words[${index}].en`]}
                         onFocus={on_focus_en}
                         onBlur={on_blur_en}
                         onChange={on_change_en} />
+                    <FormElement placeholder={t('placeholder.lang1')} default_value={word.ru}
+                        error={errors[`words[${index}].ru`]}
+                        onFocus={on_focus_ru}
+                        onBlur={on_blur_ru}
+                        onChange={on_change_ru} />
                 </Flex>
                 <IconButton size={'xs'}
                     onClick={on_delete_click}

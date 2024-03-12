@@ -55,7 +55,7 @@ export const launch_tg_service = () => {
                 id: 'start-error',
                 type: ConfigType.Text,
                 text: analytics_action(
-                    { event_type: 'Telegram Start Error' },
+                    { event_type: 'Telegram Auth Fail' },
                     always(t('telegram.start.fail', { admin_user: TG_MK_ADMIN_USER }))
                 ),
             },
