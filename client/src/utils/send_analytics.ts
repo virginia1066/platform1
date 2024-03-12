@@ -1,7 +1,24 @@
+import { randomUUID } from 'node:crypto';
+
 type Props = {
     event_type: string;
     props?: Record<string, string | number | undefined>
 }
+
+const get_id = () => {
+    const get_local_id = () => {
+        try {
+            const id = localStorage.getItem('user_id') ?? randomUUID();
+            localStorage.setItem('user_id', id);
+            return id;
+        } catch (e) {
+            return randomUUID();
+        }
+    }
+
+    return Telegram.WebApp.initDataUnsafe.user?.id ?? get_local_id();
+}
+
 export const send_analytics = (props: Props) =>
     fetch(`/api/v1/event/log`, {
         method: 'POST',
@@ -9,7 +26,7 @@ export const send_analytics = (props: Props) =>
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            user_id: Telegram.WebApp.initDataUnsafe.user?.id ?? -1,
+            user_id: get_id(),
             event_type: props.event_type,
             event_properties: { ...(props.props ?? {}) }
         })

@@ -2,6 +2,7 @@ import { parse_response } from './parse_response';
 import { warn } from './log';
 import { always, pipe } from 'ramda';
 import fetch from 'node-fetch';
+import { randomUUID } from 'crypto';
 
 export const send_amplitude_event = ({ event_type, event_properties, user_id }: EventParams) => {
     return fetch('https://api2.amplitude.com/2/httpapi', {
@@ -14,7 +15,7 @@ export const send_amplitude_event = ({ event_type, event_properties, user_id }: 
             'api_key': 'bf51792a31a45c4683931d13323572c8',
             'events': [{
                 event_type,
-                user_id: user_id === -1 ? `Unknown user without id` : user_id,
+                user_id: user_id === -1 ? `unknown-${randomUUID()}` : user_id,
                 event_properties: event_properties
                     ? Object.assign({ from: 'server' }, event_properties)
                     : { from: 'server' }
