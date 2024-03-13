@@ -6,6 +6,7 @@ import { insert_new_words } from './insert_new_words';
 import { info } from '../../../utils/log';
 import { Optional } from '../../../types/utils';
 import { knex } from '../../../constants';
+import { get_words_to_delete } from './get_words_to_delete';
 
 const add_words = (words: Array<Omit<Word, 'id'>>, pack: Pack, insert_id: string) => {
     if (!words.length) {
@@ -37,6 +38,32 @@ const update_words = (words: Array<EditWord>) => {
         });
 };
 
+const delete_words = (words: Array<Word>) => {
+    if (!words.length) {
+        return Promise.resolve();
+    }
+    const id_list = words.map(prop('id'));
+    info(`Delete words (${words.length}):`, words)
+
+    return knex
+        .transaction((trx) =>
+            Promise
+                .all([
+                    trx('words')
+                        .del()
+                        .where('id', 'in', id_list),
+                    trx('pack_links')
+                        .del()
+                        .where('word_id', 'in', id_list),
+                    trx('learn_cards')
+                        .del()
+                        .where('word_id', 'in', id_list)
+                ])
+                .then(trx.commit)
+                .catch(trx.rollback)
+        );
+};
+
 
 export const add_pack_words = (pack: Pack, words_to_update: Array<NewWord>, insert_id: string): Promise<void> =>
     get_words_by_pack(pack.id, [WordStatus.Active, WordStatus.Deleted])
@@ -51,10 +78,13 @@ export const add_pack_words = (pack: Pack, words_to_update: Array<NewWord>, inse
             const new_words = get_new_words(words, without_id)
                 .map<Omit<Word, 'id'>>(assoc('insert_id', insert_id));
 
+            const words_to_delete = get_words_to_delete(words, without_id);
+
             return Promise
                 .all([
                     add_words(new_words, pack, insert_id),
-                    update_words(with_id)
+                    update_words(with_id),
+                    delete_words(words_to_delete)
                 ])
                 .then(always(void 0));
         });

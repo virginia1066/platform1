@@ -6,6 +6,7 @@ import { pick } from 'ramda';
 import { MyClass } from '../types/my_class';
 import { make_query } from './make_query';
 import { cache, make_time } from './cache';
+import { info } from './log';
 
 const get_company_token_from_api = () =>
     REQUEST_QUEUE.push(() => fetch(`https://api.moyklass.com/v1/company/auth/getToken`, {
@@ -40,15 +41,21 @@ const get_company_token = cache((): Promise<{ token: string }> =>
 
 const private_req = (url: string, init?: RequestInit, query?: Record<string, string | number | Array<string | number>>) =>
     get_company_token()
-        .then(({ token }) => REQUEST_QUEUE.push(() => fetch(`${url}${make_query(query ?? {})}`, {
-            ...init,
-            method: init?.method ?? 'GET',
-            headers: Object.assign({
-                'Content-Type': 'application/json',
-                'X-Access-Token': token
-            }, init?.headers ?? Object.create(null)),
-            body: init?.body,
-        })));
+        .then(({ token }) => REQUEST_QUEUE.push(() => {
+            const req_url = `${url}${make_query(query ?? {})}`;
+            const req_init: RequestInit = {
+                ...init,
+                method: init?.method ?? 'GET',
+                headers: Object.assign({
+                    'Content-Type': 'application/json',
+                    'X-Access-Token': token
+                }, init?.headers ?? Object.create(null)),
+                body: init?.body,
+            };
+            info('Request:', req_url);
+
+            return fetch(req_url, req_init);
+        }));
 
 export const get_student = cache(({ student_id }: GetStudentProps) =>
         private_req(`https://api.moyklass.com/v1/company/users/${student_id}`)
@@ -56,7 +63,7 @@ export const get_student = cache(({ student_id }: GetStudentProps) =>
     make_time(24, 'hours'));
 
 export const get_student_list =
-    (query: StudentListQuery) => private_req(`https://api.moyklass.com/v1/company/users`, {  }, query)
+    (query: StudentListQuery) => private_req(`https://api.moyklass.com/v1/company/users`, {}, query)
         .then<{ users: Array<GetStudentResponse> }>(parse_response);
 
 type StudentListQuery = {
@@ -64,6 +71,7 @@ type StudentListQuery = {
     offset?: number;
     sort?: 'id' | 'name' | 'createdAt' | 'updatedAt';
     sortDirection?: 'asc' | 'desc';
+    createdAt?: string | Array<string>;
 }
 
 export const update_student = (student_id: number, update_props: UpdateStudentProps) =>
@@ -150,7 +158,8 @@ export const get_student_subscriptions = cache((props: GetUserSubscriptionsProps
 export const update_user_attribute = (student_id: number, attr_id: number, value: string) =>
     private_req(`https://api.moyklass.com/v1/company/users/${student_id}/attribute/${attr_id}`, {
         method: 'POST',
-        body: JSON.stringify({ value })
+        body: JSON.stringify({ value }),
+        timeout: 5_000
     }).then<{ value: string }>(parse_response);
 
 export type PaymentsResponse = {
@@ -193,7 +202,6 @@ type GetUserSubscriptionsResponse = {
         }
     }>
 }
-
 
 
 type GetUserSubscriptionsProps = {

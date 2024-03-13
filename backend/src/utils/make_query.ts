@@ -1,13 +1,14 @@
 export const make_query = (data: Record<string, string | number | Array<string | number>>) => {
-    const query_parts = Object.entries(data).reduce((parts, [key, value]) => {
+    const query_parts = Object.entries(data).reduce((params, [key, value]) => {
         if (Array.isArray(value)) {
-            const sub_query = value.map((v) => `${key}[]=${v}`).join('&');
-            parts.push(sub_query);
+            value.forEach(v => {
+                params.append(key, String(v));
+            });
         } else {
-            parts.push(`${key}=${value}`);
+            params.append(key, String(value));
         }
-        return parts;
-    }, [] as Array<string>);
+        return params;
+    }, new URLSearchParams());
 
-    return query_parts.length ? `?${query_parts.join('&')}` : '';
+    return query_parts.size ? `?${query_parts.toString()}` : '';
 };

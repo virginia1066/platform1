@@ -1,17 +1,15 @@
 import { Middleware } from 'koa';
 import { yup_validate_sync } from '../../../../../utils/yup_validate';
 import { number, object, string } from 'yup';
-import { knex, MESSAGE_BUS } from '../../../../../constants';
-import { WebhookUserStatus } from '../../../../../types/general';
-import { make_id } from '../../../../../utils/make_id';
-import { randomUUID } from 'crypto';
-import { info, warn } from '../../../../../utils/log';
+import { MESSAGE_BUS } from '../../../../../constants';
+import { info } from '../../../../../utils/log';
 import { make_link_params } from '../../../../../utils/make_link_params';
 
 const body_schema = object().shape({
     event: string().required().oneOf(['user_new']),
     object: object().required().shape({
         userId: number().required().integer(),
+        createdAt: string().required(),
         name: string().required()
     })
 });
@@ -35,10 +33,10 @@ const body_schema = object().shape({
  *           type: object
  */
 const middleware: Middleware = (ctx, next) => {
-    const { object: { userId, name } } = yup_validate_sync(body_schema, ctx.request.body);
+    const { object: { userId, createdAt } } = yup_validate_sync(body_schema, ctx.request.body);
     info(`Get user create event from my class! ${userId}`, ctx.request.body);
 
-    return make_link_params({ users: [{ userId }] })
+    return make_link_params([{ class_id: userId, user_created_at: createdAt }])
         .then(([user]) => {
             MESSAGE_BUS.trigger('user_create', user);
             ctx.body = { ok: true };

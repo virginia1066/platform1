@@ -1,4 +1,4 @@
-import { create_users } from './db/create_users';
+import { create_users_from_webhook } from './db/create_users_from_webhook';
 import { create_tokens } from './db/create_tokens';
 import { create_tg_users } from './db/create_tg_users';
 import { create_wokobular_tables } from './db/create_wokobular_tables';
@@ -14,10 +14,10 @@ import { create_wh_home_task } from './db/create_wh_home_task';
 import { home_task_words_daemon } from './daemons/home_task_words_daemon/home_task_words_daemon';
 import { notification_daemon } from './daemons/notification_daemon';
 
-create_users()
+create_users_from_webhook()
     .then(() =>
         Promise.all([
-            create_users(),
+            create_users_from_webhook(),
             create_tokens(),
             create_tg_users(),
             create_wokobular_tables(),

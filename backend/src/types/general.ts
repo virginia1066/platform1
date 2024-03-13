@@ -1,9 +1,10 @@
 import { Dayjs } from 'dayjs';
 
-export type UserFromWebhook = {
+export type UserFromWebhook<Date = string> = {
     class_id: number;
     link_param: string;
     attribute_status: WebhookUserStatus;
+    user_created_at: Date;
 }
 
 export enum WebhookHomeTaskStatus {
@@ -24,12 +25,6 @@ export enum WebhookUserStatus {
 export type CompanyToken<Date = Dayjs> = {
     token: string;
     expiredAt: Date;
-}
-
-export type UserToken<Date = Dayjs> = {
-    token: string;
-    expiredAt: Date;
-    student_id: number;
 }
 
 export type TgUser = {

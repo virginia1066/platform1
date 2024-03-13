@@ -47,7 +47,6 @@ export const google_words_daemon = () => {
                             return void 0;
                         }
 
-
                         const get_result_promise = () => {
                             if (value.pack_name.length > MAX_PACK_NAME_LENGTH) {
                                 warn(`Wrong pack name from google sheets!`, value.pack_name);
