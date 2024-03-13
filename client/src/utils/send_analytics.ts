@@ -20,11 +20,10 @@ const get_id = () => {
     return Telegram.WebApp.initDataUnsafe.user?.id ?? get_local_id();
 };
 
-init(AMPLITUDE_API_KEY);
+init(AMPLITUDE_API_KEY, String(get_id()));
 
 export const send_analytics = (props: Props) => {
     track({
-        user_id: String(get_id()),
         event_type: props.event_type,
         event_properties: { ...(props.props ?? Object.create(null)) }
     });

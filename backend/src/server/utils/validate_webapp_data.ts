@@ -60,13 +60,9 @@ export const validate_webapp_data = (init_data: string) => {
             .map(([key, value]) => `${key}=${value}`)
             .join('\n');
 
-        info(`Check string:`, check_string);
-
         const calculated_hash = createHmac('sha256', secret.digest())
             .update(check_string)
             .digest('hex');
-
-        info(calculated_hash, hash);
 
         if (calculated_hash === hash) {
             return target_data;
@@ -120,14 +116,10 @@ export const make_test_auth = (tg_id: number) => {
         .update(check_string)
         .digest('hex');
 
-    const result = [
+    return [
         `auth_date=${auth_date}`,
         `user=${user}`,
         `query_id=${query_id}`,
         `hash=${hash}`
     ].join('&');
-
-    info(`Test string: ${result}`);
-
-    return result;
 }
