@@ -1,13 +1,13 @@
 import { Middleware } from 'koa';
-import { SESSION_NAME } from '../../constants';
+import { AUTH_HEADER_NAME } from '../../constants';
 import { AuthError } from './errors';
 import { parse } from '../utils/token';
 import { Token } from '../../../compiled-proto/token';
 
 export const check_token_M: MiddlewareWithToken = (ctx, next) => {
-    const token_str = ctx.cookies.get(SESSION_NAME);
+    const token_str = ctx.headers[AUTH_HEADER_NAME.toLowerCase()];
 
-    if (!token_str) {
+    if (!token_str || typeof token_str !== 'string') {
         throw new AuthError('Has no token!');
     }
 

@@ -1,5 +1,5 @@
 import { knex, MASS_SEND_CHANNEL_ID, TG } from '../constants';
-import { error, info } from '../utils/log';
+import { error, info, warn } from '../utils/log';
 import dayjs from 'dayjs';
 import { AdminMessageStatus } from '../types/general';
 import { interval } from '../utils/interval';
@@ -21,6 +21,12 @@ export const mass_send_service = () => {
                 updated_at: dayjs().toISOString(),
                 status: AdminMessageStatus.Pending,
                 message_id: message.message_id,
+            })
+            .then(() => {
+                info(`Add new message to mass send!`);
+            })
+            .catch((e) => {
+                error(`Error add message for mass send!`, e, message);
             });
     });
 
@@ -33,7 +39,13 @@ export const mass_send_service = () => {
 
         knex('mass_send_tg')
             .update('updated_at', dayjs().toISOString())
-            .where('message_id', message.message_id);
+            .where('message_id', message.message_id)
+            .then(() => {
+                info(`Update done.`);
+            })
+            .catch(() => {
+                error(`Update fail!`, message);
+            });
     });
 
     interval(() =>
@@ -54,7 +66,7 @@ export const mass_send_service = () => {
                                         .then(() => send(id, chat_id, message_id));
                                 }
                                 if (e.response.statusCode === 400) {
-                                    info(`Message was deleted!`);
+                                    warn(`Message was deleted or can't send!`, e.message);
                                     return void 0;
                                 }
                                 error(e);
@@ -70,5 +82,5 @@ export const mass_send_service = () => {
                                 .update('status', AdminMessageStatus.Done)
                                 .where('message_id', message.message_id));
                 }, list))
-        , make_time(15, 'minutes'));
+        , make_time(1, 'minutes'));
 };

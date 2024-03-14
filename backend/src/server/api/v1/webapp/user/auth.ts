@@ -9,7 +9,7 @@ import { create } from '../../../../utils/token';
 import { make_time } from '../../../../../utils/cache';
 import { Token } from '../../../../../../compiled-proto/token';
 import { base64Encode } from '@waves/ts-lib-crypto';
-import { SESSION_NAME } from '../../../../../constants';
+import { AUTH_HEADER_NAME } from '../../../../../constants';
 import { set_body } from '../../../../utils/set_body';
 import { get_student, GetStudentResponse } from '../../../../../utils/request_mk';
 import { applySpec, identity, pipe } from 'ramda';
@@ -98,17 +98,12 @@ export const auth_M: Middleware = (ctx, next) =>
 
                     const token_str = base64Encode(Token.encode(token).finish());
 
-                    ctx.cookies.set(SESSION_NAME, token_str, {
-                        httpOnly: true,
-                        path: '/',
-                        maxAge: make_time(1, 'day')
-                    });
-
                     return {
                         name,
                         phone,
                         balance: balans,
-                        server_time: Date.now()
+                        server_time: Date.now(),
+                        token: token_str
                     };
                 })
                 .then(set_body(ctx))
