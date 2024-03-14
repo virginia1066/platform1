@@ -45,3 +45,15 @@ export type SubscriptionEndNotify = {
     notify_status: SubscriptionEndStatus;
     created_at: string;
 }
+
+export type AdminMessage<Date = string> = {
+    message_id: number;
+    created_at: Date;
+    updated_at: Date;
+    status: AdminMessageStatus;
+}
+
+export enum AdminMessageStatus {
+    Pending = 'PENDING',
+    Done = 'DONE'
+}

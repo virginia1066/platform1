@@ -40,6 +40,7 @@ export const SESSION_NAME = 'SESSION';
 export const TG_BOT_NAME = get_env_strict('TG_BOT_NAME');
 export const TG_LINK_ATTRIBUTE_ID = get_env_strict('TG_LINK_ATTRIBUTE_ID', Number);
 export const SERVER_PORT = get_env_strict('SERVER_PORT', Number);
+export const MASS_SEND_CHANNEL_ID = get_env_strict('MASS_SEND_CHANNEL_ID', Number);
 export const REQUEST_QUEUE = new RequestQueue(CLASS_RPS);
 export const MY_CLASS_API_KEY = get_env_strict('MY_CLASS_API_KEY');
 export const TG_MK_ADMIN_USER = get_env_strict('TG_MK_ADMIN_USER');

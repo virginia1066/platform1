@@ -14,6 +14,8 @@ import { create_wh_home_task } from './db/create_wh_home_task';
 import { home_task_words_daemon } from './daemons/home_task_words_daemon/home_task_words_daemon';
 import { notification_daemon } from './daemons/notification_daemon';
 import { create_subscription_notify } from './db/create_subscription_notify';
+import { mass_send_service } from './telegram/mass_send_service';
+import { mass_send_tg } from './db/mass_send_tg';
 
 create_users_from_webhook()
     .then(() =>
@@ -23,7 +25,8 @@ create_users_from_webhook()
             create_tg_users(),
             create_wokobular_tables(),
             create_wh_home_task(),
-            create_subscription_notify()
+            create_subscription_notify(),
+            mass_send_tg()
         ]))
     .then(pipe(
         make_auth_link_daemon,
@@ -33,5 +36,6 @@ create_users_from_webhook()
     ))
     .then(pipe(
         create_server,
-        launch_tg_service
+        launch_tg_service,
+        mass_send_service
     ));
