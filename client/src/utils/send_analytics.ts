@@ -23,7 +23,7 @@ const get_id = () => {
             localStorage.setItem('user_id', id);
             return id;
         } catch (e) {
-            return crypto.randomUUID();
+            return generate_id();
         }
     };
 
