@@ -12,9 +12,12 @@ import { UserFromWebhook } from '../../types/general';
 export const get_start_message = (buttons: Buttons) => (user: User, message: Message) => {
     const user_link_id = head(message.text!.split(' ').slice(1));
 
+    const parse_student_name = (name: string): string =>
+        head(name.trim().split(/\s+/)) ?? '';
+
     const success_response = (student: GetStudentResponse): ResponseItem => ({
         type: ConfigType.Text,
-        text: t('telegram.start.success', { student_name: student.name }),
+        text: t('telegram.start.success', { student_name: parse_student_name(student.name) }),
         buttons
     });
 

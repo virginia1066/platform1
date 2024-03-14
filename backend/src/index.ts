@@ -13,6 +13,7 @@ import { HOME_TASK_WORDS_REG } from './constants';
 import { create_wh_home_task } from './db/create_wh_home_task';
 import { home_task_words_daemon } from './daemons/home_task_words_daemon/home_task_words_daemon';
 import { notification_daemon } from './daemons/notification_daemon';
+import { create_subscription_notify } from './db/create_subscription_notify';
 
 create_users_from_webhook()
     .then(() =>
@@ -21,7 +22,8 @@ create_users_from_webhook()
             create_tokens(),
             create_tg_users(),
             create_wokobular_tables(),
-            create_wh_home_task()
+            create_wh_home_task(),
+            create_subscription_notify()
         ]))
     .then(pipe(
         make_auth_link_daemon,

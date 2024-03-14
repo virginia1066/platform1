@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { wait } from '../utils/wait';
 import { warn } from '../utils/log';
 import { getFixedT } from 'i18next';
+import { log_query } from '../utils/log_query';
 
 export const notification_daemon = () => {
     const t = getFixedT(null, null, 'server');
@@ -24,11 +25,11 @@ export const notification_daemon = () => {
         return targetTime.diff(now);
     };
     const loop = () =>
-        knex('learn_cards')
+        log_query(knex('learn_cards')
             .select<Array<Item<string>>>(knex.raw('COUNT(*) as card_count, "student_id", "users"."tg_id" as tg_id'))
             .innerJoin('tg_users as users', 'users.mk_id', 'learn_cards.student_id')
             .where('due', '<=', knex.raw('CURRENT_TIMESTAMP'))
-            .groupBy('student_id', 'users.tg_id')
+            .groupBy('student_id', 'users.tg_id'))
             .then(map(evolve({
                 card_count: Number
             })))

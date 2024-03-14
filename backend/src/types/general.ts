@@ -31,3 +31,15 @@ export type TgUser = {
     tg_id: number;
     mk_id: number;
 }
+
+export enum SubscriptionEndStatus {
+    Pending = 'PENDING',
+    Done = 'DONE'
+}
+
+export type SubscriptionEndNotify = {
+    subscription_id: number;
+    student_id: number;
+    end_date: string;
+    notify_status: SubscriptionEndStatus
+}

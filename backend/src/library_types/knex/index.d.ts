@@ -1,4 +1,4 @@
-import { CompanyToken, HomeTaskWebhook, TgUser, UserFromWebhook } from '../../types/general';
+import { CompanyToken, HomeTaskWebhook, SubscriptionEndNotify, TgUser, UserFromWebhook } from '../../types/general';
 import { LearnCard, LessonUpdate, Pack, PackLink, Word } from '../../types/Wokobular';
 
 
@@ -21,6 +21,8 @@ declare module 'knex/types/tables' {
         learn_cards: LearnCard;
 
         lesson_updates: LessonUpdate;
+
+        subscription_notify: SubscriptionEndNotify;
     }
 
 }
