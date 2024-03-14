@@ -34,12 +34,14 @@ export type TgUser = {
 
 export enum SubscriptionEndStatus {
     Pending = 'PENDING',
-    Done = 'DONE'
+    Done = 'DONE',
+    NoTelegram = 'NO_TELEGRAM'
 }
 
 export type SubscriptionEndNotify = {
     subscription_id: number;
     student_id: number;
     end_date: string;
-    notify_status: SubscriptionEndStatus
+    notify_status: SubscriptionEndStatus;
+    created_at: string;
 }

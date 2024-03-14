@@ -55,10 +55,14 @@ export const get_payments = (user: User) =>
                 ].join('\n');
             });
 
+            if (!tpl.length) {
+                tpl.push(t('no_payments'));
+            }
+
             return new MessageSpliter([
                 ...tpl,
                 new MessageSpliter([
-                    t('balance', {
+                    t(balance >= 0 ? 'balance' : 'balance_negative', {
                         count: balance,
                         balance: new BigNumber(balance).toFormat(),
                         admin: TG_MK_ADMIN_USER
