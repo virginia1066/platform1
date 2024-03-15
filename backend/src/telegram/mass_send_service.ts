@@ -54,7 +54,7 @@ export const mass_send_service = () => {
             Promise
                 .all([
                     knex('mass_send_tg')
-                        .where('created_at', '>=', dayjs().subtract(MASS_SEND_DELAY_MINUTES, 'minutes').toISOString())
+                        .where('created_at', '<=', dayjs().subtract(MASS_SEND_DELAY_MINUTES, 'minutes').toISOString())
                         .where('status', AdminMessageStatus.Pending),
                     knex('tg_users')
                 ])
