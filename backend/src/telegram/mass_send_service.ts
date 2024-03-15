@@ -1,4 +1,4 @@
-import { knex, MASS_SEND_CHANNEL_ID, TG } from '../constants';
+import { knex, MASS_SEND_CHANNEL_ID, MASS_SEND_DELAY_MINUTES, TG } from '../constants';
 import { error, info, warn } from '../utils/log';
 import dayjs from 'dayjs';
 import { AdminMessageStatus } from '../types/general';
@@ -22,6 +22,8 @@ export const mass_send_service = () => {
                 status: AdminMessageStatus.Pending,
                 message_id: message.message_id,
             })
+            .onConflict('message_id')
+            .merge()
             .then(() => {
                 info(`Add new message to mass send!`);
             })
@@ -52,7 +54,7 @@ export const mass_send_service = () => {
             Promise
                 .all([
                     knex('mass_send_tg')
-                        .where('created_at', '>=', dayjs().subtract(15, 'minutes').toISOString())
+                        .where('created_at', '>=', dayjs().subtract(MASS_SEND_DELAY_MINUTES, 'minutes').toISOString())
                         .where('status', AdminMessageStatus.Pending),
                     knex('tg_users')
                 ])

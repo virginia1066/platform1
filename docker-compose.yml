@@ -60,6 +60,7 @@ services:
       - MIN_NOTIFY_WORDS_COUNT=${MIN_NOTIFY_WORDS_COUNT}
       - NOTIFY_REPEAT_TIME=${NOTIFY_REPEAT_TIME}
       - MASS_SEND_CHANNEL_ID=${MASS_SEND_CHANNEL_ID}
+      - MASS_SEND_DELAY_MINUTES=${MASS_SEND_DELAY_MINUTES}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:

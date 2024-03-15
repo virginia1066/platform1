@@ -46,6 +46,7 @@ export const MY_CLASS_API_KEY = get_env_strict('MY_CLASS_API_KEY');
 export const TG_MK_ADMIN_USER = get_env_strict('TG_MK_ADMIN_USER');
 export const GOOGLE_SHEETS_API_KEY = get_env_strict('GOOGLE_SHEETS_API_KEY');
 export const GOOGLE_SHEETS_ID = get_env_strict('GOOGLE_SHEETS_ID');
+export const MASS_SEND_DELAY_MINUTES = get_env_strict('MASS_SEND_DELAY_MINUTES', Number);
 export const MK_DATE_PATTERN = 'YYYY-MM-DD';
 export const MAX_TG_MESSAGE_LENGTH = 1_024;
 export const OFFLINE_FILIAL_ID = 30082;
