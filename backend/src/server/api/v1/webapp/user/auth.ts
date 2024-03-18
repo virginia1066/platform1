@@ -33,7 +33,7 @@ const get_schema = () =>
  *   post:
  *     summary: Получить токен авторизации для сессии
  *     description: >
- *       Проставляет токен авторизации в сессию
+ *       Возвращает токен авторизации для сессии
  *     tags:
  *       - User Public API
  *     parameters:
@@ -65,6 +65,9 @@ const get_schema = () =>
  *             balance:
  *               type: number
  *               description: Баланс студента из МК
+ *             token:
+ *               type: string
+ *               description: Токен для всех запросов юзера
  *       '401':
  *         description: Ошибки авторизации
  *       '403':

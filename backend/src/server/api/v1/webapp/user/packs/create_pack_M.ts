@@ -18,6 +18,48 @@ const schema = object().shape({
     }))
 });
 
+/**
+ * @swagger
+ * /api/v1/web-app/user/packs/new:
+ *   put:
+ *     summary: Создание пользовательской колоды со словами
+ *     description: Создание пользовательской колоды со словами
+ *     tags:
+ *       - User Private API
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: Данные колоды
+ *         schema:
+ *           type: object
+ *           required:
+ *             - name
+ *             - words
+ *           properties:
+ *             name:
+ *               type: string
+ *             words:
+ *               type: object
+ *               properties:
+ *                 ru:
+ *                   type: string
+ *                 en:
+ *                   type: string
+ *                 status:
+ *                   type: string
+ *                   enum: [ACTIVE, DELETED]
+ *     responses:
+ *       '200':
+ *         description: >
+ *           Колода создана успешно
+ *         schema:
+ *           type: object
+ *           properties:
+ *             ok:
+ *               type: boolean
+ */
 export const create_pack_M: MiddlewareWithToken = (ctx, next) =>
     yup_validate(schema, ctx.request.body, ctx.state)
         .then(({ name, words }) => {

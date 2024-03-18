@@ -12,7 +12,41 @@ const schema = object().shape({
         lessonId: number().required().integer()
     })
 });
-
+/**
+ * @swagger
+ * /api/v1/webhooks/on-home-task-update:
+ *   post:
+ *     description: Вебхук который должен вызываться за X дней до конуа абонемента
+ *     tags: [My Class Webhook]
+ *   consumes:
+ *       - application/json
+ *   parameters:
+ *     - name: event
+ *       in: body
+ *       type: string
+ *       enum: [user_new]
+ *     - name: object
+ *       in: body
+ *       type: object
+ *       schema:
+ *         type: object
+ *         required:
+ *           - userId
+ *           - createdAt
+ *           - name
+ *         properties:
+ *           userId:
+ *             type: integer
+ *           createdAt:
+ *             type: string
+ *           name:
+ *             type: string
+ *   responses:
+ *     200:
+ *       description: login
+ *       schema:
+ *         type: object
+ */
 export const on_home_task_update_M: Middleware = (ctx, next) =>
     yup_validate(schema, ctx.request.body)
         .then(({ object: { lessonId } }) => {

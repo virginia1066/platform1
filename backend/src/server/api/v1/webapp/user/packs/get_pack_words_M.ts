@@ -13,7 +13,57 @@ import { log_query } from '../../../../../../utils/log_query';
 const schema = object().shape({
     pack_id: number().required().integer()
 });
-
+/**
+ * @swagger
+ * /api/v1/web-app/user/packs/:pack_id:
+ *   get:
+ *     summary: Получение данных колоды
+ *     description: Получение данных колоды (слова + статистика)
+ *     tags:
+ *       - User Private API
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: pack_id
+ *         in: path
+ *         description: id колоды
+ *         type: integer
+ *     responses:
+ *       '200':
+ *         description: Данные колоды
+ *         schema:
+ *           type: object
+ *           properties:
+ *             words:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   ru:
+ *                     type: string
+ *                   en:
+ *                     type: string
+ *                   status:
+ *                     type: string
+ *                     enum: [ACTIVE, DELETED]
+ *             stats:
+ *               type: object
+ *               properties:
+ *                 count_new:
+ *                   type: number
+ *                 words_count:
+ *                   type: number
+ *                 count_learning:
+ *                   type: number
+ *                 count_review:
+ *                   type: number
+ *                 count_relearning:
+ *                   type: number
+ *                 count_can_be_shown:
+ *                   type: number
+ */
 export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
     yup_validate(schema, ctx.params)
         .then(({ pack_id }) =>

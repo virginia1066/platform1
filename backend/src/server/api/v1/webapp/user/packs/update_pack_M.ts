@@ -17,7 +17,53 @@ const schema = object().shape({
         status: word_status
     }))
 });
-
+/**
+ * @swagger
+ * /api/v1/web-app/user/packs/:pack_id:
+ *   patch:
+ *     summary: Обновить колоду пользователя
+ *     description: >
+ *       Обновляет колоду пользователя
+ *     tags:
+ *       - User Private API
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: pack_id
+ *         in: path
+ *         description: id колоды
+ *         type: integer
+ *       - name: body
+ *         in: body
+ *         description: Данные колоды
+ *         schema:
+ *            type: object
+ *            required:
+ *              - name
+ *              - words
+ *            properties:
+ *              name:
+ *                type: string
+ *              words:
+ *                type: object
+ *                properties:
+ *                  ru:
+ *                    type: string
+ *                  en:
+ *                    type: string
+ *                  status:
+ *                    type: string
+ *                    enum: [ACTIVE, DELETED]
+ *     responses:
+ *       '200':
+ *         description: >
+ *           Успешный запрос. Возвращает массив статистики колод пользователя.
+ *         schema:
+ *            type: object
+ *            properties:
+ *              ok:
+ *                type: boolean
+ */
 export const update_pack_M: MiddlewareWithToken = (ctx, next) =>
     yup_validate(schema, ctx.request.body, { ...ctx.state, ...ctx.params })
         .then(({ name, words }) => {

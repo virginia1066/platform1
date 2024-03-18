@@ -22,6 +22,71 @@ const schema = object().shape({
     ] as const)
 });
 
+/**
+ * @swagger
+ * /api/v1/web-app/user/word-update:
+ *   patch:
+ *     summary: Обновить карточку изучения слова
+ *     description: Обновить карточку изучения слова
+ *     tags:
+ *       - User Private API
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: Данные для обновляения карточки
+ *         schema:
+ *           type: object
+ *           required:
+ *             - word_id
+ *             - pack_id
+ *             - student_choice
+ *           properties:
+ *             word_id:
+ *               type: integer
+ *             pack_id:
+ *               type: integer
+ *             student_choice:
+ *               type: integer
+ *               description: >
+ *                 Один из вариантов:
+ *                 Rating.Again = 1
+ *                 Rating.Hard = 2
+ *                 Rating.Good = 3
+ *                 Rating.Easy = 4
+ *     responses:
+ *       '200':
+ *         description: >
+ *           Успешный запрос. Проставляет токен сессии в cookie.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             stats:
+ *               type: object
+ *               properties:
+ *                 count_new:
+ *                   type: number
+ *                 words_count:
+ *                   type: number
+ *                 count_learning:
+ *                   type: number
+ *                 count_review:
+ *                   type: number
+ *                 count_relearning:
+ *                   type: number
+ *                 count_can_be_shown:
+ *                   type: number
+ *             word:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 ru:
+ *                   type: string
+ *                 en:
+ *                   type: string
+ */
 const check_pack = (pack_id: number, word_id: number, student_id: number): Promise<void> =>
     Promise
         .all([
