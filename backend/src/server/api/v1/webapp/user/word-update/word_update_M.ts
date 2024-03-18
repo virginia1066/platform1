@@ -33,6 +33,10 @@ const schema = object().shape({
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - in: body
  *         name: body
  *         description: Данные для обновляения карточки

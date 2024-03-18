@@ -9,10 +9,15 @@ import { get_user_packs } from '../../../../../utils/get_user_packs';
  *     summary: Получить статистику колод пользователя
  *     description: >
  *       Возвращает статистику по колодам пользователя по его идентификатору.
- *       Требуется наличие httpOnly cookie SESSION. Для  получения сессии смотри
- *       /api/v1/web-app/user/auth.
  *     tags:
  *       - User Private API
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *     responses:
  *       '200':
  *         description: >

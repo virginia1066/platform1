@@ -29,8 +29,12 @@ const schema = object().shape({
  *     consumes:
  *       - application/json
  *     parameters:
- *       - in: body
- *         name: body
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
+ *       - name: body
+ *         in: body
  *         description: Данные колоды
  *         schema:
  *           type: object
@@ -40,16 +44,20 @@ const schema = object().shape({
  *           properties:
  *             name:
  *               type: string
+ *               description: Название колоды
  *             words:
- *               type: object
- *               properties:
- *                 ru:
- *                   type: string
- *                 en:
- *                   type: string
- *                 status:
- *                   type: string
- *                   enum: [ACTIVE, DELETED]
+ *               type: array
+ *               description: Список слов колоды
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   ru:
+ *                     type: string
+ *                   en:
+ *                     type: string
+ *                   status:
+ *                     type: string
+ *                     enum: [ACTIVE, DELETED]
  *     responses:
  *       '200':
  *         description: >

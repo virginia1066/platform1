@@ -18,7 +18,9 @@ const body_schema = object().shape({
  * @swagger
  * /api/v1/webhooks/user-create:
  *   post:
- *     description: Url for webhook after user creation
+ *     description: >
+ *       Вебхук который вызывается при создании нового пользователя.
+ *       Создаёт пользователю атрибут со ссылкой на телеграм бота.
  *     tags: [My Class Webhook]
  *   consumes:
  *       - application/json

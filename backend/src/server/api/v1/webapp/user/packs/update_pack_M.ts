@@ -29,6 +29,10 @@ const schema = object().shape({
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - name: pack_id
  *         in: path
  *         description: id колоды
@@ -46,7 +50,13 @@ const schema = object().shape({
  *                type: string
  *              words:
  *                type: object
+ *                description: >
+ *                  Принимает новые слова без id и те что надо отредактировать с id.
+ *                  Если в метод не передавать существующие в колоде слова, то они останутся в колоде.
  *                properties:
+ *                  id:
+ *                    type: integer
+ *                    optional: true
  *                  ru:
  *                    type: string
  *                  en:
@@ -57,7 +67,7 @@ const schema = object().shape({
  *     responses:
  *       '200':
  *         description: >
- *           Успешный запрос. Возвращает массив статистики колод пользователя.
+ *           Колода успешно обновлена.
  *         schema:
  *            type: object
  *            properties:

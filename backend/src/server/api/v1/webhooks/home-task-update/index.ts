@@ -16,7 +16,7 @@ const schema = object().shape({
  * @swagger
  * /api/v1/webhooks/on-home-task-update:
  *   post:
- *     description: Вебхук который должен вызываться за X дней до конуа абонемента
+ *     description: Вебхук который должен вызываться при редактировании слов в домашнем задании
  *     tags: [My Class Webhook]
  *   consumes:
  *       - application/json

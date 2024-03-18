@@ -14,13 +14,19 @@ const schema = object().shape({
  * @swagger
  * /api/v1/web-app/user/packs/:pack_id:
  *   delete:
- *     summary: Создание пользовательской колоды со словами
- *     description: Создание пользовательской колоды со словами
+ *     summary: Удаление колоды со всеми словами
+ *     description: >
+ *       Удаление колоды со всеми словами. Помечает колоду удалённой, слова не удаляет,
+ *       так как они могут использоваться в других колодах.
  *     tags:
  *       - User Private API
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - name: pack_id
  *         in: path
  *         description: id колоды для удаления

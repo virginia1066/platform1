@@ -24,6 +24,10 @@ const schema = object().shape({
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: X-Session-Token
+ *         in: header
+ *         description: >
+ *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - name: pack_id
  *         in: path
  *         description: id колоды
