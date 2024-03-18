@@ -22,34 +22,34 @@ const body_schema = object().shape({
  *       Вебхук который вызывается при создании нового пользователя.
  *       Создаёт пользователю атрибут со ссылкой на телеграм бота.
  *     tags: [My Class Webhook]
- *   consumes:
- *       - application/json
- *   parameters:
- *     - name: event
- *       in: body
- *       type: string
- *       enum: [user_new]
- *     - name: object
- *       in: body
- *       type: object
- *       schema:
- *         type: object
- *         required:
- *           - userId
- *           - createdAt
- *           - name
- *         properties:
- *           userId:
- *             type: integer
- *           createdAt:
- *             type: string
- *           name:
- *             type: string
- *   responses:
- *     200:
- *       description: login
- *       schema:
- *         type: object
+ *     consumes:
+ *         - application/json
+ *     parameters:
+ *       - name: event
+ *         in: body
+ *         schema:
+ *           type: object
+ *           properties:
+ *             event:
+ *               type: string
+ *               enum: [user_new]
+ *             object:
+ *               type: object
+ *               required:
+ *                 - userId
+ *                 - createdAt
+ *                 - name
+ *               properties:
+ *                 userId:
+ *                   type: integer
+ *                 createdAt:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         schema:
+ *           type: object
  */
 const middleware: Middleware = (ctx, next) => {
     const { object: { userId, createdAt } } = yup_validate_sync(body_schema, ctx.request.body);

@@ -16,6 +16,8 @@ import { get_user_packs } from '../../../../../utils/get_user_packs';
  *     parameters:
  *       - name: X-Session-Token
  *         in: header
+ *         type: string
+ *         required: true
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *     responses:

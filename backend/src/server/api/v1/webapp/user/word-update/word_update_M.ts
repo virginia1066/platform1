@@ -35,11 +35,12 @@ const schema = object().shape({
  *     parameters:
  *       - name: X-Session-Token
  *         in: header
+ *         type: string
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - in: body
  *         name: body
- *         description: Данные для обновляения карточки
+ *         description: Данные для обновления карточки
  *         schema:
  *           type: object
  *           required:
@@ -62,7 +63,7 @@ const schema = object().shape({
  *     responses:
  *       '200':
  *         description: >
- *           Успешный запрос. Проставляет токен сессии в cookie.
+ *           Успешный запрос.
  *         schema:
  *           type: object
  *           properties:

@@ -20,36 +20,37 @@ const schema = object()
  * @swagger
  * /api/v1/webhooks/subscription-expiry:
  *   post:
- *     description: Вебхук который должен вызываться за X дней до конуа абонемента
+ *     description: Вебхук который должен вызываться за X дней до конца абонемента
  *     tags: [My Class Webhook]
- *   consumes:
- *       - application/json
- *   parameters:
- *     - name: event
- *       in: body
- *       type: string
- *       enum: [user_new]
- *     - name: object
- *       in: body
- *       type: object
- *       schema:
- *         type: object
- *         required:
- *           - userId
- *           - createdAt
- *           - name
- *         properties:
- *           userId:
- *             type: integer
- *           createdAt:
- *             type: string
- *           name:
- *             type: string
- *   responses:
- *     200:
- *       description: login
- *       schema:
- *         type: object
+ *     consumes:
+ *         - application/json
+ *     parameters:
+ *       - name: event
+ *         in: body
+ *         schema:
+ *           type: object
+ *           properties:
+ *             event:
+ *               type: string
+ *               enum: [sub_end]
+ *             object:
+ *               type: object
+ *               required:
+ *                 - userId
+ *                 - createdAt
+ *                 - name
+ *               properties:
+ *                 userId:
+ *                   type: integer
+ *                 createdAt:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: login
+ *         schema:
+ *           type: object
  */
 export const subscription_expiry_M: Middleware = (ctx, next) =>
     yup_validate(schema, ctx.request.body)

@@ -19,7 +19,7 @@ const schema = object().shape({
 });
 /**
  * @swagger
- * /api/v1/web-app/user/packs/:pack_id:
+ * /api/v1/web-app/user/packs/{pack_id}:
  *   patch:
  *     summary: Обновить колоду пользователя
  *     description: >
@@ -31,10 +31,13 @@ const schema = object().shape({
  *     parameters:
  *       - name: X-Session-Token
  *         in: header
+ *         type: string
+ *         required: true
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - name: pack_id
  *         in: path
+ *         required: true
  *         description: id колоды
  *         type: integer
  *       - name: body
@@ -56,7 +59,6 @@ const schema = object().shape({
  *                properties:
  *                  id:
  *                    type: integer
- *                    optional: true
  *                  ru:
  *                    type: string
  *                  en:

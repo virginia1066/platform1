@@ -15,7 +15,7 @@ const schema = object().shape({
 });
 /**
  * @swagger
- * /api/v1/web-app/user/packs/:pack_id:
+ * /api/v1/web-app/user/packs/{pack_id}:
  *   get:
  *     summary: Получение данных колоды
  *     description: Получение данных колоды (слова + статистика)
@@ -28,7 +28,10 @@ const schema = object().shape({
  *         in: header
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
+ *         type: string
+ *         required: true
  *       - name: pack_id
+ *         required: true
  *         in: path
  *         description: id колоды
  *         type: integer

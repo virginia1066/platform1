@@ -12,7 +12,7 @@ const schema = object().shape({
 });
 /**
  * @swagger
- * /api/v1/web-app/user/packs/:pack_id:
+ * /api/v1/web-app/user/packs/{pack_id}:
  *   delete:
  *     summary: Удаление колоды со всеми словами
  *     description: >
@@ -25,9 +25,12 @@ const schema = object().shape({
  *     parameters:
  *       - name: X-Session-Token
  *         in: header
+ *         required: true
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
+ *         type: string
  *       - name: pack_id
+ *         required: true
  *         in: path
  *         description: id колоды для удаления
  *         type: integer

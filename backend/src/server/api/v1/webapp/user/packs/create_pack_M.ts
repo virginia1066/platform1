@@ -31,6 +31,8 @@ const schema = object().shape({
  *     parameters:
  *       - name: X-Session-Token
  *         in: header
+ *         type: string
+ *         required: true
  *         description: >
  *           Токен авторизации полученный в запросе /api/v1/webhooks/user-create
  *       - name: body

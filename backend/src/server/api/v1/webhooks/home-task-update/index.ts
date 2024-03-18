@@ -18,34 +18,27 @@ const schema = object().shape({
  *   post:
  *     description: Вебхук который должен вызываться при редактировании слов в домашнем задании
  *     tags: [My Class Webhook]
- *   consumes:
+ *     consumes:
  *       - application/json
- *   parameters:
- *     - name: event
- *       in: body
- *       type: string
- *       enum: [user_new]
- *     - name: object
- *       in: body
- *       type: object
- *       schema:
- *         type: object
- *         required:
- *           - userId
- *           - createdAt
- *           - name
- *         properties:
- *           userId:
- *             type: integer
- *           createdAt:
- *             type: string
- *           name:
- *             type: string
- *   responses:
- *     200:
- *       description: login
- *       schema:
- *         type: object
+ *     parameters:
+ *       - name: event
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             object:
+ *               type: object
+ *               required:
+ *                 - lessonId
+ *               properties:
+ *                 lessonId:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: login
+ *         schema:
+ *           type: object
  */
 export const on_home_task_update_M: Middleware = (ctx, next) =>
     yup_validate(schema, ctx.request.body)

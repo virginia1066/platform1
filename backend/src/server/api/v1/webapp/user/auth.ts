@@ -9,11 +9,9 @@ import { create } from '../../../../utils/token';
 import { make_time } from '../../../../../utils/cache';
 import { Token } from '../../../../../../compiled-proto/token';
 import { base64Encode } from '@waves/ts-lib-crypto';
-import { AUTH_HEADER_NAME } from '../../../../../constants';
 import { set_body } from '../../../../utils/set_body';
 import { get_student, GetStudentResponse } from '../../../../../utils/request_mk';
 import { applySpec, identity, pipe } from 'ramda';
-import { info } from '../../../../../utils/log';
 
 const get_schema = () =>
     process.env.TEST_TG_USER
@@ -38,7 +36,6 @@ const get_schema = () =>
  *       - User Public API
  *     parameters:
  *       - name: auth_data
- *         type: string
  *         in: body
  *         description: >
  *           Данные, которые проставил пользователь в URL Telegram.
@@ -46,6 +43,13 @@ const get_schema = () =>
  *           Чтобы только пользователь Telegram мог получать данные из этой страницы.
  *           Данные, которые нужно отправить, находятся в window.Telegram.WebApp.initData.
  *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - auth_data
+ *           properties:
+ *             auth_data:
+ *               type: string
  *     responses:
  *       '200':
  *         description: >
