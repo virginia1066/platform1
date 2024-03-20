@@ -109,3 +109,5 @@ docker-compose --env-file {{путь к вашему .env}} up -d
 ```shell
 TG_TOKEN=... CLASS_RPS=... ... docker-compose up -d
 ```
+
+Для генерации swagger.json нужно запустить npm run make-swagger в папке bakend.

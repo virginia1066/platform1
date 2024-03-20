@@ -7,7 +7,6 @@ import { head, omit } from 'ramda';
 import { NotFound, PermissionDenied } from '../../../../../middlewares/errors';
 import { set_body } from '../../../../../utils/set_body';
 import { get_stats_by_pack } from '../../../../../../utils/get_stats_by_pack';
-import { log_query } from '../../../../../../utils/log_query';
 
 
 const schema = object().shape({
@@ -90,7 +89,7 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
 
                     return Promise
                         .all([
-                            log_query(knex('pack_links')
+                            knex('pack_links')
                                 .select(
                                     'pack_links.word_id as id',
                                     'ru',
@@ -104,7 +103,7 @@ export const get_pack_words_M: MiddlewareWithToken = (ctx, next) =>
                                         .andOn(knex.raw(`"learn_cards"."student_id" = ${student_id}`));
                                 })
                                 .where('words.status', WordStatus.Active)
-                                .where('pack_id', pack_id)),
+                                .where('pack_id', pack_id),
                             get_stats_by_pack({
                                 pack_id: pack_id,
                                 student_id: Number(ctx.state.token.user_id)

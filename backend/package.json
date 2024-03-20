@@ -7,7 +7,8 @@
     "build": "rm -rf ./dist && npx tsc && npm run copy-proto",
     "start": "node ./dist/src/index.js --color",
     "build-proto": "rm -rf compiled-proto && npx ts-node ./compile-proto.ts -p ./protobuf -o ./compiled-proto",
-    "copy-proto": "cp -r ./compiled-proto ./dist/"
+    "copy-proto": "cp -r ./compiled-proto ./dist/",
+    "make-swagger": "npx ts-node ./generate-swagger.ts"
   },
   "repository": {
     "type": "git",

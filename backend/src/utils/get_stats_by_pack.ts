@@ -1,10 +1,9 @@
 import { knex } from '../constants';
 import { WordStatus } from '../types/Wokobular';
 import { defaultTo, evolve, head } from 'ramda';
-import { log_query } from './log_query';
 
 export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): Promise<StatByPack> =>
-    log_query(knex('pack_links')
+    knex('pack_links')
         .where({ pack_id })
         .innerJoin('words as w', function () {
             this.on('pack_links.word_id', 'w.id')
@@ -21,7 +20,7 @@ export const get_stats_by_pack = ({ pack_id, student_id }: GetPackStatsProps): P
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 2 THEN 1 ELSE 0 END) AS count_review'),
             knex.raw('SUM(CASE WHEN CAST(lc.state AS INTEGER) = 3 THEN 1 ELSE 0 END) AS count_relearning'),
             knex.raw('SUM(CASE WHEN lc.due < CURRENT_TIMESTAMP THEN 1 ELSE 0 END) + COUNT(CASE WHEN lc IS NULL THEN 1 END) as count_can_be_shown')
-        ))
+        )
         .then<StatByPack | undefined>(head)
         .then(defaultTo({
             words_count: 0,

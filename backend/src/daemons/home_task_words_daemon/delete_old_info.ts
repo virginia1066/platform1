@@ -1,7 +1,5 @@
 import { knex } from '../../constants';
-import { LessonUpdate } from '../../types/Wokobular';
-import { head, prop } from 'ramda';
-import { log_query } from '../../utils/log_query';
+import { prop } from 'ramda';
 
 export const delete_old_info = (lesson_id: number): Promise<unknown> => {
     return knex('lesson_updates')
@@ -16,21 +14,15 @@ export const delete_old_info = (lesson_id: number): Promise<unknown> => {
 
             return Promise
                 .all([
-                    log_query(
-                        knex('packs')
-                            .where('insert_id', 'in', id_list)
-                            .del()
-                    ),
-                    log_query(
-                        knex('pack_links')
-                            .where('insert_id', 'in', id_list)
-                            .del()
-                    ),
-                    log_query(
-                        knex('words')
-                            .where('insert_id', 'in', id_list)
-                            .del()
-                    )
+                    knex('packs')
+                        .where('insert_id', 'in', id_list)
+                        .del(),
+                    knex('pack_links')
+                        .where('insert_id', 'in', id_list)
+                        .del(),
+                    knex('words')
+                        .where('insert_id', 'in', id_list)
+                        .del()
                 ]);
         });
 };
