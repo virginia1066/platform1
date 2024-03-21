@@ -55,13 +55,15 @@ export const get_payments = (user: User) =>
                 ].join('\n');
             });
 
-            if (!tpl.length) {
+            const is_empty_list = tpl.length === 0;
+
+            if (is_empty_list) {
                 tpl.push(t('no_payments'));
             }
 
             return new MessageSpliter([
                 ...tpl,
-                tpl.length
+                !is_empty_list
                     ? new MessageSpliter([
                         t(balance >= 0 ? 'balance' : 'balance_negative', {
                             count: balance,
