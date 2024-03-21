@@ -61,13 +61,15 @@ export const get_payments = (user: User) =>
 
             return new MessageSpliter([
                 ...tpl,
-                new MessageSpliter([
-                    t(balance >= 0 ? 'balance' : 'balance_negative', {
-                        count: balance,
-                        balance: new BigNumber(balance).toFormat(),
-                        admin: TG_MK_ADMIN_USER
-                    })
-                ], '\n\n')
-            ], '\n\n');
+                tpl.length
+                    ? new MessageSpliter([
+                        t(balance >= 0 ? 'balance' : 'balance_negative', {
+                            count: balance,
+                            balance: new BigNumber(balance).toFormat(),
+                            admin: TG_MK_ADMIN_USER
+                        })
+                    ], '\n\n')
+                    : null
+            ].filter(isNotNil), '\n\n');
         })
         .catch(pipe(error, always(t('telegram.error'))));
