@@ -7,7 +7,7 @@ import { getFixedT, t } from 'i18next';
 import { always, indexBy, isNotNil, pipe, prop, propEq } from 'ramda';
 import dayjs from 'dayjs';
 import { error } from '../../utils/log';
-import { OFFLINE_FILIAL_ID } from '../../constants';
+import { OFFLINE_FILIAL_ID, TG_MK_ADMIN_USER } from '../../constants';
 
 export const get_time_table =
     (user: User) =>
@@ -23,7 +23,7 @@ export const get_time_table =
                 const tDict = getFixedT('ru', undefined, 'telegram.dictionary');
 
                 if (!lessons.length) {
-                    return new MessageSpliter([t('empty')], '');
+                    return new MessageSpliter([t('empty', { admin: TG_MK_ADMIN_USER })], '');
                 }
 
                 const hash_filials = indexBy(prop('id'), filials);
