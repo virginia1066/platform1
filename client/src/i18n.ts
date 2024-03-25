@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import translationRU from './locales/ru/translation.json';
+import 'intl-pluralrules';
 
 i18n
     // pass the i18n instance to react-i18next.

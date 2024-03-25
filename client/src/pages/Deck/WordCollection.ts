@@ -11,14 +11,6 @@ export class WordCollection {
         this.repeated = repeated_list;
         const now = Date.now();
 
-        repeated_list.forEach((word) => {
-            const date = new Date(word.due);
-            const tpl = [
-                date.toLocaleDateString(),
-                date.toLocaleTimeString()
-            ].join(' ')
-        });
-
         this.active_word = repeated_list
             .find(({ due }) => now >= due) ?? new_list[0];
     }

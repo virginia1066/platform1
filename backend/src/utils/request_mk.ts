@@ -123,8 +123,7 @@ export const get_classes = cache(() =>
     make_time(4, 'hour')
 );
 
-export const
-    get_student_payments = cache((student_id: number) =>
+export const get_student_payments = cache((student_id: number) =>
             private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
                 userId: student_id,
                 limit: 500

@@ -1,3 +1,4 @@
+import './utils/globalThis';
 import { ChakraProvider, Container } from '@chakra-ui/react';
 import { themeParams } from './theme/defaults';
 import tgTheme from './theme/tgTheme';
@@ -46,7 +47,7 @@ export const App = () => {
                 theme: Telegram.WebApp.colorScheme,
                 page: window.location.pathname
             }
-        })
+        });
         setReady(true);
     }, []);
 

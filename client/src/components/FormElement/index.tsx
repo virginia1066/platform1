@@ -40,7 +40,7 @@ export const FormElement = <T extends string | number>({
             set_value(value);
             onChange(value);
         }
-    }, [onChange]);
+    }, [onChange, input_length]);
 
     return (
         <FormControl isInvalid={!!error}>
