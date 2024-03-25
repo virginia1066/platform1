@@ -1,3 +1,4 @@
+import 'polyfill-object.fromentries';
 import './utils/globalThis';
 import { ChakraProvider, Container } from '@chakra-ui/react';
 import { themeParams } from './theme/defaults';
