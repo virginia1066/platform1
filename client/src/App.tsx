@@ -1,5 +1,6 @@
 import 'polyfill-object.fromentries';
 import './utils/globalThis';
+import 'array-flat-polyfill';
 import { ChakraProvider, Container } from '@chakra-ui/react';
 import { themeParams } from './theme/defaults';
 import tgTheme from './theme/tgTheme';

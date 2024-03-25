@@ -12,6 +12,7 @@
     "@types/ramda": "^0.29.10",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
+    "array-flat-polyfill": "^1.0.1",
     "effector": "^23.2.0",
     "effector-react": "^23.2.0",
     "effector-storage": "^7.0.0",
