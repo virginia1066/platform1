@@ -72,7 +72,7 @@ export const DeckList = () => {
                 </Box>
             </Flex>
             <Flex h={'full'} position={'relative'}>
-                <Box position={'absolute'} w={'full'} h={'full'} overflowY={'auto'}>
+                <Box position={'absolute'} w={'-webkit-fill-available'} h={'full'} overflowY={'auto'}>
                     <VStack spacing={4} h={'max-content'} justifyContent={'center'} opacity={0}
                             animation={is_pending ? 'none' : 'fadeIn 500ms forwards'}>
                         {

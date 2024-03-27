@@ -55,7 +55,7 @@ export const App = () => {
 
     return (
         <ChakraProvider theme={tgTheme}>
-            <Container h={'full'} p={4} bgColor={themeParams.secondary_bg_color} opacity={0}
+            <Container w={'-webkit-fill-available'} h={'full'} p={4} bgColor={themeParams.secondary_bg_color} opacity={0}
                        animation={ready ? '400ms linear forwards fadeIn;' : ''}>
                 <RouterProvider router={router}/>
             </Container>

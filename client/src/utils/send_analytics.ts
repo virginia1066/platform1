@@ -8,7 +8,7 @@ type Props = {
 }
 
 const generate_id = () => {
-    if (window.crypto) {
+    if (window.crypto && window.crypto.randomUUID) {
         return window.crypto.randomUUID();
     }
     return range(0, 5)
