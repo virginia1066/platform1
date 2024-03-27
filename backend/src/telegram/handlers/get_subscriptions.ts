@@ -16,20 +16,15 @@ import { error } from '../../utils/log';
 import { format_mk_date } from '../../utils/format_mk_date';
 
 export const get_subscriptions = (user: User) =>
-    Promise
-        .all([
-            get_student_by_tg(user.id, true)
+    get_student_by_tg(user.id, true)
                 .then((userId) => get_student_subscriptions({
                     userId, statusId: [
                         MkSubscriptionStatus.Disabled,
                         MkSubscriptionStatus.Active,
                         MkSubscriptionStatus.Frozen
                     ]
-                })),
-            get_subscriptions_groups()
-        ])
-        .then(([data, groups]) => {
-            const hash = get_subscription_type_hash(groups);
+                }))
+        .then((data) => {
             const t = getFixedT('ru', undefined, 'telegram.actions.subscription' as const);
 
             if (!data.subscriptions.length) {
@@ -58,8 +53,7 @@ export const get_subscriptions = (user: User) =>
                     t('item', {
                         index: index + 1,
                         period: period_str,
-                        visitCount: t('visitCount', { count: visitCount }),
-                        type: hash[subscriptionId]
+                        visitCount: t('visitCount', { count: visitCount })
                     }),
                     visitCount === 0 ? null : t('visits', { count: visitCount }),
                     visitCount === 0 ? null : t('burns', { count: stats.totalBurned }),
