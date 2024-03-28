@@ -59,9 +59,11 @@ export const get_payments = (user: User) =>
                 tpl.push(t('no_payments'));
             }
 
+            const has_balance_message = !is_empty_list && !balance.eq(0);
+
             return new MessageSpliter([
                 ...tpl,
-                !is_empty_list
+                !has_balance_message
                     ? new MessageSpliter([
                         t(balance >= 0 ? 'balance' : 'balance_negative', {
                             count: balance,
