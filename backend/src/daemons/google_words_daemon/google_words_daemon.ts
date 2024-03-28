@@ -1,15 +1,12 @@
 import { interval } from '../../utils/interval';
 import { make_time } from '../../utils/cache';
 import { get_google_wokobular } from '../../utils/get_google_wokobular';
-import { Word, WordStatus } from '../../types/Wokobular';
+import { Word } from '../../types/Wokobular';
 import { MAX_PACK_NAME_LENGTH, SYSTEM_PACK_ID } from '../../constants';
-import { assoc, pipe } from 'ramda';
+import { pipe } from 'ramda';
 import * as console from '../../utils/log';
 import { get_or_create_pack } from '../../utils/get_or_create_pack';
-import { get_words_by_pack } from '../../utils/get_words_by_pack';
 import { randomUUID } from 'crypto';
-import { get_new_words } from '../../server/utils/words/get_new_words';
-import { insert_new_words } from '../../server/utils/words/insert_new_words';
 import { add_pack_words } from '../../server/utils/words/add_pack_words';
 
 const info = console.info.bind(null, 'Google words daemon:');

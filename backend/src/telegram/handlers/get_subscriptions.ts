@@ -38,7 +38,6 @@ export const get_subscriptions = (user: User) =>
             };
 
             const tpl_list = data.subscriptions.map(({
-                                                         subscriptionId,
                                                          period,
                                                          visitCount,
                                                          statusId,
