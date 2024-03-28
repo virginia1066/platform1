@@ -16,7 +16,7 @@ export const insert_new_words = (new_words: Array<Omit<Word, 'id' | 'insert_id'>
                     insert_id
                 })))
                 .onConflict(['pack_id', 'word_id'])
-                .ignore()
+                .merge()
                 .returning('*')
                 .then(always(void 0))
         )

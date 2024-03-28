@@ -1,7 +1,7 @@
 import { User } from 'node-telegram-bot-api';
 import { get_student_by_tg } from '../../utils/get_student_by_tg';
 import { get_student, get_student_payments, PaymentOpType } from '../../utils/request_mk';
-import { always, groupBy, identity, ifElse, isNil, isNotNil, pipe, prop, uniq } from 'ramda';
+import { always, groupBy, identity, ifElse, isNil, isNotNil, not, pipe, prop, propEq, uniq } from 'ramda';
 import { BigNumber } from '@waves/bignumber';
 import { getFixedT, t } from 'i18next';
 import { format_mk_date } from '../../utils/format_mk_date';
@@ -38,15 +38,13 @@ export const get_payments = (user: User) =>
 
                 return [
                     t('date', { date: format_mk_date(date) }),
-                    [PaymentOpType.Income, PaymentOpType.Debit, PaymentOpType.Refund]
+                    [PaymentOpType.Income, PaymentOpType.Refund]
                         .map((type) => !type_hash[type]
                             ? null
                             : type_hash[type]!.map(({ optype, summa }) => {
                                 return [
-                                    t(`payments.${optype}`),
+                                    t(`payments.${optype as PaymentOpType.Income | PaymentOpType.Refund}`),
                                     t('income', {
-                                        sign: [PaymentOpType.Income, PaymentOpType.Refund].includes(optype)
-                                            ? '+' : '-',
                                         sum: new BigNumber(summa).abs().toFormat()
                                     })
                                 ].join('\n');

@@ -52,7 +52,7 @@ const parse_sheets = (response: GaxiosResponse<sheets_v4.Schema$Spreadsheet>): R
                             break;
                     }
                     return acc;
-                }, Object.assign(Object.create(null), { source: WordSourcePrefix.GoogleSheets }));
+                }, Object.assign(Object.create(null), { source: `${WordSourcePrefix.GoogleSheets}-${sheet_name}` }));
 
                 if (word.ru && word.en) {
                     if (word.ru.length <= MAX_WORD_LENGTH && word.en.length <= MAX_WORD_LENGTH) {
