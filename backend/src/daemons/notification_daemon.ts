@@ -63,7 +63,7 @@ export const notification_daemon = () => {
                     const subscription_tpl = subscription
                         ? t('notify_subscriptions', {
                             count: get_time_diff(subscription.end_date),
-                            admin_user: TG_MK_ADMIN_USER
+                            admin: TG_MK_ADMIN_USER
                         })
                         : null;
 
