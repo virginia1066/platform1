@@ -49,14 +49,14 @@ export const launch_tg_service = () => {
             {
                 id: 'unknown',
                 type: ConfigType.Text,
-                text: t('telegram.unknown_message')
+                text: t('telegram.unknown_message', {admin: TG_MK_ADMIN_USER})
             },
             {
                 id: 'start-error',
                 type: ConfigType.Text,
                 text: analytics_action(
                     { event_type: 'Telegram Auth Fail' },
-                    always(t('telegram.start.fail', { admin_user: TG_MK_ADMIN_USER }))
+                    always(t('telegram.start.fail', { admin: TG_MK_ADMIN_USER }))
                 ),
             },
             {
