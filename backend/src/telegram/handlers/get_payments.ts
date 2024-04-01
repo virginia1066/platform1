@@ -12,21 +12,9 @@ import { error } from '../../utils/log';
 export const get_payments = (user: User) =>
     get_student_by_tg(user.id, true)
         .then((student_id) =>
-            Promise
-                .all([
                     get_student_payments(student_id)
-                        .then(prop('payments')),
-                    get_student({ student_id })
-                        .then(pipe(
-                            prop('balans'),
-                            ifElse(
-                                isNil,
-                                always(0),
-                                identity
-                            )
-                        ))
-                ]))
-        .then(([payments, balance]) => {
+                        .then(prop('payments'))
+        .then((payments) => {
             const t = getFixedT('ru', undefined, 'telegram.actions.payments');
 
             const date_group = groupBy(prop('date'), payments);
@@ -59,19 +47,8 @@ export const get_payments = (user: User) =>
                 tpl.push(t('no_payments'));
             }
 
-            const has_balance_message = !is_empty_list && !balance.eq(0);
-
             return new MessageSpliter([
                 ...tpl,
-                !has_balance_message
-                    ? new MessageSpliter([
-                        t(balance >= 0 ? 'balance' : 'balance_negative', {
-                            count: balance,
-                            balance: new BigNumber(balance).toFormat(),
-                            admin: TG_MK_ADMIN_USER
-                        })
-                    ], '\n\n')
-                    : null
-            ].filter(isNotNil), '\n\n');
+            ], '\n\n');
         })
         .catch(pipe(error, always(t('telegram.error'))));
