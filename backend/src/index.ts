@@ -7,15 +7,13 @@ import { pipe } from 'ramda';
 import { create_server } from './server/create_server';
 import { launch_tg_service } from './telegram/launch_tg_service';
 import { google_words_daemon } from './daemons/google_words_daemon/google_words_daemon';
-import { get_lesson_by_id } from './utils/request_mk';
-import { info } from './utils/log';
-import { HOME_TASK_WORDS_REG } from './constants';
 import { create_wh_home_task } from './db/create_wh_home_task';
 import { home_task_words_daemon } from './daemons/home_task_words_daemon/home_task_words_daemon';
 import { notification_daemon } from './daemons/notification_daemon';
 import { create_subscription_notify } from './db/create_subscription_notify';
 import { mass_send_service } from './telegram/mass_send_service';
 import { mass_send_tg } from './db/mass_send_tg';
+
 
 create_users_from_webhook()
     .then(() =>

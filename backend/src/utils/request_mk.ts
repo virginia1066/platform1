@@ -161,6 +161,10 @@ export const update_user_attribute = (student_id: number, attr_id: number, value
         timeout: 5_000
     }).then<{ value: string }>(parse_response);
 
+export const get_rooms = () =>
+    private_req(`https://api.moyklass.com/v1/company/rooms`)
+        .then(parse_response);
+
 export type PaymentsResponse = {
     payments: Array<{
         id: number;

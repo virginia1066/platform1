@@ -15,6 +15,8 @@ import { MessageSpliter } from '../../services/MessageSpliter';
 import { error } from '../../utils/log';
 import { format_mk_date } from '../../utils/format_mk_date';
 
+const DOUBLES = [2052, 2054];
+
 export const get_subscriptions = (user: User) =>
     Promise
         .all([
@@ -48,7 +50,7 @@ export const get_subscriptions = (user: User) =>
                                                          statusId,
                                                          beginDate,
                                                          endDate,
-                                                         stats
+                                                         subscriptionId
                                                      }, index) => {
                 const period_str = period
                     ? parse_period(period)
@@ -59,9 +61,15 @@ export const get_subscriptions = (user: User) =>
                         period: period_str,
                         visitCount: t('visitCount', { count: visitCount })
                     }),
-                    visitCount === 0 ? null : t('visits', { count: visitCount }),
-                    visitCount === 0 ? null : t('burns', { count: stats.totalBurned }),
-                    t('interval.title', {
+                    t('type', {
+                        type: hash[subscriptionId].name
+                    }),
+                    visitCount === 0 ? null : t('visits', {
+                        count: DOUBLES.includes(hash[subscriptionId].id)
+                            ? visitCount / 2
+                            : visitCount
+                    }),
+                    period === null ? null : t('interval.title', {
                         interval: statusId === MkSubscriptionStatus.Disabled
                             ? t('interval.disabled')
                             : period === null

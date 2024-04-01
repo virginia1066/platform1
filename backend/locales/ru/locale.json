@@ -74,7 +74,8 @@
           "time": "Время <b>{{time_interval}}</b>",
           "place": "Место <a href=\"{{link}}\">{{address}}</a>",
           "manager": "Преподаватель <b>{{manager}}</b>"
-        }
+        },
+        "time_zone": "Время расписания Московское (GMT +3)"
       },
       "subscription": {
         "empty": "У вас пока нет абонементов.\n\nКупить или продлить абонемент: @{{admin}}",
@@ -86,10 +87,11 @@
         "visitCount_one": "{{count}} занятий",
         "visitCount_few": "{{count}} занятия",
         "visitCount_many": "{{count}} занятий",
-        "visits": "Осталось занятий: {{count}}",
+        "visits": "Осталось занятий: <b>{{count}}</b>",
         "burns": "Сгорело занятий: {{count}}",
         "unlimited": "Бессрочный",
         "frozen": "Заморожен",
+        "type": "Тип абонемента: <b>{{type}}</b>",
         "interval": {
           "title": "Срок действия абонемента: {{interval}}",
           "disabled": "Не активный",

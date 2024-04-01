@@ -57,7 +57,8 @@ export const get_time_table =
                                         address
                                     })
                                     : null,
-                                t('detailed.manager', { manager })
+                                t('detailed.manager', { manager }),
+                                t('time_zone')
                             ].filter(isNotNil).join('\n');
                         });
 

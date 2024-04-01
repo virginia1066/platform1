@@ -5,10 +5,12 @@ export const get_subscription_type_hash = (data: {
         subscriptions: Array<{ id: number }>
     }>
 }) => {
-    return data.groupings.reduce<Record<number, string>>((acc, item) => {
+    return data.groupings.reduce<Record<number, { name: string, id: number }>>((acc, item) => {
         const name = item.name;
         return item.subscriptions.reduce((acc, { id }) => {
-            return Object.assign(acc, { [id]: name });
+            return Object.assign(acc, {
+                [id]: { name, id: item.id }
+            });
         }, acc);
     }, Object.create(null));
 };
