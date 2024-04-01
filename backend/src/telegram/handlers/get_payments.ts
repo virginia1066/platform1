@@ -13,7 +13,7 @@ export const get_payments = (user: User) =>
     get_student_by_tg(user.id, true)
         .then((student_id) =>
                     get_student_payments(student_id)
-                        .then(prop('payments'))
+                        .then(prop('payments')))
         .then((payments) => {
             const t = getFixedT('ru', undefined, 'telegram.actions.payments');
 
