@@ -16,15 +16,20 @@ import { error } from '../../utils/log';
 import { format_mk_date } from '../../utils/format_mk_date';
 
 export const get_subscriptions = (user: User) =>
-    get_student_by_tg(user.id, true)
+    Promise
+        .all([
+            get_student_by_tg(user.id, true)
                 .then((userId) => get_student_subscriptions({
                     userId, statusId: [
                         MkSubscriptionStatus.Disabled,
                         MkSubscriptionStatus.Active,
                         MkSubscriptionStatus.Frozen
                     ]
-                }))
-        .then((data) => {
+                })),
+            get_subscriptions_groups()
+        ])
+        .then(([data, groups]) => {
+            const hash = get_subscription_type_hash(groups);
             const t = getFixedT('ru', undefined, 'telegram.actions.subscription' as const);
 
             if (!data.subscriptions.length) {
