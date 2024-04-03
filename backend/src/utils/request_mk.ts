@@ -292,6 +292,7 @@ export type GetLessonsRecordResponse = {
         totalItems: number;
     }
     lessons: Array<{
+        roomId: number;
         id: number;
         date: string;
         beginTime: string;

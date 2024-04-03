@@ -3,7 +3,6 @@ import { indexBy, prop } from 'ramda';
 import { get_dictionaries } from '../../../utils/get_dictionaries';
 import { getFixedT } from 'i18next';
 import dayjs from 'dayjs';
-import { OFFLINE_FILIAL_ID } from '../../../constants';
 
 export const get_lessons = (student_id: number) =>
     Promise
@@ -14,6 +13,11 @@ export const get_lessons = (student_id: number) =>
         ])
         .then(([lessons, [filials, courses, classes]]) => {
             const tDict = getFixedT('ru', undefined, 'telegram.dictionary');
+
+            const address_map: Record<number, string> = {
+                45259: `ул. Большая Новодмитровская, 36`,
+                45258: `ул. Большая Новодмитровская, 23c6`
+            };
 
             const course_type_map = {
                 course: tDict('course'),
@@ -52,11 +56,10 @@ export const get_lessons = (student_id: number) =>
                         filial: hash_filials[lesson.filialId].name.toLowerCase(),
                         icon: filial_map[lesson.filialId] ?? '❔',
                         lesson_class: hash_classes[lesson.classId],
-                        address: hash_filials[lesson.filialId].address,
+                        address: address_map[lesson.roomId] ?? '',
                         beginTime: lesson.beginTime,
                         endTime: lesson.endTime,
-                        manager_id,
-                        is_offline: lesson.filialId === OFFLINE_FILIAL_ID
+                        manager_id
                     };
                 })
                 .reduce<Array<Lesson>>((acc, item) => {
@@ -92,5 +95,4 @@ type Lesson = {
     beginTime: string;
     endTime: string;
     manager_id: number;
-    is_offline: boolean;
 }

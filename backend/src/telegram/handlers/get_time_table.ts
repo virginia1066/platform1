@@ -52,7 +52,7 @@ export const get_time_table =
                                 t('detailed.date', { date, month, week_day }),
                                 t('detailed.type', { icon, course_type, filial }),
                                 t('detailed.time', { time_interval }),
-                                lesson.is_offline ? t('detailed.place', {
+                                lesson.address ? t('detailed.place', {
                                         link: `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`,
                                         address
                                     })

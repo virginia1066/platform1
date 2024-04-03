@@ -49,7 +49,6 @@ export const GOOGLE_SHEETS_ID = get_env_strict('GOOGLE_SHEETS_ID');
 export const MASS_SEND_DELAY_MINUTES = get_env_strict('MASS_SEND_DELAY_MINUTES', Number);
 export const MK_DATE_PATTERN = 'YYYY-MM-DD';
 export const MAX_TG_MESSAGE_LENGTH = 1_024;
-export const OFFLINE_FILIAL_ID = 30082;
 export const SYSTEM_PACK_ID = 0;
 export const MESSAGE_BUS = new EventEmitter<MessageBussEvents>(error);
 export const WORD_CONFLICT_COLUMNS = ['en', 'source'];
