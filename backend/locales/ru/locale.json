@@ -69,7 +69,7 @@
         "header_many": "{{count}} занятий в ближайшие 4 недели",
         "short": "<code>{{date}} {{month}}, {{week_day}}</code>\n<b>{{time_interval}}</b> {{course_type}} {{filial}} занятие",
         "detailed": {
-          "date": "<b>{{date}} {{month}}</b> {{week_day}}",
+          "date": "<b>{{date}} {{month}}</b>, {{week_day}}",
           "type": "{{icon}} {{course_type}} <b>{{filial}}</b> занятие",
           "time": "Время <b>{{time_interval}}</b>",
           "place": "Место <a href=\"{{link}}\">{{address}}</a>",
