@@ -67,7 +67,7 @@
         "header_one": "{{count}} занятие в ближайшие 4 недели",
         "header_few": "{{count}} занятия в ближайшие 4 недели",
         "header_many": "{{count}} занятий в ближайшие 4 недели",
-        "short": "<code>{{date}} {{month}} {{week_day}}</code>\n<b>{{time_interval}}</b> {{course_type}} {{filial}} занятие",
+        "short": "<code>{{date}} {{month}}, {{week_day}}</code>\n<b>{{time_interval}}</b> {{course_type}} {{filial}} занятие",
         "detailed": {
           "date": "<b>{{date}} {{month}}</b> {{week_day}}",
           "type": "{{icon}} {{course_type}} <b>{{filial}}</b> занятие",
