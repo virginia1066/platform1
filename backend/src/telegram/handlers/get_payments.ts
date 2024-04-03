@@ -1,19 +1,19 @@
 import { User } from 'node-telegram-bot-api';
 import { get_student_by_tg } from '../../utils/get_student_by_tg';
-import { get_student, get_student_payments, PaymentOpType } from '../../utils/request_mk';
-import { always, groupBy, identity, ifElse, isNil, isNotNil, not, pipe, prop, propEq, uniq } from 'ramda';
+import { get_student_payments, PaymentOpType } from '../../utils/request_mk';
+import { always, filter, groupBy, isNotNil, not, pipe, prop, propEq, uniq } from 'ramda';
 import { BigNumber } from '@waves/bignumber';
 import { getFixedT, t } from 'i18next';
 import { format_mk_date } from '../../utils/format_mk_date';
 import { MessageSpliter } from '../../services/MessageSpliter';
-import { TG_MK_ADMIN_USER } from '../../constants';
 import { error } from '../../utils/log';
 
 export const get_payments = (user: User) =>
     get_student_by_tg(user.id, true)
         .then((student_id) =>
-                    get_student_payments(student_id)
-                        .then(prop('payments')))
+            get_student_payments(student_id)
+                .then(prop('payments'))
+                .then(filter(pipe(propEq(PaymentOpType.Debit, 'optype'), not))))
         .then((payments) => {
             const t = getFixedT('ru', undefined, 'telegram.actions.payments');
 
