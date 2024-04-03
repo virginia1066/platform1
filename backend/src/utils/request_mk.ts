@@ -124,13 +124,13 @@ export const get_classes = cache(() =>
 );
 
 export const get_student_payments = cache((student_id: number) =>
-            private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
-                userId: student_id,
-                limit: 500
-            })
-                .then<PaymentsResponse>(parse_response),
-        make_time(5, 'minutes')
-    );
+        private_req(`https://api.moyklass.com/v1/company/payments`, {}, {
+            userId: student_id,
+            limit: 500
+        })
+            .then<PaymentsResponse>(parse_response),
+    make_time(5, 'minutes')
+);
 
 export enum PaymentOpType {
     Income = 'income',
@@ -161,9 +161,9 @@ export const update_user_attribute = (student_id: number, attr_id: number, value
         timeout: 5_000
     }).then<{ value: string }>(parse_response);
 
-export const get_rooms = () =>
+export const get_rooms = cache(() =>
     private_req(`https://api.moyklass.com/v1/company/rooms`)
-        .then(parse_response);
+        .then<Array<{ id: number }>>(parse_response), make_time(4, 'hours'));
 
 export type PaymentsResponse = {
     payments: Array<{

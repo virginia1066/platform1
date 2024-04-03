@@ -1,4 +1,4 @@
-import { get_classes, get_courses, get_filials } from './request_mk';
+import { get_classes, get_courses, get_filials, get_rooms } from './request_mk';
 
 export const get_dictionaries = () =>
     Promise
@@ -6,4 +6,5 @@ export const get_dictionaries = () =>
             get_filials(),
             get_courses(),
             get_classes(),
+            get_rooms()
         ]);

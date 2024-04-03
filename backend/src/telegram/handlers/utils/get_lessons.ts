@@ -3,6 +3,7 @@ import { indexBy, prop } from 'ramda';
 import { get_dictionaries } from '../../../utils/get_dictionaries';
 import { getFixedT } from 'i18next';
 import dayjs from 'dayjs';
+import { info } from '../../../utils/log';
 
 export const get_lessons = (student_id: number) =>
     Promise
@@ -11,12 +12,20 @@ export const get_lessons = (student_id: number) =>
                 .then(prop('lessons')),
             get_dictionaries()
         ])
-        .then(([lessons, [filials, courses, classes]]) => {
+        .then(([lessons, [filials, courses, classes, rooms]]) => {
             const tDict = getFixedT('ru', undefined, 'telegram.dictionary');
 
             const address_map: Record<number, string> = {
-                45259: `ул. Большая Новодмитровская, 36`,
-                45258: `ул. Большая Новодмитровская, 23c6`
+                44727: `г. Москва, ул. Большая Новодмитровская, 36`,
+                45259: `г. Москва, ул. Большая Новодмитровская, 36`,
+                45258: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44728: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44730: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44731: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44732: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44733: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44734: `г. Москва, ул. Большая Новодмитровская, 23c6`,
+                44735: `г. Москва, ул. Большая Новодмитровская, 23c6`,
             };
 
             const course_type_map = {
