@@ -52,10 +52,14 @@ export const get_time_table =
                                 t('detailed.date', { date, month, week_day }),
                                 t('detailed.type', { icon, course_type, filial }),
                                 t('detailed.time', { time_interval }),
-                                lesson.address ? t('detailed.place', {
+                                lesson.address
+                                    ? t('detailed.place', {
                                         link: `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`,
                                         address
                                     })
+                                    : null,
+                                lesson.address
+                                    ? t('detailed.room', { room: lesson.room })
                                     : null,
                                 t('detailed.manager', { manager }),
                                 t('time_zone')

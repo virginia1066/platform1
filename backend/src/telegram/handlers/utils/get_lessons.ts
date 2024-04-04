@@ -14,6 +14,7 @@ export const get_lessons = (student_id: number) =>
         ])
         .then(([lessons, [filials, courses, classes, rooms]]) => {
             const tDict = getFixedT('ru', undefined, 'telegram.dictionary');
+            const room_hash = indexBy(prop('id'), rooms);
 
             const address_map: Record<number, string> = {
                 44727: `г. Москва, ул. Большая Новодмитровская, 36`,
@@ -66,6 +67,7 @@ export const get_lessons = (student_id: number) =>
                         icon: filial_map[lesson.filialId] ?? '❔',
                         lesson_class: hash_classes[lesson.classId],
                         address: address_map[lesson.roomId] ?? '',
+                        room: room_hash[lesson.roomId].name,
                         beginTime: lesson.beginTime,
                         endTime: lesson.endTime,
                         manager_id
@@ -104,4 +106,5 @@ type Lesson = {
     beginTime: string;
     endTime: string;
     manager_id: number;
+    room: string;
 }

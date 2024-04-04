@@ -73,6 +73,7 @@
           "type": "{{icon}} {{course_type}} <b>{{filial}}-занятие</b>",
           "time": "Время <b>{{time_interval}}</b>",
           "place": "Место <a href=\"{{link}}\">{{address}}</a>",
+          "room": "Аудитория <b>{{room}}</b>",
           "manager": "Преподаватель <b>{{manager}}</b>"
         },
         "time_zone": "В расписании указано московское время (GMT +3)"
