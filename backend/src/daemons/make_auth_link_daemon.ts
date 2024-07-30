@@ -27,9 +27,9 @@ export const make_auth_link_daemon = () => {
                     return update_user_attribute(class_user_id, TG_LINK_ATTRIBUTE_ID, link)
                         .catch((e) => {
                             if (retry_count > 10) {
-                                throw new Error(e);
+                                throw new Error(String(e));
                             } else {
-                                warn(`Update attr error (try count ${retry_count + 1}):`, e);
+                                warn(`Update attr error (try count ${retry_count + 1}):`, String(e));
                             }
                             return wait((retry_count + 1) * 500)
                                 .then(() => update_loop(retry_count + 1));

@@ -13,8 +13,6 @@ import { notification_daemon } from './daemons/notification_daemon';
 import { create_subscription_notify } from './db/create_subscription_notify';
 import { mass_send_service } from './telegram/mass_send_service';
 import { mass_send_tg } from './db/mass_send_tg';
-import { get_rooms } from './utils/request_mk';
-import { info } from './utils/log';
 
 
 create_users_from_webhook()

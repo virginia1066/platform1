@@ -7,4 +7,5 @@ export const create_subscription_notify = () =>
         builder.integer('student_id').notNullable();
         builder.string('notify_status', 20).notNullable();
         builder.string('snd_date').notNullable();
+        builder.datetime('end_date', { useTz: true }).notNullable();
     });
