@@ -43,9 +43,11 @@ const private_req = (url: string, init?: RequestInit, query?: Record<string, str
     get_company_token()
         .then(({ token }) => REQUEST_QUEUE.push(() => {
             const req_url = `${url}${make_query(query ?? {})}`;
+            const signal = new AbortController();
             const req_init: RequestInit = {
                 ...init,
                 method: init?.method ?? 'GET',
+                signal: signal.signal,
                 headers: Object.assign({
                     'Content-Type': 'application/json',
                     'X-Access-Token': token
@@ -54,7 +56,19 @@ const private_req = (url: string, init?: RequestInit, query?: Record<string, str
             };
             info('Request:', req_url);
 
-            return fetch(req_url, req_init);
+            const timer = setTimeout(() => {
+                signal.abort();
+            }, 10_000);
+
+            return fetch(req_url, req_init)
+                .then((data) => {
+                    clearTimeout(timer);
+                    return data;
+                })
+                .catch((e) => {
+                    clearTimeout(timer);
+                    return Promise.reject(e);
+                });
         }));
 
 export const get_student = cache(({ student_id }: GetStudentProps) =>
