@@ -24,12 +24,25 @@ export const make_auth_link_daemon = () => {
                 const link = `https://t.me/${TG_BOT_NAME}?start=${link_data.link_param}`;
 
                 const update_loop = (retry_count: number): Promise<unknown> => {
+                    const stringify_error = (e: any): string => {
+                        const tpl = (str: string) => `Can't update user attribute: ${str}`;
+                        if ('message' in e) {
+                            return tpl(e.message);
+                        } else {
+                            try {
+                                return tpl(JSON.stringify(e, null, 4));
+                            } catch (e) {
+                                return tpl(String(e));
+                            }
+                        }
+                    }
+
                     return update_user_attribute(class_user_id, TG_LINK_ATTRIBUTE_ID, link)
                         .catch((e) => {
                             if (retry_count > 10) {
-                                throw new Error(String(e));
+                                throw new Error(stringify_error(e));
                             } else {
-                                warn(`Update attr error (try count ${retry_count + 1}):`, String(e));
+                                warn(`Update attr error (try count ${retry_count + 1}):`, stringify_error(e));
                             }
                             return wait((retry_count + 1) * 500)
                                 .then(() => update_loop(retry_count + 1));
