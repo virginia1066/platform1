@@ -19,7 +19,8 @@ export type HomeTaskWebhook = {
 
 export enum WebhookUserStatus {
     Done = 'DONE',
-    Pending = 'PENDING'
+    Pending = 'PENDING',
+    Fail = 'FAIL'
 }
 
 export type CompanyToken<Date = Dayjs> = {

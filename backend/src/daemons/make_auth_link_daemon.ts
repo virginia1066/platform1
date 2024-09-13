@@ -1,5 +1,5 @@
 import { update_user_attribute } from '../utils/request_mk';
-import { info, warn } from '../utils/log';
+import { info, warn, error } from '../utils/log';
 import { knex, MESSAGE_BUS, TG_BOT_NAME, TG_LINK_ATTRIBUTE_ID } from '../constants';
 import { UserFromWebhook, WebhookUserStatus } from '../types/general';
 import { head, prop } from 'ramda';
@@ -52,7 +52,13 @@ export const make_auth_link_daemon = () => {
                 return update_loop(0)
                     .then(() => knex('users_from_webhook')
                         .update('attribute_status', WebhookUserStatus.Done)
-                        .where('class_id', class_user_id));
+                        .where('class_id', class_user_id))
+                    .catch((e) => {
+                        error(`Fail to update user attribute! ${e.message}`);
+                        return knex('users_from_webhook')
+                            .update('attribute_status', WebhookUserStatus.Fail)
+                            .where('class_id', class_user_id);
+                    });
             });
     };
 
