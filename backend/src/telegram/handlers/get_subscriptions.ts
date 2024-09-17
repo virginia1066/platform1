@@ -47,6 +47,7 @@ export const get_subscriptions = (user: User) =>
             const tpl_list = data.subscriptions.map(({
                                                          period,
                                                          visitCount,
+                                                         visitedCount,
                                                          statusId,
                                                          beginDate,
                                                          endDate,
@@ -55,19 +56,26 @@ export const get_subscriptions = (user: User) =>
                 const period_str = period
                     ? parse_period(period)
                     : t('unlimited');
+
+                const total_visit_count = DOUBLES.includes(hash[subscriptionId].id)
+                    ? visitCount / 2
+                    : visitCount;
+
+                const visited = DOUBLES.includes(hash[subscriptionId].id)
+                    ? visitedCount / 2
+                    : visitedCount;
+
                 return [
                     t('item', {
                         index: index + 1,
                         period: period_str,
-                        visitCount: t('visitCount', { count: visitCount })
+                        visitCount: t('visitCount', { count: total_visit_count })
                     }),
                     t('type', {
                         type: hash[subscriptionId].name
                     }),
                     visitCount === 0 ? null : t('visits', {
-                        count: DOUBLES.includes(hash[subscriptionId].id)
-                            ? visitCount / 2
-                            : visitCount
+                        count: total_visit_count - visited
                     }),
                     period === null ? null : t('interval.title', {
                         interval: statusId === MkSubscriptionStatus.Disabled

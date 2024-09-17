@@ -210,6 +210,7 @@ type GetUserSubscriptionsResponse = {
         period: MkPeriod | null;
         subscriptionId: number;
         visitCount: number;
+        visitedCount: number;
         beginDate: string | null;
         endDate: string | null;
         statusId: MkSubscriptionStatus
