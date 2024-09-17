@@ -17,10 +17,15 @@ import { format_mk_date } from '../../utils/format_mk_date';
 
 const DOUBLES = [2052, 2054];
 
-export const get_subscriptions = (user: User) =>
+const get_student = (user: User | number) =>
+    typeof user === 'number'
+        ? Promise.resolve(user)
+        : get_student_by_tg(user.id, true)
+
+export const get_subscriptions = (user: User | number) =>
     Promise
         .all([
-            get_student_by_tg(user.id, true)
+            get_student(user)
                 .then((userId) => get_student_subscriptions({
                     userId, statusId: [
                         MkSubscriptionStatus.Disabled,
