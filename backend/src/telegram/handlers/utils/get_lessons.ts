@@ -1,9 +1,9 @@
 import { ClassesResponse, CurseResponse, get_user_lessons } from '../../../utils/request_mk';
-import { indexBy, prop } from 'ramda';
+import { filter, indexBy, isNotNil, prop } from 'ramda';
 import { get_dictionaries } from '../../../utils/get_dictionaries';
 import { getFixedT } from 'i18next';
 import dayjs from 'dayjs';
-import { info } from '../../../utils/log';
+import { warn } from '../../../utils/log';
 
 export const get_lessons = (student_id: number) =>
     Promise
@@ -47,32 +47,38 @@ export const get_lessons = (student_id: number) =>
             const hash_classes = indexBy(prop('id'), classes);
 
             return lessons
-                .map((lesson): Lesson => {
-                    const date = dayjs(lesson.date);
-                    const lesson_class = hash_classes[lesson.classId];
-                    const course = hash_courses[lesson_class.courseId];
-                    const month_num = date.get('month') as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
-                    const month = tDict(`month.${month_num}`);
-                    const manager_id = lesson_class.managerIds[0];
+                .map((lesson): Lesson | null => {
+                    try {
+                        const date = dayjs(lesson.date);
+                        const lesson_class = hash_classes[lesson.classId];
+                        const course = hash_courses[lesson_class.courseId];
+                        const month_num = date.get('month') as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+                        const month = tDict(`month.${month_num}`);
+                        const manager_id = lesson_class.managerIds[0];
 
-                    return {
-                        origin_date: lesson.date,
-                        date: date.format('D'),
-                        month,
-                        week_day: date.format('dddd'),
-                        time_interval: `${lesson.beginTime}-${lesson.endTime}`,
-                        course_type: course_type_map[course.courseType],
-                        courseType: course.courseType,
-                        filial: hash_filials[lesson.filialId].name.toLowerCase(),
-                        icon: filial_map[lesson.filialId] ?? '❔',
-                        lesson_class: hash_classes[lesson.classId],
-                        address: address_map[lesson.roomId] ?? '',
-                        room: room_hash[lesson.roomId].name,
-                        beginTime: lesson.beginTime,
-                        endTime: lesson.endTime,
-                        manager_id
-                    };
+                        return {
+                            origin_date: lesson.date,
+                            date: date.format('D'),
+                            month,
+                            week_day: date.format('dddd'),
+                            time_interval: `${lesson.beginTime}-${lesson.endTime}`,
+                            course_type: course_type_map[course.courseType],
+                            courseType: course.courseType,
+                            filial: hash_filials[lesson.filialId].name.toLowerCase(),
+                            icon: filial_map[lesson.filialId] ?? '❔',
+                            lesson_class: hash_classes[lesson.classId],
+                            address: address_map[lesson.roomId] ?? '',
+                            room: room_hash[lesson.roomId].name,
+                            beginTime: lesson.beginTime,
+                            endTime: lesson.endTime,
+                            manager_id
+                        };
+                    } catch (e) {
+                        warn(`Can't get lesson info! ${String(e)}`);
+                        return null;
+                    }
                 })
+                .filter(isNotNil)
                 .reduce<Array<Lesson>>((acc, item) => {
                     if (!acc.length || item.courseType !== 'personal') {
                         acc.push(item);
