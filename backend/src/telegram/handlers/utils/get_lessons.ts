@@ -1,5 +1,5 @@
 import { ClassesResponse, CurseResponse, get_user_lessons } from '../../../utils/request_mk';
-import { filter, indexBy, isNotNil, prop } from 'ramda';
+import { indexBy, isNotNil, prop } from 'ramda';
 import { get_dictionaries } from '../../../utils/get_dictionaries';
 import { getFixedT } from 'i18next';
 import dayjs from 'dayjs';
@@ -74,7 +74,20 @@ export const get_lessons = (student_id: number) =>
                             manager_id
                         };
                     } catch (e) {
-                        warn(`Can't get lesson info! ${String(e)}`);
+                        const safe_get = <T extends Record<string, any>, K extends keyof T>(from: T, property: K, hash: Record<string, any>) => {
+                            if (!from[property] || !hash[from[property]]) {
+                                return 'undefined';
+                            }
+                            return JSON.stringify(hash[from[property]], null, 4);
+                        };
+                        const lesson_class = hash_classes?.[lesson.classId];
+
+                        const details = [
+                            `Can't get lesson info for ${student_id}`,
+                            `Class: ${safe_get(lesson, 'classId', hash_classes)}`,
+                            `Course: ${safe_get(lesson_class, 'courseId', hash_courses)}`,
+                        ].join('\n');
+                        warn(details);
                         return null;
                     }
                 })
