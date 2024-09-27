@@ -6,7 +6,7 @@ import { pick } from 'ramda';
 import { MyClass } from '../types/my_class';
 import { make_query } from './make_query';
 import { cache, make_time } from './cache';
-import { info } from './log';
+import { error, info } from './log';
 
 const get_company_token_from_api = () =>
     REQUEST_QUEUE.push(() => fetch(`https://api.moyklass.com/v1/company/auth/getToken`, {
@@ -67,6 +67,7 @@ const private_req = (url: string, init?: RequestInit, query?: Record<string, str
                 })
                 .catch((e) => {
                     clearTimeout(timer);
+                    error(`Request error ${req_url}: ${String(e)}`);
                     return Promise.reject(e);
                 });
         }));
