@@ -7,6 +7,7 @@ import { MyClass } from '../types/my_class';
 import { make_query } from './make_query';
 import { cache, make_time } from './cache';
 import { error, info } from './log';
+import { log_query } from './log_query';
 
 const get_company_token_from_api = () =>
     REQUEST_QUEUE.push(() => fetch(`https://api.moyklass.com/v1/company/auth/getToken`, {
@@ -18,10 +19,10 @@ const get_company_token_from_api = () =>
     }).then<GetTokenResponse>(parse_response));
 
 const get_company_token = cache((): Promise<{ token: string }> =>
-        knex('company_access_tokens')
+        log_query(knex('company_access_tokens')
             .select('*')
             .where('expiredAt', '<=', dayjs().subtract(1, 'hour').toISOString())
-            .orderBy('expiredAt', 'desc')
+            .orderBy('expiredAt', 'desc'))
             .then((tokens) => {
                 const token = tokens.pop();
 
