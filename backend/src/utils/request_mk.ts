@@ -21,7 +21,7 @@ const get_company_token_from_api = () =>
 const get_company_token = cache((): Promise<{ token: string }> =>
         log_query(knex('company_access_tokens')
             .select('*')
-            .where('expiredAt', '<=', dayjs().subtract(1, 'hour').toISOString())
+            .where('expiredAt', '>=', dayjs().subtract(1, 'hour').toISOString())
             .orderBy('expiredAt', 'desc'))
             .then((tokens) => {
                 const token = tokens.pop();
