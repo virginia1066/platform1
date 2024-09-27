@@ -57,7 +57,9 @@ const middleware: Middleware = (ctx, next) => {
 
     return make_link_params([{ class_id: userId, user_created_at: createdAt }])
         .then(([user]) => {
-            MESSAGE_BUS.trigger('user_create', user);
+            if (user) {
+                MESSAGE_BUS.trigger('user_create', user);
+            }
             ctx.body = { ok: true };
         })
         .then(next);
