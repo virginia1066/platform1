@@ -52,7 +52,9 @@ export const get_time_table =
                                 month
                             } = lesson;
 
-                            const manager = managers_hash[lesson_class.managerIds[0]].name;
+                            const manager = managers_hash[lesson.manager_id]
+                                ? managers_hash[lesson.manager_id].name
+                                : managers_hash[lesson_class.managerIds[0]].name;
 
                             return [
                                 t('detailed.date', { date, month, week_day }),

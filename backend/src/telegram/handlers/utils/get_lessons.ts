@@ -54,7 +54,7 @@ export const get_lessons = (student_id: number) =>
                         const course = hash_courses[lesson_class.courseId];
                         const month_num = date.get('month') as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
                         const month = tDict(`month.${month_num}`);
-                        const manager_id = lesson_class.managerIds[0];
+                        const manager_id = lesson.teacherIds?.[0] ?? lesson_class.managerIds[0];
 
                         return {
                             origin_date: lesson.date,

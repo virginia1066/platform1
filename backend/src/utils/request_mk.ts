@@ -317,6 +317,7 @@ export type GetLessonsRecordResponse = {
         topic: string;
         filialId: number;
         classId: number;
+        teacherIds?: Array<number>
     }>
 }
 
